@@ -15,11 +15,4 @@ import com.xnx3.robot.Robot;
  *
  */
 public class MYTwoStars extends Base{
-
-	public MYTwoStars(Com com, Window window, Mouse mouse, Press press, Color color, Robot robot, FindPic findPic,
-			File file) {
-		super(com, window, mouse, press, color, robot, findPic, file);
-	}
-	
-	
 }

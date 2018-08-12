@@ -118,7 +118,6 @@ public class MYDemo extends JFrame{
         color = new Color(com.getActiveXComponent());   //颜色相关的取色、判断类
         findPic = new FindPic(com.getActiveXComponent());
         file = new com.xnx3.microsoft.File(com.getActiveXComponent());
-        twoStars = new MYTwoStars(com, window, mouse, press, color, robot, findPic, file);
         
         path = Thread.currentThread().getContextClassLoader().getResource("").getPath();
         if(StringUtils.isNotBlank(path)){
