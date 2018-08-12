@@ -35,7 +35,7 @@ public class Common {
     static String fenjieshengwu = "fenjieshengwu.bmp";
     static String kaishifenjie_huise = "kaishifenjie_huise.bmp";
     
-    static String dashaziImg = "dashaizi.png";
+    static String dashaziImg = "dashaizi.bmp";
     static String emailImg = "email.bmp";
     static String email1Img = "email1.bmp";
     static String qdImg = "qd.png";

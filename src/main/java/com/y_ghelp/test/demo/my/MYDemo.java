@@ -63,6 +63,9 @@ public class MYDemo extends JFrame{
 	static Logger log = Logger.getLogger(MYDemo.class);
 	String gameName = (String) MYConfig.getInstance().getConfig("gameName");
     String defaultGamePath = (String) MYConfig.getInstance().getConfig("defaultGamePath");
+    
+    private MYTwoStars twoStars;
+    
     private JPanel contentPane;
     private JTextArea textArea;
     private JTextField textField;
@@ -115,6 +118,8 @@ public class MYDemo extends JFrame{
         color = new Color(com.getActiveXComponent());   //颜色相关的取色、判断类
         findPic = new FindPic(com.getActiveXComponent());
         file = new com.xnx3.microsoft.File(com.getActiveXComponent());
+        twoStars = new MYTwoStars(com, window, mouse, press, color, robot, findPic, file);
+        
         path = Thread.currentThread().getContextClassLoader().getResource("").getPath();
         if(StringUtils.isNotBlank(path)){
             path = path.replace("/", "\\");
@@ -1560,9 +1565,8 @@ public class MYDemo extends JFrame{
      * @return
      */
     private boolean findInputPass(int time){
-    	robot.setSourcePath(MYDemo.class);
-    	boolean flag = robot.imageDelaySearch(0, 0, robot.screenWidth, robot.screenHeight, 
-    			robot.getResourceImage(Common.inputUserImg), Robot.SIM_ACCURATE,time);//1分钟内循环找输入账号和密码的框
+    	//1分钟内循环找输入账号和密码的框
+    	boolean flag = findImg(Common.inputUserImg, time, new ArrayList<CoordBean>());
     	return flag;
     }
     
@@ -1631,19 +1635,17 @@ public class MYDemo extends JFrame{
     private void enter(String[] user) throws Exception{
         addLog("按下ENTER");
         press.keyPress(press.ENTER);
-        
-        robot.setSourcePath(MYDemo.class);
         List<CoordBean> list = new ArrayList<CoordBean>();
-        boolean flag = robot.imageDelaySearch(0, 0, robot.screenWidth, robot.screenHeight, 
-        		robot.getResourceImage(Common.quxiaoImg), Robot.SIM_ACCURATE,3000,list);
+        boolean flag = findImg(Common.quxiaoImg, 3000, list);
     	if(flag){//如果出现取消按钮
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
     		login(user);
     	}else{
     		//按下enter之后，如果还停留在登录页面,继续按ENTER
-		    flag = robot.imageDelaySearch(0, 0, robot.screenWidth, robot.screenHeight, 
-		    		robot.getResourceImage(Common.inputUserImg), Robot.SIM_ACCURATE,3000);
+		    flag = findImg(Common.inputUserImg, 3000, list);
 	        if(flag){
+	        	mouse.mouseClick(list.get(0).getX() - 50, list.get(0).getY() + 12, true);
+	        	robot.delay(200);
 	        	enter(user);
 	        }
     	}
@@ -1718,17 +1720,9 @@ public class MYDemo extends JFrame{
             }
             list = findPic(Common.emailImg);
         	if(list.size() > 0){
-            	int y = list.get(0).getY() + 135;
-            	mouse.mouseMoveTo(list.get(0).getX(), y);
-            	robot.delay(1000);
-            	list = findPic(Common.qiImg);
-            	if(null == list || list.size() <= 0){
-            		robot.delay(500);
-            		list = findPic(Common.qi1Img);
-            	}
-            	if(null != list && list.size() > 0){
-            		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(),true);	
-            	}
+            	int y = list.get(0).getY() + 137;
+            	int x = list.get(0).getX() - 126;
+        		mouse.mouseClick(x, y,true);	
             }
         }else{
         	mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);//移动之后，左键点击        	
@@ -1738,7 +1732,7 @@ public class MYDemo extends JFrame{
         	addLog("未能找到图片【"+Common.dashaziImg+"】..");
             return;
         }
-        mouse.mouseClick(list.get(0).getX() + 175, list.get(0).getY() - 190, true);//移动之后，左键点击
+        mouse.mouseClick(list.get(0).getX(), list.get(0).getY() - 105, true);//移动之后，左键点击
         robot.delay(500);
         if(findImg(Common.qdImg, 1000, list)){
         	mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);//移动之后，左键点击
