@@ -52,6 +52,12 @@ public class Layout extends JFrame{
     }
     
     public void wb(){
+    	int hwnd = window.findWindow(0, null, Constant.appName);
+        if(hwnd > 0){
+        	Base.addLog("模拟器句柄：" + hwnd);
+            window.moveWindow(hwnd, 0, 0);
+            window.setWindowActivate(hwnd); //激活窗口
+        }
     	Base.addLog("wb start..");
     	//收起任务栏
     	List<CoordBean> list = Base.findPic(Constant.go_index_1,2000);
@@ -272,11 +278,14 @@ public class Layout extends JFrame{
     	if(list.size() > 0){
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
         	robot.delay(500);
-        	list = Base.findPic(Constant.wb_1,3000);
+        	list = Base.findPic(Constant.wb_1,140,219,288,260,3000);
         	if(list.size() > 0){
         		//x+371,y-8
-        		mouse.mouseClick(list.get(0).getX() + 371, list.get(0).getY() - 8, true);
-        		list = Base.findPic(Constant.wb_2,45000);
+        		robot.delay(200);
+        		mouse.mouseMoveTo(list.get(0).getX() + 366, list.get(0).getY() - 9);
+        		robot.delay(500);
+        		mouse.mouseClick(list.get(0).getX() + 366, list.get(0).getY() - 9, true);
+        		list = Base.findPic(Constant.wb_2,145,318,269,365,45000);
         		if(list.size() > 0){
         			Base.addLog("藏宝图NPC 0/5 " + list.get(0).getX() + "," + list.get(0).getY());
         			int i = 0;
@@ -285,7 +294,7 @@ public class Layout extends JFrame{
         				mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
         				robot.delay(500);
         				i++;
-        				if(i > 10 || Base.findPic(Constant.wb_3).size() > 0){
+        				if(i > 10 || Base.findPic(Constant.wb_3,145,318,269,365).size() > 0){
         					flag = false;
         				}
         			}while(flag);
@@ -460,10 +469,17 @@ public class Layout extends JFrame{
     }
     
     public Layout() {
-    	JButton btnNewButton = new JButton("New button");
+    	JButton btnNewButton = new JButton("\u9886\u53D6\u85CF\u5B9D\u56FE");
     	btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	wb();
+            }
+        });
+    	
+    	JButton button = new JButton("\u5F00\u59CB\u6316\u5B9D");
+    	button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	do_all();
             }
         });
     	GroupLayout groupLayout = new GroupLayout(getContentPane());
@@ -471,7 +487,9 @@ public class Layout extends JFrame{
     		groupLayout.createParallelGroup(Alignment.LEADING)
     			.addGroup(groupLayout.createSequentialGroup()
     				.addGap(123)
-    				.addComponent(btnNewButton)
+    				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+    					.addComponent(button)
+    					.addComponent(btnNewButton))
     				.addContainerGap(218, Short.MAX_VALUE))
     	);
     	groupLayout.setVerticalGroup(
@@ -479,7 +497,9 @@ public class Layout extends JFrame{
     			.addGroup(groupLayout.createSequentialGroup()
     				.addGap(56)
     				.addComponent(btnNewButton)
-    				.addContainerGap(183, Short.MAX_VALUE))
+    				.addGap(18)
+    				.addComponent(button)
+    				.addContainerGap(142, Short.MAX_VALUE))
     	);
     	getContentPane().setLayout(groupLayout);
     }
