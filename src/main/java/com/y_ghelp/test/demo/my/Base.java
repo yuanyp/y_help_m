@@ -9,6 +9,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import com.xnx3.microsoft.Color;
 import com.xnx3.microsoft.Com;
@@ -21,6 +23,9 @@ import com.xnx3.robot.support.CoordBean;
 import com.y_ghelp.test.demo.my.wb.Layout;
 
 public class Base{
+	
+	static Logger log = Logger.getLogger(Base.class);
+	
 	public static Com com;
 	public static Window window;
 	public static Mouse mouse;
@@ -59,8 +64,9 @@ public class Base{
         screenHeight = robot.screenHeight;
         if(StringUtils.isNotBlank(path)){
             path = path.replace("/", "\\");
-            path = path.substring(1, path.length());                
+            path = path.substring(1, path.length());
         }
+        PropertyConfigurator.configure(path + "log4j.properties");
         start = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -93,10 +99,14 @@ public class Base{
     }
     
     public static List<CoordBean> findPic(String img,int maxDelay){
+    	return findPic(img,0,0,screenWidth,screenHeight,maxDelay);
+    }
+    
+    public static List<CoordBean> findPic(String img,int sx,int sy,int ex,int ey,int maxDelay){
     	List<CoordBean> list = new ArrayList<CoordBean>();
     	int time = 0;
 		while(time<maxDelay){
-			list = findPic(img,0, 0, screenWidth, screenHeight);
+			list = findPic(img,sx, sy, ex, ey);
 			if(list.size()>0){
 				return list;
 			}else{
@@ -114,7 +124,17 @@ public class Base{
     
     public static List<CoordBean> findPic(String img,int sx,int sy,int ex,int ey){
     	List<CoordBean> list = new ArrayList<CoordBean>();
-    	int[] a = findPic.findPic(sx,sy,ex,ey, getRealPath(img), "", 0.9, 0);
+    	String imgs = "";
+    	if(img.indexOf("|") != -1){
+    		String[] imgarr = img.split("\\|");
+    		for(String item_img : imgarr){
+    			imgs += getRealPath(item_img) + "|";	
+    		}
+    		imgs = imgs.substring(0, imgs.length() - 1);
+    	}else{
+    		imgs = getRealPath(img);
+    	}
+    	int[] a = findPic.findPic(sx,sy,ex,ey, imgs, "", 0.9, 0);
     	if(a[0] != 0){
     		System.out.println("未能找到IMG【"+img+"】..");
     		return list;
@@ -126,5 +146,10 @@ public class Base{
     		System.out.println("找到IMG【"+img+"】坐標【"+item.getX()+","+item.getY()+"】..");
     	}
     	return list;
+    }
+    
+    public static void addLog(Object str){
+    	log.info(str);
+        System.out.println(str);
     }
 }

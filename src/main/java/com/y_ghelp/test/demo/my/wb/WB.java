@@ -33,7 +33,7 @@ public class WB extends Base{
 		//748 * 35 40*10
 		file.screenImage(748,35,(748+40),(35+10), "c:\\logs\\bcd.png");
     	boolean a = findPic.isDisplayDead(748,35,(748+40),(35+10),2);
-    	System.out.println("isMove " + !a);
+    	addLog("isMove " + !a);
     	return !a;
     }
 	
@@ -57,7 +57,7 @@ public class WB extends Base{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			    boolean unbind = com.unbind();
-			    System.out.println("com.unbind " + unbind);
+			    addLog("com.unbind " + unbind);
 			    sysHotKey.destroy();
 			}
 		});
