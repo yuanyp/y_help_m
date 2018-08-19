@@ -1682,6 +1682,7 @@ public class MYDemo extends JFrame{
         window.moveWindow(hwnd, 0, 0);
         
         robot.delay(3000);
+        sigin_detail();
         press.keyPress(press.ESC);
         robot.delay(500);
         List<CoordBean> list = new ArrayList<CoordBean>();
@@ -1726,6 +1727,14 @@ public class MYDemo extends JFrame{
         }else{
         	mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);//移动之后，左键点击        	
         }
+        sigin_detail();
+        press.keyPress(press.ESC);
+        robot.delay(1000);
+        addLog("结束签到..");
+    }
+    
+    private void sigin_detail(){
+    	List<CoordBean> list = new ArrayList<CoordBean>();
         robot.delay(500);
         if(!findImg(Common.dashaziImg, 1000, list)){
         	addLog("未能找到图片【"+Common.dashaziImg+"】..");
@@ -1737,9 +1746,6 @@ public class MYDemo extends JFrame{
         	mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);//移动之后，左键点击
             robot.delay(1000);
         }
-        press.keyPress(press.ESC);
-        robot.delay(1000);
-        addLog("结束签到..");
     }
     
     /**
@@ -1800,7 +1806,8 @@ public class MYDemo extends JFrame{
         forceExit();
         robot.delay(2000);
         List<CoordBean> list = new ArrayList<CoordBean>();
-        if(findImg(Common.huanbaoliangongImg, 2000, list)){
+        list = findPic(Common.quanbuhuanbao, 1000);
+        if(list.size() > 0 || findImg(Common.huanbaoliangongImg, 2000, list)){
         	list.clear();
         	if(findImg(Common.qdImg, 2000, list)){
         		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);

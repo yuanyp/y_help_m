@@ -3,6 +3,7 @@ package com.y_ghelp.test.demo.my;
 import java.awt.TrayIcon;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -50,8 +51,8 @@ public class Base{
 	
 	public static Thread start;
 	public static boolean execute = false;
-	public static List<String> listUsers = new ArrayList<String>();//判断账号是否已经处理过
-	
+	public static LinkedList<String[]> listUsers = new LinkedList<String[]>();//判断账号是否已经处理过
+	public static LinkedList<CoordBean> xiaohao = new LinkedList<CoordBean>();//判断小号
     static{
         com = new Com();
         window = new Window(com.getActiveXComponent());    //窗口操作类
@@ -59,6 +60,7 @@ public class Base{
         press = new Press(com.getActiveXComponent());   //键盘模拟操作类
         color = new Color(com.getActiveXComponent());   //颜色相关的取色、判断类
         findPic = new FindPic(com.getActiveXComponent());
+        file = new com.xnx3.microsoft.File(com.getActiveXComponent());
         robot = new Robot();
         screenWidth = robot.screenWidth;
         screenHeight = robot.screenHeight;
@@ -102,6 +104,10 @@ public class Base{
     	return findPic(img,0,0,screenWidth,screenHeight,maxDelay);
     }
     
+    public static void screenImage(){
+    	file.screenImage(0, 0, screenWidth, screenWidth, "c:\\temp_img\\"+System.currentTimeMillis()+".png");
+    }
+    
     public static List<CoordBean> findPic(String img,int sx,int sy,int ex,int ey,int maxDelay){
     	List<CoordBean> list = new ArrayList<CoordBean>();
     	int time = 0;
@@ -135,15 +141,15 @@ public class Base{
     		imgs = getRealPath(img);
     	}
     	int[] a = findPic.findPic(sx,sy,ex,ey, imgs, "", 0.9, 0);
-    	if(a[0] != 0){
-    		System.out.println("未能找到IMG【"+img+"】..");
+    	if(a[0] == -1){
+    		System.out.println("未能找到IMG【"+imgs+"】..");
     		return list;
     	}else{
     		CoordBean item = new CoordBean();
     		item.setX(a[1]);
     		item.setY(a[2]);
     		list.add(item);
-    		System.out.println("找到IMG【"+img+"】坐標【"+item.getX()+","+item.getY()+"】..");
+    		System.out.println("找到IMG【"+imgs+"】坐標【"+item.getX()+","+item.getY()+"】..");
     	}
     	return list;
     }

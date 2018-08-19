@@ -33,15 +33,26 @@ public class Constant {
 	public static String wb_2 = "wb_2.bmp";
 	//领取完毕
 	public static String wb_3 = "wb_3.bmp";
+	public static String wb_4 = "wb_4.bmp";
+	public static String wb_close = "wb_close.bmp";
+	public static String baoxiang_click = "baoxiang_click.bmp";
 	
 	//背包关闭按钮 ;任务栏:228*42 x-228 y+42
 	public static String beibao_close = "beibao_close.bmp";
+	
+	public static String logout_ok = "logout_ok.bmp";
+	public static String logout = "logout.bmp";
 	
 	public static String cangbaotu_2 = "cangbaotu_2.bmp";
 	public static String cangbaotu_3 = "cangbaotu_3.bmp";
 	public static String cangbaotu_4 = "cangbaotu_4.bmp";
 	public static String cangbaotu_5 = "cangbaotu_5.bmp";
 	public static String cangbaotu_6 = "cangbaotu_6.bmp";
+	public static String cangbaotu_7 = "cangbaotu_7.bmp";
+	public static String cangbaotu_8 = "cangbaotu_8.bmp";
+	public static String cangbaotu_close = "cangbaotu_close.bmp";
+	
+	public static String xiaohao_close = "xiaohao_close.bmp";
 	
 	public static String xunlu = "xunlu.bmp";
 	
@@ -52,6 +63,9 @@ public class Constant {
 	public static String do_baoxiang = "do_baoxiang.bmp";
 	public static String do_baoxiang_1 = "do_baoxiang_1.bmp";
 	public static String do_baoxiang_2 = "do_baoxiang_2.bmp";
+	public static String do_baoxiang_3 = "do_baoxiang_3.bmp";
+	public static String do_baoxiang_4 = "do_baoxiang_4.bmp";
+	public static String do_baoxiang_5 = "do_baoxiang_5.bmp";
 	public static String do_jingyan = "do_jingyan.bmp";
 	public static String do_ok = "do_ok.bmp";
 	

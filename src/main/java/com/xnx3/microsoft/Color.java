@@ -1,10 +1,14 @@
 package com.xnx3.microsoft;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Variant;
 import com.xnx3.Lang;
 import com.xnx3.Log;
 import com.xnx3.bean.ActiveBean;
+import com.xnx3.robot.support.CoordBean;
 
 /**
  * 颜色识别
@@ -118,6 +122,73 @@ public class Color {
 			log.debug(this,"findColor","获取颜色异常捕获:"+e.getMessage());
 		}
 		return xnx3_result;
+	}
+	
+	/**
+	 * 参数定义:
+		x1 整形数:区域的左上X坐标
+		y1 整形数:区域的左上Y坐标
+		x2 整形数:区域的右下X坐标
+		y2 整形数:区域的右下Y坐标
+		first_color 字符串:颜色 格式为"RRGGBB-DRDGDB",比如"123456-000000"
+		
+		这里的含义和按键自带Color插件的意义相同，只不过我的可以支持偏色
+		
+		所有的偏移色坐标都相对于此颜色.注意，这里只支持RGB颜色.
+		offset_color 字符串: 偏移颜色 可以支持任意多个点 格式和按键自带的Color插件意义相同
+		
+		 格式为"x1|y1|RRGGBB-DRDGDB,……xn|yn|RRGGBB-DRDGDB"
+		
+		比如"1|3|aabbcc,-5|-3|123456-000000"等任意组合都可以，支持偏色
+		
+		还可以支持反色模式，比如"1|3|-aabbcc,-5|-3|-123456-000000","-"表示除了指定颜色之外的颜色.
+		
+		
+		sim 双精度浮点数:相似度,取值范围0.1-1.0
+		dir 整形数:查找方向 0: 从左到右,从上到下 1: 从左到右,从下到上 2: 从右到左,从上到下 3: 从右到左, 从下到上
+		
+		返回值: 
+		字符串:
+		返回X和Y坐标 形式如"x|y", 比如"100|200"
+	 * @param xStart
+	 * @param yStart
+	 * @param xEnd
+	 * @param yEnd
+	 * @param color
+	 * @param offset_color
+	 * @param sim
+	 * @param dir
+	 * @return
+	 */
+	public List<CoordBean> findMultiColorEx(int xStart,int yStart,int xEnd,int yEnd,String color,String offset_color,double sim,int dir){
+		List<CoordBean> list = new ArrayList<CoordBean>();
+		try {
+			Variant[] var=new Variant[8];
+			var[0]=new Variant(xStart);
+			var[1]=new Variant(yStart);
+			var[2]=new Variant(xEnd);
+			var[3]=new Variant(yEnd);
+			var[4]=new Variant(color);
+			var[5]=new Variant(offset_color);
+			var[6]=new Variant(sim);
+			var[7]=new Variant(dir);
+			String r = activeDm.invoke("FindMultiColorE",var).getString();
+			System.out.println(r);
+			String[] findColorArray=r.split("\\|");
+			CoordBean coordBean = new CoordBean();
+			if(!findColorArray[0].equals("-1")){
+				coordBean.setX(Integer.parseInt(findColorArray[0]));
+			}
+			if(!findColorArray[1].equals("-1")){
+				coordBean.setY(Integer.parseInt(findColorArray[1]));
+			}
+			System.out.println(coordBean);
+			list.add(coordBean);
+			return list;
+		} catch (Exception e) {
+			log.debug(this,"findMultiColorEx","findMultiColorEx"+e.getMessage());
+		}
+		return list;
 	}
 	
 	/**
