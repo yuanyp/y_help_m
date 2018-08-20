@@ -10,6 +10,14 @@ public class CoordBean {
 	private int x;
 	private int y;
 	
+	private int id;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	/**
 	 * 获取x坐标
 	 * @return x坐标
@@ -34,6 +42,6 @@ public class CoordBean {
 	
 	@Override
 	public String toString() {
-		return x + "," + y;
+		return x + "," + y + ";id" + id;
 	}
 }

@@ -4,9 +4,11 @@ import java.awt.PopupMenu;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import com.xnx3.Lang;
 import com.xnx3.microsoft.SystemUtil;
+import com.xnx3.robot.support.CoordBean;
 import com.y_ghelp.test.demo.my.Base;
 
 /**
@@ -16,6 +18,42 @@ import com.y_ghelp.test.demo.my.Base;
  *
  */
 public class WB extends Base{
+	
+	public static Thread checkDie = new Thread(new Runnable() {
+        public void run() {
+            try {
+            	//处理如果人物死亡自动复活
+            	//检测人物死亡开始
+            	int sx = 244;
+            	int sy = 295;
+            	int ex = 636;
+            	int ey = 467;
+            	Base.addLog("自动复活开启..");
+            	do{
+            		robot.delay(500);
+            		List<CoordBean> list = findPic(Constant.die,sx,sy,ex,ey,false);
+            		if(list.size() > 0){
+            			Base.addLog("检测到人物死活，等待复活..");
+            			robot.delay(200);
+            			list = findPic(Constant.fuhuo_2,sx,sy,ex,ey);
+            			if(list.size() > 0){
+            				Base.addLog("找到原地复活按钮..");
+            				mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
+            			}else{
+            				robot.delay(200);
+                			list = findPic(Constant.fuhuo_1+"|"+Constant.fuhuo_3,sx,sy,ex,ey);
+                			if(list.size() > 0){
+                				Base.addLog("找到回城复活按钮..");
+                				mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
+                			}
+            			}
+            		}
+            	}while(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    });
 	
 	public static Thread openGame = new Thread(new Runnable() {
         public void run() {
@@ -39,12 +77,13 @@ public class WB extends Base{
 	
 	public static void main(String[] args) {
 		setImgHomeFolder(Constant.img_home);
+		setDic(0, Constant.dm_dic);
 		setScreenWidthAndHeight(800, 600);
-		/********创建界面********/
 		frame = new Layout();
 		frame.setBounds(100, 100, 700, 250);
 		frame.setVisible(true);
 		
+		/********创建界面********/
 		final SysHotKey sysHotKey = new SysHotKey(frame);
         sysHotKey.initHotkey();
         

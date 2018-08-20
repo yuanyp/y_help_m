@@ -8,6 +8,8 @@ public class Constant {
 	
 	public static String img_home = "wb_img";
 	
+	public static String dm_dic = "C://dm_dic/dm_soft.txt";
+	
 	public static String app_game = "app.bmp";
 	public static String login_1 = "login_1.bmp";
 	public static String login_2 = "login_2.bmp";
@@ -24,6 +26,7 @@ public class Constant {
 	public static String go_index = "go_index.bmp";
 	
 	public static String go_index_1 = "go_index_1.bmp";
+	public static String go_index_1_1 = "go_index_1_1.bmp";
 	
 	//活动中心坐标
 	public static String wb_0 = "wb_0.bmp";
@@ -53,6 +56,7 @@ public class Constant {
 	public static String cangbaotu_close = "cangbaotu_close.bmp";
 	
 	public static String xiaohao_close = "xiaohao_close.bmp";
+	public static String xiaohao_qiehuan = "xiaohao_qiehuan.bmp";
 	
 	public static String xunlu = "xunlu.bmp";
 	
@@ -63,11 +67,21 @@ public class Constant {
 	public static String do_baoxiang = "do_baoxiang.bmp";
 	public static String do_baoxiang_1 = "do_baoxiang_1.bmp";
 	public static String do_baoxiang_2 = "do_baoxiang_2.bmp";
-	public static String do_baoxiang_3 = "do_baoxiang_3.bmp";
-	public static String do_baoxiang_4 = "do_baoxiang_4.bmp";
 	public static String do_baoxiang_5 = "do_baoxiang_5.bmp";
+	public static String do_baoxiang_6 = "do_baoxiang_6.bmp";
+	public static String do_baoxiang_7 = "do_baoxiang_7.bmp";
+	public static String do_baoxiang_8 = "do_baoxiang_8.bmp";
+	public static String do_baoxiang_9 = "do_baoxiang_9.bmp";
+	public static String do_baoxiang_10 = "do_baoxiang_10.bmp";
+	public static String do_baoxiang_11 = "do_baoxiang_11.bmp";
+	public static String do_baoxiang_12 = "do_baoxiang_12.bmp";
 	public static String do_jingyan = "do_jingyan.bmp";
 	public static String do_ok = "do_ok.bmp";
 	
 	
+	/////////////////////////////////////
+	public static String die = "die.bmp";
+	public static String fuhuo_1 = "fuhuo_1.bmp";
+	public static String fuhuo_2 = "fuhuo_2.bmp";
+	public static String fuhuo_3 = "fuhuo_3.bmp";
 }

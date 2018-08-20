@@ -16,6 +16,7 @@ import org.apache.log4j.PropertyConfigurator;
 import com.xnx3.microsoft.Color;
 import com.xnx3.microsoft.Com;
 import com.xnx3.microsoft.FindPic;
+import com.xnx3.microsoft.FindStr;
 import com.xnx3.microsoft.Mouse;
 import com.xnx3.microsoft.Press;
 import com.xnx3.microsoft.Window;
@@ -34,6 +35,7 @@ public class Base{
 	public static Color color;
 	public static Robot robot;
 	public static FindPic findPic;
+	public static FindStr findStr;
 	public static com.xnx3.microsoft.File file;
 	
 	public static String imgHomeFolder = "game_img";
@@ -46,12 +48,13 @@ public class Base{
 	
 	public static String path = Thread.currentThread().getContextClassLoader().getResource("").getPath();
     
-	public static ThreadPoolExecutor threadPool = new ThreadPoolExecutor(2, 4, 3, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(3),
+	public static ThreadPoolExecutor threadPool = new ThreadPoolExecutor(8, 10, 3, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(3),
             new ThreadPoolExecutor.DiscardOldestPolicy());
 	
 	public static Thread start;
 	public static boolean execute = false;
 	public static LinkedList<String[]> listUsers = new LinkedList<String[]>();//判断账号是否已经处理过
+	public static LinkedList<String> listUserXiaoHao = new LinkedList<String>();//判断大号的小号是否已经处理过
 	public static LinkedList<CoordBean> xiaohao = new LinkedList<CoordBean>();//判断小号
     static{
         com = new Com();
@@ -60,6 +63,7 @@ public class Base{
         press = new Press(com.getActiveXComponent());   //键盘模拟操作类
         color = new Color(com.getActiveXComponent());   //颜色相关的取色、判断类
         findPic = new FindPic(com.getActiveXComponent());
+        findStr = new FindStr(com.getActiveXComponent());
         file = new com.xnx3.microsoft.File(com.getActiveXComponent());
         robot = new Robot();
         screenWidth = robot.screenWidth;
@@ -86,12 +90,32 @@ public class Base{
     	System.out.println("setImgHomeFolder " + imgHomeFolder);
     }
     
+    public static void setDic(int x, String fileName){
+    	com.setDict(0, fileName);
+    }
+    
     public static String getRealPath(String img){
     	return path + imgHomeFolder + File.separator + img;
     }
     
     public static List<CoordBean> findPic(String img){
 		return findPic(img,0,0,screenWidth,screenHeight);
+    }
+    
+    public static List<CoordBean> findStrE(String str,String color,double sim,int useDict){
+    	return findStrE(str,screenWidth,screenHeight,color, sim, useDict);
+    }
+    
+    public static List<CoordBean> findStrE(String str,int w,int h,String color,double sim,int useDict){
+		int[] strs = Base.findStr.findStrE(0, 0, w, h, str, color, 1, 0);
+		CoordBean item = new CoordBean();
+		if(strs[0] != -1){
+			item.setX(strs[1]);
+			item.setY(strs[2]);
+		}
+		List<CoordBean> list = new ArrayList<CoordBean>();
+		list.add(item);
+		return list;
     }
     
     public static void doubleClick(){
@@ -129,6 +153,10 @@ public class Base{
     }
     
     public static List<CoordBean> findPic(String img,int sx,int sy,int ex,int ey){
+    	return findPic(img, sx, sy, ex, ey, true);
+    }
+    
+    public static List<CoordBean> findPic(String img,int sx,int sy,int ex,int ey,boolean log){
     	List<CoordBean> list = new ArrayList<CoordBean>();
     	String imgs = "";
     	if(img.indexOf("|") != -1){
@@ -142,14 +170,16 @@ public class Base{
     	}
     	int[] a = findPic.findPic(sx,sy,ex,ey, imgs, "", 0.9, 0);
     	if(a[0] == -1){
-    		System.out.println("未能找到IMG【"+imgs+"】..");
+    		if(log){
+    			addLog("未找到IMG【"+imgs+"】");
+    		}
     		return list;
     	}else{
     		CoordBean item = new CoordBean();
     		item.setX(a[1]);
     		item.setY(a[2]);
     		list.add(item);
-    		System.out.println("找到IMG【"+imgs+"】坐標【"+item.getX()+","+item.getY()+"】..");
+    		addLog("找到IMG【"+imgs+"】坐標【"+item.getX()+","+item.getY()+"】..");
     	}
     	return list;
     }

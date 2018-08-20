@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.JIntellitype;
-import com.xnx3.robot.Robot;
 import com.xnx3.robot.support.CoordBean;
 import com.y_ghelp.test.demo.my.Base;
 
@@ -32,6 +31,7 @@ public class SysHotKey implements HotkeyListener {
                 System.out.println("start..");
                 WB.execute = true;
                 WB.threadPool.execute(WB.start);
+//                WB.threadPool.execute(WB.checkDie);
                 break;
             case end:
                 System.out.println("end..");
@@ -45,10 +45,14 @@ public class SysHotKey implements HotkeyListener {
                 WB.screenImage();
                 break;
             case test_search_img:
-            	String img = Constant.wb_close;
-            	List<CoordBean> list = Base.findPic(img);
+            	String cangbaotu = Constant.cangbaotu_2 + "|" + Constant.cangbaotu_3
+    			+ "|" + Constant.cangbaotu_4+ "|" + Constant.cangbaotu_5
+    			+ "|" + Constant.cangbaotu_6
+    			+ "|" + Constant.cangbaotu_7
+    			+ "|" + Constant.cangbaotu_8;
+            	List<CoordBean> list = Base.findPic(cangbaotu);
             	for(CoordBean item : list){
-            		System.out.println(item);
+            		System.out.println("cangbaotu:" + item);
             	}
                 break;
             case state:

@@ -1783,6 +1783,7 @@ public class MYDemo extends JFrame{
         boolean flag = robot.imageDelaySearch(0, 0, robot.screenWidth, robot.screenHeight, robot.getResourceImage(xiaohao), Robot.SIM_ACCURATE, 80000,list);
         if(!flag){
         	addLog("未能找到图片【"+xiaohao+"】..");
+        	return;
         }
         mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 10, true);//移动之后，左键点击
         singIn(hwnd);
