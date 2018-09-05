@@ -106,15 +106,30 @@ public class Base{
     	return findStrE(str,screenWidth,screenHeight,color, sim, useDict);
     }
     
+    public static List<CoordBean> findStrE(String str,String color,double sim,int useDict,int maxDelay){
+        List<CoordBean> list = new ArrayList<CoordBean>();
+    	int time = 0;
+    	while(time<maxDelay){
+    		list = findStrE(str,color, sim, useDict);
+    		if(list.size()>0){
+    			return list;
+    		}else{
+    			robot.delay(200);
+    			time+=200;
+    		}
+    	}
+    	return list;
+    }
+    
     public static List<CoordBean> findStrE(String str,int w,int h,String color,double sim,int useDict){
 		int[] strs = Base.findStr.findStrE(0, 0, w, h, str, color, 1, 0);
 		CoordBean item = new CoordBean();
+		List<CoordBean> list = new ArrayList<CoordBean>();
 		if(strs[0] != -1){
 			item.setX(strs[1]);
 			item.setY(strs[2]);
+			list.add(item);
 		}
-		List<CoordBean> list = new ArrayList<CoordBean>();
-		list.add(item);
 		return list;
     }
     

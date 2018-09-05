@@ -191,7 +191,7 @@ public class FastDFSUtil{
 				suffix=ClientGlobal.defaultSuffix;
 			}
 			results = client.upload_file(local_filename, suffix, meta_list);
-		} catch (IOException | MyException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -216,7 +216,7 @@ public class FastDFSUtil{
 		String[] results=null;
 		try {
 			 results = client.upload_file(file_buff, file_ext_name, meta_list);
-		} catch (IOException | MyException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -247,7 +247,7 @@ public class FastDFSUtil{
 				uploadBean.setRemoteFileName(remote_filename);
 				uploadBean.setSourceIpAddr(fileInfo.getSourceIpAddr());
 				uploadBean.setSuccess(true);
-			} catch (IOException | MyException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

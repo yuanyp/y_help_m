@@ -382,114 +382,129 @@ public class MYDemo extends JFrame{
             }
         });
         
+        JButton test_btn_move = new JButton("\u6FC0\u6D3B\u79FB\u52A8");
+        test_btn_move.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+            	int hwnd = window.findWindow(0, null, gameName);
+                if(hwnd > 0){
+                	addLog("hwnd : " + hwnd);
+                    window.setWindowActivate(hwnd); //激活窗口
+                    addLog("hwnd : " + hwnd);
+                    window.moveWindow(hwnd,0,0);
+                }
+            }
+        });
         //布局
         GroupLayout gl_contentPane = new GroupLayout(contentPane);
         gl_contentPane.setHorizontalGroup(
-            gl_contentPane.createParallelGroup(Alignment.LEADING)
-                .addGroup(gl_contentPane.createSequentialGroup()
-                    .addGap(21)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                        .addGroup(gl_contentPane.createSequentialGroup()
-                            .addPreferredGap(ComponentPlacement.RELATED)
-                            .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                                .addGroup(gl_contentPane.createSequentialGroup()
-                                    .addComponent(button_jzt_1, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(ComponentPlacement.RELATED)
-                                    .addComponent(button_jzt_2, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(ComponentPlacement.RELATED)
-                                    .addComponent(button_jzt_3, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(ComponentPlacement.RELATED)
-                                    .addComponent(button_jzt_4))
-                                .addGroup(gl_contentPane.createSequentialGroup()
-                                    .addComponent(btnNewButton)
-                                    .addPreferredGap(ComponentPlacement.UNRELATED)
-                                    .addComponent(exitSearchImg))))
-                        .addGroup(gl_contentPane.createSequentialGroup()
-                            .addComponent(lblNewLabel)
-                            .addGap(5)
-                            .addComponent(textField, GroupLayout.PREFERRED_SIZE, 533, GroupLayout.PREFERRED_SIZE)))
-                    .addGap(99))
-                .addGroup(gl_contentPane.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(textArea, GroupLayout.PREFERRED_SIZE, 606, GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(90, Short.MAX_VALUE))
-                .addGroup(gl_contentPane.createSequentialGroup()
-                    .addGap(23)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                        .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                            .addGroup(gl_contentPane.createSequentialGroup()
-                                .addComponent(btnJZT)
-                                .addPreferredGap(ComponentPlacement.RELATED)
-                                .addComponent(button_mi3))
-                            .addGroup(gl_contentPane.createSequentialGroup()
-                                .addComponent(btnSearchImg)
-                                .addPreferredGap(ComponentPlacement.RELATED)
-                                .addComponent(textField1, GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
-                                .addGap(284)))
-                        .addGroup(gl_contentPane.createSequentialGroup()
-                            .addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-                                .addComponent(label, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(m3_textField_cd, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(ComponentPlacement.UNRELATED)
-                            .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                                .addGroup(gl_contentPane.createSequentialGroup()
-                                    .addComponent(m3_textField_x, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-                                    .addGap(15)
-                                    .addComponent(m3_textField_y, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18)
-                                    .addComponent(button_start_yongsheng)
-                                    .addPreferredGap(ComponentPlacement.RELATED)
-                                    .addComponent(button_test))
-                                .addGroup(gl_contentPane.createSequentialGroup()
-                                    .addGap(12)
-                                    .addComponent(lblX, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18)
-                                    .addComponent(lblY, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)))
-                            .addGap(319))))
+        	gl_contentPane.createParallelGroup(Alignment.LEADING)
+        		.addGroup(gl_contentPane.createSequentialGroup()
+        			.addGap(21)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+        				.addGroup(gl_contentPane.createSequentialGroup()
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+        						.addGroup(gl_contentPane.createSequentialGroup()
+        							.addComponent(button_jzt_1, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(button_jzt_2, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(button_jzt_3, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(button_jzt_4))
+        						.addGroup(gl_contentPane.createSequentialGroup()
+        							.addComponent(btnNewButton)
+        							.addPreferredGap(ComponentPlacement.UNRELATED)
+        							.addComponent(exitSearchImg)
+        							.addPreferredGap(ComponentPlacement.UNRELATED)
+        							.addComponent(test_btn_move, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE))))
+        				.addGroup(gl_contentPane.createSequentialGroup()
+        					.addComponent(lblNewLabel)
+        					.addGap(5)
+        					.addComponent(textField, GroupLayout.PREFERRED_SIZE, 533, GroupLayout.PREFERRED_SIZE)))
+        			.addGap(99))
+        		.addGroup(gl_contentPane.createSequentialGroup()
+        			.addContainerGap()
+        			.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 606, GroupLayout.PREFERRED_SIZE)
+        			.addContainerGap(90, Short.MAX_VALUE))
+        		.addGroup(gl_contentPane.createSequentialGroup()
+        			.addGap(23)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+        				.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+        					.addGroup(gl_contentPane.createSequentialGroup()
+        						.addComponent(btnJZT)
+        						.addPreferredGap(ComponentPlacement.RELATED)
+        						.addComponent(button_mi3))
+        					.addGroup(gl_contentPane.createSequentialGroup()
+        						.addComponent(btnSearchImg)
+        						.addPreferredGap(ComponentPlacement.RELATED)
+        						.addComponent(textField1, GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
+        						.addGap(284)))
+        				.addGroup(gl_contentPane.createSequentialGroup()
+        					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+        						.addComponent(label, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(m3_textField_cd, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE))
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+        						.addGroup(gl_contentPane.createSequentialGroup()
+        							.addComponent(m3_textField_x, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
+        							.addGap(15)
+        							.addComponent(m3_textField_y, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
+        							.addGap(18)
+        							.addComponent(button_start_yongsheng)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(button_test))
+        						.addGroup(gl_contentPane.createSequentialGroup()
+        							.addGap(12)
+        							.addComponent(lblX, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
+        							.addGap(18)
+        							.addComponent(lblY, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)))
+        					.addGap(319))))
         );
         gl_contentPane.setVerticalGroup(
-            gl_contentPane.createParallelGroup(Alignment.LEADING)
-                .addGroup(gl_contentPane.createSequentialGroup()
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-                        .addGroup(gl_contentPane.createSequentialGroup()
-                            .addGap(9)
-                            .addComponent(lblNewLabel))
-                        .addGroup(gl_contentPane.createSequentialGroup()
-                            .addGap(6)
-                            .addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                    .addGap(18)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(btnNewButton)
-                        .addComponent(exitSearchImg))
-                    .addPreferredGap(ComponentPlacement.UNRELATED)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(button_jzt_1)
-                        .addComponent(button_jzt_4)
-                        .addComponent(button_jzt_2)
-                        .addComponent(button_jzt_3))
-                    .addGap(14)
-                    .addComponent(textArea, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-                    .addGap(13)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(label)
-                        .addComponent(lblX)
-                        .addComponent(lblY))
-                    .addPreferredGap(ComponentPlacement.UNRELATED)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(m3_textField_cd, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(m3_textField_x, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(button_start_yongsheng)
-                        .addComponent(m3_textField_y, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(button_test))
-                    .addGap(38)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(btnSearchImg)
-                        .addComponent(textField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addGap(18)
-                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-                        .addComponent(btnJZT)
-                        .addComponent(button_mi3))
-                    .addGap(286))
+        	gl_contentPane.createParallelGroup(Alignment.LEADING)
+        		.addGroup(gl_contentPane.createSequentialGroup()
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+        				.addGroup(gl_contentPane.createSequentialGroup()
+        					.addGap(9)
+        					.addComponent(lblNewLabel))
+        				.addGroup(gl_contentPane.createSequentialGroup()
+        					.addGap(6)
+        					.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+        			.addGap(18)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(btnNewButton)
+        				.addComponent(exitSearchImg)
+        				.addComponent(test_btn_move))
+        			.addPreferredGap(ComponentPlacement.UNRELATED)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(button_jzt_1)
+        				.addComponent(button_jzt_4)
+        				.addComponent(button_jzt_2)
+        				.addComponent(button_jzt_3))
+        			.addGap(14)
+        			.addComponent(textArea, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
+        			.addGap(13)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(label)
+        				.addComponent(lblX)
+        				.addComponent(lblY))
+        			.addPreferredGap(ComponentPlacement.UNRELATED)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(m3_textField_cd, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(m3_textField_x, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(button_start_yongsheng)
+        				.addComponent(m3_textField_y, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(button_test))
+        			.addGap(38)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(btnSearchImg)
+        				.addComponent(textField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        			.addGap(18)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(btnJZT)
+        				.addComponent(button_mi3))
+        			.addGap(286))
         );
         contentPane.setLayout(gl_contentPane);
     }
@@ -843,7 +858,7 @@ public class MYDemo extends JFrame{
     	//查找宝箱
     	int x = 0;
     	int y = 0;
-    	List<CoordBean> list = new ArrayList<>();
+    	List<CoordBean> list = new ArrayList<CoordBean>();
     	int i = 0;
     	do{
     		if(findImg(Common.baoxiang,1000,list)){
@@ -897,7 +912,7 @@ public class MYDemo extends JFrame{
      */
     private int addCaiLiao(String cail1,String cail2,String cail3,String cail4,String cail5){
     	addLog("添加材料开始");
-    	List<CoordBean> list = new ArrayList<>();
+    	List<CoordBean> list = new ArrayList<CoordBean>();
     	int i = 0;
     	do{
         	i = addCaiLiao(cail1);
@@ -922,7 +937,7 @@ public class MYDemo extends JFrame{
     	int x = 0;
     	int y = 0;
     	int ret = 0;
-    	List<CoordBean> list = new ArrayList<>();
+    	List<CoordBean> list = new ArrayList<CoordBean>();
     	if(findImg(cail,500,startX,startY,list)){
     		addLog(cail +  list.size());
     		for(CoordBean item : list){
@@ -1459,7 +1474,19 @@ public class MYDemo extends JFrame{
      */
     private void start_game(String[] user) throws Exception{
     	threadPool.execute(openGameTh);
-    	robot.delay(1000);
+    	robot.delay(3000);
+        boolean flag = true;
+        do{
+        	robot.delay(500);
+        	int hwnd = window.findWindow(0, null, gameName);
+            if(hwnd > 0){
+            	addLog("hwnd : " + hwnd);
+                window.setWindowActivate(hwnd); //激活窗口
+                addLog("hwnd : " + hwnd);
+                window.moveWindow(hwnd,0,0);
+                flag = false;
+            }
+        }while(flag);
         robot.setSourcePath(MYDemo.class);
         boolean showGame = robot.imageDelaySearch(0, 0, robot.screenWidth, robot.screenHeight, robot.getResourceImage(Common.startImg), Robot.SIM_ACCURATE, 10000);
         if(!showGame){
@@ -1477,7 +1504,7 @@ public class MYDemo extends JFrame{
             }
             mouse.mouseClick(list.get(0).getX() - 60, list.get(0).getY() - 60, true);//移动之后，左键点击
             
-            boolean flag = true;
+            flag = true;
             do{
                 login(user);
                 addLog("flag.." + flag);

@@ -45,15 +45,39 @@ public class SysHotKey implements HotkeyListener {
                 WB.screenImage();
                 break;
             case test_search_img:
-            	String cangbaotu = Constant.cangbaotu_2 + "|" + Constant.cangbaotu_3
-    			+ "|" + Constant.cangbaotu_4+ "|" + Constant.cangbaotu_5
-    			+ "|" + Constant.cangbaotu_6
-    			+ "|" + Constant.cangbaotu_7
-    			+ "|" + Constant.cangbaotu_8;
-            	List<CoordBean> list = Base.findPic(cangbaotu);
-            	for(CoordBean item : list){
-            		System.out.println("cangbaotu:" + item);
-            	}
+            	Base.addLog("test_search_img start..");
+            	List<CoordBean> list = Base.findStrE("雷鸣", 
+        				"9a957d-565247", 1, 0,1000);
+        		if(list.size() > 0){
+        			Base.addLog("当前人物在雷鸣");
+        			for(CoordBean item : list){
+        				System.out.println("雷鸣:" + item);
+	            	}
+        			return;
+        		}else{
+        			list = Base.findStrE("遗忘", 
+        					"a6a08a-4b473b", 1, 0,1000);
+        			if(list.size() > 0){
+        				for(CoordBean item : list){
+            				System.out.println("遗忘" + item);
+    	            	}
+        				Base.mouse.mouseMoveTo(list.get(0).getX(), list.get(0).getY());
+        				Base.robot.delay(500);
+        				Base.addLog("当前人物在神界");
+        				//检查是否已经到了神界
+        				list = Base.findStrE("神界", 
+        						"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013", 1, 0,1000);
+        				if(list.size() > 0){//50 80
+        					for(CoordBean item : list){
+                				System.out.println("神界" + item);
+        	            	}
+        				}else{
+        					Base.addLog("没有回到神界");
+        		    		return;
+        				}
+        			}
+        		}
+        		Base.addLog("test_search_img end..");
                 break;
             case state:
                 if(frame.getState() != Frame.ICONIFIED){
