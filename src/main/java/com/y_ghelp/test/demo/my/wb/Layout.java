@@ -2,6 +2,7 @@ package com.y_ghelp.test.demo.my.wb;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -459,6 +460,16 @@ public class Layout extends JFrame{
     		Base.addLog("挖宝完毕");
     		//领取宝箱
     		baoxiang_click();
+    		return;
+    	}
+    	//检测复活
+    	List<CoordBean> die_list = new ArrayList<>();
+    	boolean die = WB.die(die_list);
+    	if(die) {
+    		//如果任务死亡，执行复活
+    		WB.threadPool.execute(WB.checkDie);
+    		robot.delay(5000);
+    		//直接返回，切换账号；
     		return;
     	}
     	//清理怪物，避免挖宝被打断

@@ -4,6 +4,7 @@ import java.awt.PopupMenu;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.xnx3.Lang;
@@ -19,21 +20,37 @@ import com.y_ghelp.test.demo.my.Base;
  */
 public class WB extends Base{
 	
+	static int sx = 244;
+	static int sy = 295;
+	static int ex = 636;
+	static int ey = 467;
+	
+	public static boolean die(List<CoordBean> _list) {
+		if(null != _list){
+			_list.clear();
+		}
+		robot.delay(500);
+		List<CoordBean> list = findPic(Constant.die,sx,sy,ex,ey,false);
+		if(list.size() > 0){
+			Base.addLog("检测到人物死亡");
+			_list.addAll(list);//返回坐标
+			return true;
+		}
+		return false;
+	}
+	
 	public static Thread checkDie = new Thread(new Runnable() {
         public void run() {
             try {
             	//处理如果人物死亡自动复活
             	//检测人物死亡开始
-            	int sx = 244;
-            	int sy = 295;
-            	int ex = 636;
-            	int ey = 467;
             	Base.addLog("自动复活开启..");
+            	boolean flag = true;
             	do{
-            		robot.delay(500);
-            		List<CoordBean> list = findPic(Constant.die,sx,sy,ex,ey,false);
-            		if(list.size() > 0){
-            			Base.addLog("检测到人物死活，等待复活..");
+            		List<CoordBean> list = new ArrayList<>();
+            		boolean die = die(list);
+            		if(die){
+            			Base.addLog("检测到人物死亡，等待复活..");
             			robot.delay(200);
             			list = findPic(Constant.fuhuo_2,sx,sy,ex,ey);
             			if(list.size() > 0){
@@ -47,8 +64,10 @@ public class WB extends Base{
                 				mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
                 			}
             			}
+            		}else {
+            			flag = false;
             		}
-            	}while(true);
+            	}while(flag);
             } catch (Exception e) {
                 e.printStackTrace();
             }
