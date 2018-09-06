@@ -99,7 +99,7 @@ public class Robot{
 	 * @return 按键码
 	 */
 	public int StringToKey(String key){
-		switch (key) {
+		switch (key.toLowerCase()) {
 		case "a":
 			return KeyEvent.VK_A;
 		case "b":
@@ -174,6 +174,42 @@ public class Robot{
 			return KeyEvent.VK_9;
 		case ".":
 			return KeyEvent.VK_PERIOD;
+		case "f1":
+			return KeyEvent.VK_F1;
+		case "f2":
+			return KeyEvent.VK_F2;
+		case "f3":
+			return KeyEvent.VK_F3;
+		case "f4":
+			return KeyEvent.VK_F4;
+		case "f5":
+			return KeyEvent.VK_F5;
+		case "f6":
+			return KeyEvent.VK_F6;
+		case "f7":
+			return KeyEvent.VK_F7;
+		case "f8":
+			return KeyEvent.VK_F8;
+		case "f9":
+			return KeyEvent.VK_F9;
+		case "f10":
+			return KeyEvent.VK_F10;
+		case "f11":
+			return KeyEvent.VK_F11;
+		case "f12":
+			return KeyEvent.VK_F12;
+		case "esc":
+			return KeyEvent.VK_ESCAPE;
+		case "ctrl":
+			return KeyEvent.VK_CONTROL;
+		case "alt":
+			return KeyEvent.VK_ALT;
+		case "shift":
+			return KeyEvent.VK_SHIFT;
+		case "delete":
+			return KeyEvent.VK_DELETE;
+		case "enter":
+			return KeyEvent.VK_ENTER;
 		default:
 			break;
 		}
