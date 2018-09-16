@@ -37,7 +37,7 @@ public class Common {
     
     static String dashaziImg = "dashaizi.bmp";
     static String emailImg = "email.bmp";
-    static String email1Img = "email1.bmp";
+    public static String email1Img = "email1.bmp";
     static String qdImg = "qd.png";
     static String shaiziImg = "shaizi.png";
     static String fangguaiwuImg = "fangguaiwu.bmp";
@@ -81,6 +81,7 @@ public class Common {
     static String m3_jiao1 = "m3_jiao1.bmp";
     static String m3_jiao1_1 = "m3_jiao1_1.bmp";
     static String m3_jiao1_2 = "m3_jiao1_2.bmp";
+    static String m3_jiao1_2_top = "m3_jiao1_2_top.bmp";
     static String m3_jiao2 = "m3_jiao2.bmp";
     static String m3_jiao3 = "m3_jiao3.bmp";
     static String m3_jiao4 = "m3_jiao4.bmp";

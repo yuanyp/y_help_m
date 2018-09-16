@@ -2,7 +2,9 @@ package com.y_ghelp.test.demo.my;
 
 import java.awt.TrayIcon;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -147,7 +149,23 @@ public class Base{
     	file.screenImage(0, 0, screenWidth, screenWidth, "c:\\temp_img\\"+System.currentTimeMillis()+".png");
     }
     
+    public static void screenDieImage(){
+    	String date = getDate("YYYYMMDD");
+    	String dir = "c:\\temp_img\\"+date;
+    	File file1 = new File(dir);
+    	if(!file1.exists()){
+    		file1.mkdirs();
+    	}
+    	file.screenImage(0, 0, screenWidth, screenWidth, dir + "\\" + System.currentTimeMillis()+".png");
+    }
+    
+    public static String getDate(String fmt){
+    	SimpleDateFormat sdf = new SimpleDateFormat(fmt);
+    	return sdf.format(new Date());
+    }
+    
     public static List<CoordBean> findPic(String img,int sx,int sy,int ex,int ey,int maxDelay){
+    	addLog("开始循环找图IMG【"+img+"】");
     	List<CoordBean> list = new ArrayList<CoordBean>();
     	int time = 0;
 		while(time<maxDelay){
@@ -159,6 +177,7 @@ public class Base{
 				time+=200;
 			}
 		}
+		addLog("结束找图IMG【"+img+"】" + list.size());
 		return list;
     }
     
@@ -168,7 +187,7 @@ public class Base{
     }
     
     public static List<CoordBean> findPic(String img,int sx,int sy,int ex,int ey){
-    	return findPic(img, sx, sy, ex, ey, true);
+    	return findPic(img, sx, sy, ex, ey, false);
     }
     
     public static List<CoordBean> findPic(String img,int sx,int sy,int ex,int ey,boolean log){

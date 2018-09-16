@@ -55,6 +55,47 @@ public class Layout extends JFrame{
         Base.addLog("结束..");
     }
     
+    /**
+     * 出征宝宝
+     */
+    private void chuzhengbaobao(int x,int y){
+    	//66 * 58
+    	robot.delay(200);
+    	mouse.mouseClick(x + 66, y - 58, true);
+    	robot.delay(200);
+    	chuzhen_1();
+    	robot.delay(200);
+    	mouse.mouseClick(x + 66, y - 58, true);
+    	//134 * 58
+//    	robot.delay(200);
+//    	mouse.mouseClick(x + 134, y - 58, true);
+//    	robot.delay(200);
+//    	chuzhen_1();
+    }
+    
+    private void chuzhen_1(){
+    	robot.delay(200);
+    	List<CoordBean> list = Base.findStrE("解体",  "d9d8d7-262728", 1, 0);//解体
+    	if(list.size() > 0){
+    		Base.addLog("解体..");
+    		return;
+    	}
+    	robot.delay(200);
+    	list = Base.findStrE("合体",  "d9d8d7-262728", 1, 0);//合体
+    	if(list.size() > 0){
+    		Base.addLog("合体..");
+    		mouse.mouseClick(list.get(0).getX() + 8, list.get(0).getY() + 8, true);
+    		robot.delay(200);
+    		return;
+    	}
+    	list = Base.findStrE("出征",  "d9d8d7-262728", 1, 0);//出征
+    	if(list.size() > 0){
+    		Base.addLog("出征..");
+    		mouse.mouseClick(list.get(0).getX() + 8, list.get(0).getY() + 8, true);
+    		robot.delay(200);
+    	}
+    }
+    
     private void active(){
     	int hwnd = window.findWindow(0, null, Constant.appName);
         if(hwnd > 0){
@@ -78,21 +119,32 @@ public class Layout extends JFrame{
 			robot.delay(500);
 		}
     	//收起任务栏
-    	list = Base.findPic(Constant.go_index_1 + "|" + Constant.go_index_1_1,2000);
+    	list = Base.findPic(Constant.go_index_1 + "|" + Constant.go_index_1_1,5000);
+    	int x = -1;
+    	int y = -1;
     	if(list.size() > 0){
-    		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
+    		x = list.get(0).getX();
+    		y = list.get(0).getY();
+    		mouse.mouseClick(x, y, true);
     		robot.delay(1000);
     	}else{
     		Base.addLog("没有找到收起人物栏的图标");
     		return;
     	}
-		list = Base.findPic(Constant.go_index,30000);
-		if(list.size() > 0){
-			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
-			robot.delay(500);
-		}
-		robot.delay(3000);
-		
+    	//出征宝宝
+    	chuzhengbaobao(x, y);
+    	
+    	//判断是否在雷鸣领奖处
+    	list = Base.findStrE("罗兰", "29ce21-2a3121", 0.9, 0,5000);
+    	if(list.size() > 0){
+    		Base.addLog("在雷鸣领奖处..");
+    	}else{
+    		list = Base.findPic(Constant.go_index,25000);
+    		if(list.size() > 0){
+    			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
+    		}
+    	}
+		robot.delay(500);
     	Base.addLog("wb start..");
     	//领藏宝图
     	lcbt();
@@ -165,8 +217,13 @@ public class Layout extends JFrame{
     	return Base.xiaohao;
     }
     
+    public void clearData(){
+    	WB.die_count = 0;
+    }
+    
     public void switchUser(){
     	Base.addLog("开始切换账号..");
+    	clearData();//清空死亡次数
     	robot.delay(2000);
     	//先退出当前账号
     	//按K然后找到设置按钮
@@ -178,11 +235,16 @@ public class Layout extends JFrame{
     	
     	//判断是否有小号
     	List<CoordBean> xiaohao = has_xiaohao();
+    	robot.delay(1500);
     	//210 247
-		List<CoordBean> list = Base.findPic(Constant.xiaohao_close,3000);
+		List<CoordBean> list = Base.findPic(Constant.xiaohao_close,1500);
     	if(xiaohao.size() > 0){
     		Base.addLog("有小号.." + xiaohao);
     		robot.delay(500);
+    		if(list.size() <= 0){
+    			Base.addLog("找不到" + Constant.xiaohao_close);
+    			return;
+    		}
     		if(xiaohao.get(0).getId() == 1){
     			mouse.mouseClick(list.get(0).getX() - 266, list.get(0).getY() + 89,true);
     		}else if(xiaohao.get(0).getId() == 2){
@@ -219,7 +281,7 @@ public class Layout extends JFrame{
     			//126 383//退出游戏
     			if(list.size() > 0){
     				list = Base.findStrE("退出", 
-    						"f0ece5-0f131a|e9e2da-161d25|d9d8d7-262728|d8d6d5-27292a", 1, 0);
+    						"d9d8d7-262728", 1, 0);
     				if(list.size() > 0){
     					mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
     				}else{
@@ -240,6 +302,8 @@ public class Layout extends JFrame{
      * @return
      */
     public boolean open_cbt(List<CoordBean> list){
+    	press.keyPress(press.Z);
+    	robot.delay(200);
     	open_beibao();
     	if(null != list && list.size() > 0){
 			Base.addLog("点击藏宝图...");
@@ -270,12 +334,13 @@ public class Layout extends JFrame{
 		Base.addLog("开始自动寻路中...");
 		do{
 			//自动寻路
-			List<CoordBean> list = Base.findPic(Constant.xunlu,2000);
+			List<CoordBean> list = Base.findPic(Constant.xunlu);
 			if(list.size() <= 0){
 				//自动寻路完毕
     			Base.addLog("自动寻路完毕...");
 				flag = false;
 			}
+			robot.delay(1000);
 		}while(flag);
 		Base.addLog("结束自动寻路中...");
     }
@@ -312,6 +377,10 @@ public class Layout extends JFrame{
      */
     public List<CoordBean> find_cbt(){
     	List<CoordBean> list = open_beibao();
+    	if(list.size() <= 0){
+    		Base.addLog("find_cbt open_beibao return null");
+    		return null;
+    	}
     	int b_x = list.get(0).getX();
     	int b_y = list.get(0).getY();
     	//查找藏宝图
@@ -357,6 +426,10 @@ public class Layout extends JFrame{
     	do{
     		do_0();
     		press.keyPress(press.F3);
+    		if(i == 2){
+    			press.keyPress(press.F2);
+    			robot.delay(500);
+    		}
     		i++;
     		Base.addLog("处理山贼... i " + i);
     		flag = Base.findPic(getBaoXiangImg()).size() <= 0;
@@ -397,6 +470,10 @@ public class Layout extends JFrame{
     	do{
     		press.keyPress(press.SPACE);
     		robot.delay(200);
+    		if(i == 2){
+    			press.keyPress(press.F2);
+    			robot.delay(500);
+    		}
     		list = Base.findPic(Constant.do_2_1);
         	if(list.size() > 0){
         		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
@@ -435,6 +512,10 @@ public class Layout extends JFrame{
     	boolean flag = true;
     	do{
     		do_0();
+    		if(i == 2){
+    			press.keyPress(press.F2);
+    			robot.delay(500);
+    		}
     		press.keyPress(press.SPACE);
     		i++;
     		Base.addLog("处理宝树... i " + i);
@@ -466,11 +547,19 @@ public class Layout extends JFrame{
     	List<CoordBean> die_list = new ArrayList<>();
     	boolean die = WB.die(die_list);
     	if(die) {
-    		//如果任务死亡，执行复活
+    		robot.delay(500);
+			//如果人物死亡，执行复活
     		WB.threadPool.execute(WB.checkDie);
-    		robot.delay(5000);
-    		//直接返回，切换账号；
-    		return;
+    		robot.delay(1000);
+    		do{
+    			robot.delay(1000);
+    			Base.addLog("等待复活...");
+    		}while(WB.die);
+    		//判断是否已经复活过5次
+    		if(WB.die_count >=5){
+    			Base.addLog("复活次数大于等于5次直接返回...");
+    			return;
+    		}
     	}
     	//清理怪物，避免挖宝被打断
     	clear_gw();
@@ -581,11 +670,11 @@ public class Layout extends JFrame{
      * 领藏宝图
      */
     public void lcbt(){
-    	robot.delay(3000);
+    	robot.delay(200);
     	List<CoordBean> list = Base.findPic(Constant.wb_0,17000);
     	if(list.size() > 0){
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-        	robot.delay(500);
+        	robot.delay(2000);
         	list = Base.findPic(Constant.wb_4,140,219,288,260,3000);//是否已经挖过宝了
         	if(list.size() > 0){
         		Base.addLog("该账号已经挖过宝..");
@@ -602,23 +691,33 @@ public class Layout extends JFrame{
         		robot.delay(500);
         		//判断当前是在雷鸣还是在神界
         		list = Base.findStrE("确定", 
-    					"bfb490-40473f", 1, 0,2000);
+    					"c7bd97-383e38", 1, 0,2000);
     			if(list.size() > 0){
     				mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
     				robot.delay(500);
     				Base.addLog("当前人物在神界");
     				//检查是否已经到了神界
     				list = Base.findStrE("神界", 
-    						"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013", 1, 0,10000);
+    						"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013", 0.9, 0,10000);
     				if(list.size() > 0){//50 80
-    					mouse.mouseClick(list.get(0).getX() + 50, list.get(0).getY() + 80, true);
+    					mouse.mouseClick(list.get(0).getX() + 50, list.get(0).getY() + 80, true);//点击传送师
     					robot.delay(500);
-    					list = Base.findStrE("交易", 
-    							"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013|9a9782-36352f", 1, 0,5000);
-    					if(list.size() > 0){
-    						mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
-    						robot.delay(500);
+    					boolean a = go_to_lm();
+    					if(a){
     						lcbt();
+    					}else{
+    						Base.addLog("传送员可能被挡住了，查找上面弹出的NPC..");
+    						list = Base.findStrE("神界", "808012-737312", 0.9, 0, 1000);
+    						if(list.size() > 0){
+    							Base.mouse.mouseClick(list.get(0).getX(), list.get(0).getY(),true);
+    							robot.delay(500);
+    							a = go_to_lm();
+    							if(a){
+    	    						lcbt();
+    							}
+    						}else{
+    							Base.addLog("没有找到神界传送师NPC");
+    						}
     					}
     				}
     			}else{
@@ -633,6 +732,18 @@ public class Layout extends JFrame{
     	}
     }
 
+    private boolean go_to_lm(){
+    	boolean f = false;
+    	List<CoordBean> list = Base.findStrE("交易", 
+				"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013|9a9782-36352f", 0.9, 0,1000);
+		if(list.size() > 0){
+			mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
+			f = true;
+		}
+		robot.delay(500);
+		return f;
+    }
+    
 	private void wb_2(){
 		List<CoordBean> list = Base.findPic(Constant.wb_2,145,318,269,365,45000);
 		if(list.size() > 0){
@@ -726,6 +837,14 @@ public class Layout extends JFrame{
     		robot.delay(3000);
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
     	}else{
+    		list = Base.findPic(Constant.update_4,2000);
+    		if(list.size() > 0){
+    			Base.addLog("找到更新内容界面，关闭界面然后重新登录");
+    			robot.delay(200);
+    			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
+    			robot.delay(200);
+    			login();
+    		}
     		Base.addLog("没有找到登录按钮login_1");
     		Base.screenImage();
     		return false;

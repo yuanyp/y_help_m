@@ -10,6 +10,7 @@ import java.util.List;
 import com.xnx3.Lang;
 import com.xnx3.microsoft.SystemUtil;
 import com.xnx3.robot.support.CoordBean;
+import com.y_ghelp.test.demo.config.MYConfig;
 import com.y_ghelp.test.demo.my.Base;
 
 /**
@@ -20,10 +21,13 @@ import com.y_ghelp.test.demo.my.Base;
  */
 public class WB extends Base{
 	
-	static int sx = 244;
-	static int sy = 295;
-	static int ex = 636;
-	static int ey = 467;
+	static int sx = 0;
+	static int sy = 0;
+	static int ex = 800;
+	static int ey = 600;
+	
+	static int die_count = 0;
+	static boolean die = false;//判断人物是否死亡
 	
 	public static boolean die(List<CoordBean> _list) {
 		if(null != _list){
@@ -32,10 +36,13 @@ public class WB extends Base{
 		robot.delay(500);
 		List<CoordBean> list = findPic(Constant.die,sx,sy,ex,ey,false);
 		if(list.size() > 0){
+			Base.screenDieImage();
 			Base.addLog("检测到人物死亡");
 			_list.addAll(list);//返回坐标
+			WB.die = true;
 			return true;
 		}
+		WB.die = false;
 		return false;
 	}
 	
@@ -50,24 +57,18 @@ public class WB extends Base{
             		List<CoordBean> list = new ArrayList<>();
             		boolean die = die(list);
             		if(die){
-            			Base.addLog("检测到人物死亡，等待复活..");
             			robot.delay(200);
-            			list = findPic(Constant.fuhuo_2,sx,sy,ex,ey);
-            			if(list.size() > 0){
-            				Base.addLog("找到原地复活按钮..");
-            				mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-            			}else{
-            				robot.delay(200);
-                			list = findPic(Constant.fuhuo_1+"|"+Constant.fuhuo_3,sx,sy,ex,ey);
-                			if(list.size() > 0){
-                				Base.addLog("找到回城复活按钮..");
-                				mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-                			}
-            			}
+            			int x = list.get(0).getX() + 5;
+            			int y = list.get(0).getY() + 95;
+            			Base.addLog("鼠标点击复活坐标【"+x+","+y+"】..");
+        				mouse.mouseClick(x, y, true);
             		}else {
+            			WB.die = false;
             			flag = false;
             		}
             	}while(flag);
+            	WB.die_count = WB.die_count + 1;//复活次数+1
+            	Base.addLog("复活次数+1...【"+WB.die_count+"】");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -77,8 +78,12 @@ public class WB extends Base{
 	public static Thread openGame = new Thread(new Runnable() {
         public void run() {
             try {
+            	String appPath = (String)MYConfig.getInstance().getConfig("defaultYSPath");
+            	if(org.apache.commons.lang.StringUtils.isBlank(appPath)){
+            		appPath = Constant.appPath;
+            	}
                 // 打开应用,此函数会阻塞当前线程，直到打开的关闭为止。故而须另开辟一个线程执行此函数
-                String cmdExe = " start \"\" \"" + Constant.appPath + "\"";
+                String cmdExe = " start \"\" \"" + appPath + "\"";
                 SystemUtil.cmd(cmdExe);
             } catch (Exception e) {
                 e.printStackTrace();

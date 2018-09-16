@@ -10,6 +10,10 @@ public class Constant {
 	
 	public static String dm_dic = "C://dm_dic/dm_soft.txt";
 	
+	public static String chuzheng_01 = "chuzheng_01.bmp";
+	public static String chuzheng_02 = "chuzheng_02.bmp";
+	public static String chuzheng_03 = "chuzheng_03.bmp";
+	
 	public static String app_game = "app.bmp";
 	public static String login_1 = "login_1.bmp";
 	public static String login_2 = "login_2.bmp";
