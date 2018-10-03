@@ -16,11 +16,11 @@ import com.y_ghelp.test.demo.my.MYDemo;
 
 public class SysHotKey implements HotkeyListener {
     
-    final int start = 1;//开始
-    final int end = 2;//结束
-    final int state = 3;//切换窗口,显示\隐藏
-    final int cut = 4;//截图
-    final int test_search_img = 5;//测试找图
+	public static final int start = 1;//开始
+	public static final int end = 2;//结束
+	public static final int state = 3;//切换窗口,显示\隐藏
+	public static final int cut = 4;//截图
+	public static final int test_search_img = 5;//测试找图
     
     JFrame frame;
     
@@ -46,15 +46,31 @@ public class SysHotKey implements HotkeyListener {
                 break;
             case cut:
                 System.out.println("截图..");
-                WB.screenImage();
+                WB.screenImage("截图");
                 break;
             case test_search_img:
             	Base.addLog("test_search_img start..");
-            	Base.screenDieImage();
-//        		for(CoordBean item : list){
-//        			System.out.println(item.getX());
-//        			System.out.println(item.getY());
-//        		}
+//            	List<CoordBean> list = Base.findStrE("德兰", "0bb10b-0b4e0c", 0.9, 0);
+            	String cangbaotu = Constant.cangbaotu_2 + "|" + Constant.cangbaotu_3
+            			+ "|" + Constant.cangbaotu_4+ "|" + Constant.cangbaotu_5
+            			+ "|" + Constant.cangbaotu_6
+            			+ "|" + Constant.cangbaotu_7
+            			+ "|" + Constant.cangbaotu_8;
+//            	String color = "a22513|aa2c15|9d2b11|ac1f10|a42a16|ac2210|a62918|a22a16";
+//            	int[] caobaotu = Base.color.findColor(440, 219, 736, 462, color, 0.9, 0);
+//            	CoordBean coordBean = new CoordBean();
+            	
+            	//
+//            	XY=Plugin.Color.FindMutiColor(0,0,1280,1024,"162AA4","-6|6|3A5C6A,-19|10|0D257B,-17|-5|3A5B6B",1)
+//            			dim MyArray
+//            			MyArray = Split(XY, "|")
+//            			X = CInt(MyArray(0)): Y = CInt(MyArray(1))
+            	List<CoordBean> list = Base.findPic(cangbaotu,0,0,800,600,500);
+            	
+        		for(CoordBean item : list){
+        			System.out.println(item.getX());
+        			System.out.println(item.getY());
+        		}
 //        		Base.mouse.mouseMoveTo(list.get(0).getX(), list.get(0).getY());
         		Base.addLog("test_search_img end..");
                 break;
@@ -76,7 +92,7 @@ public class SysHotKey implements HotkeyListener {
     /**
      * 解除注册
      * */
-    void destroy() {
+    public static void destroy() {
         JIntellitype.getInstance().unregisterHotKey(start);
         JIntellitype.getInstance().unregisterHotKey(end);
         JIntellitype.getInstance().unregisterHotKey(cut);

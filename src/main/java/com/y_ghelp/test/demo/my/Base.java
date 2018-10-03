@@ -145,12 +145,17 @@ public class Base{
     	return findPic(img,0,0,screenWidth,screenHeight,maxDelay);
     }
     
-    public static void screenImage(){
-    	file.screenImage(0, 0, screenWidth, screenWidth, "c:\\temp_img\\"+System.currentTimeMillis()+".png");
+    public static void screenImage(String name){
+    	String dir = "c:\\temp_img\\"+name;
+    	File file1 = new File(dir);
+    	if(!file1.exists()){
+    		file1.mkdirs();
+    	}
+    	file.screenImage(0, 0, screenWidth, screenWidth, dir + "\\" + System.currentTimeMillis()+".png");
     }
     
     public static void screenDieImage(){
-    	String date = getDate("YYYYMMDD");
+    	String date = getDate("YYYYMMdd");
     	String dir = "c:\\temp_img\\"+date;
     	File file1 = new File(dir);
     	if(!file1.exists()){

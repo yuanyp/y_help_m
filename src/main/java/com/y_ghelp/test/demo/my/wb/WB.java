@@ -60,8 +60,14 @@ public class WB extends Base{
             			robot.delay(200);
             			int x = list.get(0).getX() + 5;
             			int y = list.get(0).getY() + 95;
-            			Base.addLog("鼠标点击复活坐标【"+x+","+y+"】..");
+            			Base.addLog("鼠标点击复活坐标1【"+x+","+y+"】..");
         				mouse.mouseClick(x, y, true);
+        				robot.delay(500);
+        				//68 86
+        				int x1 = list.get(0).getX() - 68;
+        				int y1 = list.get(0).getY() + 86;
+        				Base.addLog("鼠标点击复活坐标2【"+x1+","+y1+"】..");
+        				mouse.mouseClick(x1, y1, true);
             		}else {
             			WB.die = false;
             			flag = false;

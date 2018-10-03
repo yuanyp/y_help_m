@@ -139,7 +139,12 @@ public class Layout extends JFrame{
     	if(list.size() > 0){
     		Base.addLog("在雷鸣领奖处..");
     	}else{
-    		list = Base.findPic(Constant.go_index,25000);
+    		list = Base.findStrE("德兰", "0bb10b-0b4e0c", 0.9, 0,5000);
+    		if(list.size() > 0){//13 51
+    			mouse.mouseClick(list.get(0).getX() + 13, list.get(0).getY() + 51, true);
+    		}
+    		//判断是否在环保练功场（未成神）
+    		list = Base.findPic(Constant.go_index,20000);
     		if(list.size() > 0){
     			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
     		}
@@ -399,9 +404,20 @@ public class Layout extends JFrame{
 //    			MyArray = Split(XY, "|")
 //    			X = CInt(MyArray(0)): Y = CInt(MyArray(1))
     	list = Base.findPic(cangbaotu,412,144,756,551,5000);
-    	Base.addLog("关闭背包...");
-		mouse.mouseClick(b_x + 5, b_y + 5, true);
-		robot.delay(500);
+    	boolean flag = true;
+    	do{
+    		Base.addLog("关闭背包...");
+    		mouse.mouseClick(b_x + 8, b_y + 8, true);
+    		robot.delay(500);
+    		List<CoordBean> list1 = Base.findPic(Constant.beibao_close);
+    		if(list1.size() <= 0){
+    			flag = false;
+    		}else{
+    			b_x = list1.get(0).getX();
+    			b_y = list1.get(0).getY();
+    		}
+    	}while(flag);//防止背包关不掉
+    	
 //    	if(caobaotu[0] != -1){
 //    		list.clear();
 //    		coordBean.setX(caobaotu[0]);
@@ -434,12 +450,11 @@ public class Layout extends JFrame{
     		Base.addLog("处理山贼... i " + i);
     		flag = Base.findPic(getBaoXiangImg()).size() <= 0;
     		if(flag){
-    			if(i == 8 || i == 15){
-    				Base.screenImage();
-    			}
     			if(i >= 15){
     				flag = false;
     			}
+    		}else{
+    			Base.screenImage("宝箱");
     		}
     	}while(flag);
     	Base.addLog("处理山贼结束...");
@@ -485,6 +500,8 @@ public class Layout extends JFrame{
     			if(i >= 140){
     				flag = false;
     			}
+    		}else{
+    			Base.screenImage("宝箱");
     		}
     	}while(flag);
     	Base.addLog("处理盗墓贼结束...");
@@ -619,7 +636,6 @@ public class Layout extends JFrame{
             		robot.delay(500);
             	}else{
             		flag = false;
-    				Base.screenImage();
             	}
     		}while(flag);
     	}else{
@@ -846,7 +862,7 @@ public class Layout extends JFrame{
     			login();
     		}
     		Base.addLog("没有找到登录按钮login_1");
-    		Base.screenImage();
+    		Base.screenImage("login_1");
     		return false;
     	}
     	String[] user = loadUserInfo();
@@ -875,12 +891,12 @@ public class Layout extends JFrame{
     			Base.addLog("登录成功..");
     		}else{
         		Base.addLog("没有找到login_success");
-        		Base.screenImage();
+        		Base.screenImage("login_success");
         		return false;
         	}
     	}else{
     		Base.addLog("没有找到login_2");
-    		Base.screenImage();
+    		Base.screenImage("login_2");
     		return false;
     	}
     	return true;
@@ -892,15 +908,17 @@ public class Layout extends JFrame{
      */
     public void input_user(String[] user){
     	clearInput();
-    	robot.delay(200);
+    	robot.delay(500);
     	List<CoordBean> list = Base.findPic(Constant.login_u,2000);
     	if(list.size() > 0){
     		mouse.mouseClick(list.get(0).getX() + 90, list.get(0).getY() + 13, true);
+    		robot.delay(500);
     		robot.sendString(user[0]);
     	}
     	list = Base.findPic(Constant.login_p,2000);
     	if(list.size() > 0){
     		mouse.mouseClick(list.get(0).getX() + 90, list.get(0).getY() + 13, true);
+    		robot.delay(500);
     		robot.sendString(user[1]);
     	}
     }
@@ -1028,6 +1046,22 @@ public class Layout extends JFrame{
             	switchUser();
             }
         });
+    	
+    	JButton btn_reset = new JButton("\u91CD\u7F6E");
+    	btn_reset.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent arg0) {
+    			Base.listUsers.clear();
+    			Base.xiaohao.clear();
+    			Base.listUserXiaoHao.clear();
+    		}
+    	});
+    	
+    	JButton btn_exit = new JButton("\u9000\u51FA");
+    	btn_exit.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent e) {
+    			SysHotKey.destroy();
+    		}
+    	});
     	GroupLayout groupLayout = new GroupLayout(getContentPane());
     	groupLayout.setHorizontalGroup(
     		groupLayout.createParallelGroup(Alignment.LEADING)
@@ -1035,20 +1069,30 @@ public class Layout extends JFrame{
     				.addGap(123)
     				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
     					.addComponent(button_1, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
-    					.addComponent(button)
-    					.addComponent(btnNewButton))
-    				.addContainerGap(206, Short.MAX_VALUE))
+    					.addGroup(groupLayout.createSequentialGroup()
+    						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+    							.addComponent(btnNewButton)
+    							.addComponent(button))
+    						.addGap(18)
+    						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+    							.addComponent(btn_exit, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+    							.addComponent(btn_reset, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE))))
+    				.addContainerGap(107, Short.MAX_VALUE))
     	);
     	groupLayout.setVerticalGroup(
     		groupLayout.createParallelGroup(Alignment.LEADING)
     			.addGroup(groupLayout.createSequentialGroup()
     				.addGap(56)
-    				.addComponent(btnNewButton)
+    				.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+    					.addComponent(btnNewButton)
+    					.addComponent(btn_reset))
     				.addGap(18)
-    				.addComponent(button)
+    				.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+    					.addComponent(button)
+    					.addComponent(btn_exit))
     				.addGap(18)
     				.addComponent(button_1)
-    				.addContainerGap(101, Short.MAX_VALUE))
+    				.addContainerGap(90, Short.MAX_VALUE))
     	);
     	getContentPane().setLayout(groupLayout);
     }

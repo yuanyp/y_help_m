@@ -1788,6 +1788,9 @@ public class MYDemo extends JFrame{
     	boolean success = false;
     	List<CoordBean> list = new ArrayList<CoordBean>();
         robot.delay(500);
+        if(findImg(Common.huodong_close, 3000, list)){
+        	mouse.mouseClick(list.get(0).getX() + 8, list.get(0).getY() + 8, true);
+        }
         if(!findImg(Common.dashaziImg, 3000, list)){
         	addLog("未能找到图片【"+Common.dashaziImg+"】..");
             return success;
