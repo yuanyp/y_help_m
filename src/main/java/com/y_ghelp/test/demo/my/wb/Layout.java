@@ -142,6 +142,7 @@ public class Layout extends JFrame{
     		list = Base.findStrE("德兰", "0bb10b-0b4e0c", 0.9, 0,5000);
     		if(list.size() > 0){//13 51
     			mouse.mouseClick(list.get(0).getX() + 13, list.get(0).getY() + 51, true);
+    			robot.delay(1500);
     		}
     		//判断是否在环保练功场（未成神）
     		list = Base.findPic(Constant.go_index,20000);
@@ -403,7 +404,7 @@ public class Layout extends JFrame{
 //    			dim MyArray
 //    			MyArray = Split(XY, "|")
 //    			X = CInt(MyArray(0)): Y = CInt(MyArray(1))
-    	list = Base.findPic(cangbaotu,412,144,756,551,5000);
+    	list = Base.findPic(cangbaotu,412,144,756,551,0.8);
     	boolean flag = true;
     	do{
     		Base.addLog("关闭背包...");
@@ -761,7 +762,8 @@ public class Layout extends JFrame{
     }
     
 	private void wb_2(){
-		List<CoordBean> list = Base.findPic(Constant.wb_2,145,318,269,365,45000);
+		xunlu();
+		List<CoordBean> list = Base.findPic(Constant.wb_2,145,318,269,365,10000);
 		if(list.size() > 0){
 			Base.addLog("藏宝图NPC 0/5 " + list.get(0).getX() + "," + list.get(0).getY());
 			int i = 0;
@@ -892,7 +894,19 @@ public class Layout extends JFrame{
     		}else{
         		Base.addLog("没有找到login_success");
         		Base.screenImage("login_success");
-        		return false;
+        		list = Base.findStrE("确定","c7bd97-383e38", 1, 0,2000);
+        		if(list.size() > 0){
+        			Base.addLog("找到确定按钮，点击确定，然后重新登录");
+        			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
+        			return login();
+        		}else{
+        			list = Base.findPic(Constant.login_u,2000);
+        			if(list.size() > 0){
+        				Base.addLog("还停留在输入账号密码界面，重新登录");
+        				return login();
+        			}
+        			return false;
+        		}
         	}
     	}else{
     		Base.addLog("没有找到login_2");
