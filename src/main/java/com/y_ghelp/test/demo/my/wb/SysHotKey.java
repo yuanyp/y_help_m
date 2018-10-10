@@ -51,11 +51,11 @@ public class SysHotKey implements HotkeyListener {
             case test_search_img:
             	Base.addLog("test_search_img start..");
 //            	List<CoordBean> list = Base.findStrE("德兰", "0bb10b-0b4e0c", 0.9, 0);
-            	String cangbaotu = Constant.cangbaotu_2 + "|" + Constant.cangbaotu_3
-            			+ "|" + Constant.cangbaotu_4+ "|" + Constant.cangbaotu_5
-            			+ "|" + Constant.cangbaotu_6
-            			+ "|" + Constant.cangbaotu_7
-            			+ "|" + Constant.cangbaotu_8;
+//            	String cangbaotu = Constant.cangbaotu_2 + "|" + Constant.cangbaotu_3
+//            			+ "|" + Constant.cangbaotu_4+ "|" + Constant.cangbaotu_5
+//            			+ "|" + Constant.cangbaotu_6
+//            			+ "|" + Constant.cangbaotu_7
+//            			+ "|" + Constant.cangbaotu_8;
 //            	String color = "a22513|aa2c15|9d2b11|ac1f10|a42a16|ac2210|a62918|a22a16";
 //            	int[] caobaotu = Base.color.findColor(440, 219, 736, 462, color, 0.9, 0);
 //            	CoordBean coordBean = new CoordBean();
@@ -65,7 +65,7 @@ public class SysHotKey implements HotkeyListener {
 //            			dim MyArray
 //            			MyArray = Split(XY, "|")
 //            			X = CInt(MyArray(0)): Y = CInt(MyArray(1))
-            	List<CoordBean> list = Base.findPic(cangbaotu,0,0,800,600,500);
+            	List<CoordBean> list = Base.findPic(Constant.beibao_close,0,0,800,600,500);
             	
         		for(CoordBean item : list){
         			System.out.println(item.getX());

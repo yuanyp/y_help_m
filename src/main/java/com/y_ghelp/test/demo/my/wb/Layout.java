@@ -1019,6 +1019,9 @@ public class Layout extends JFrame{
     	btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	active();
+            	Base.listUsers.clear();
+    			Base.xiaohao.clear();
+    			Base.listUserXiaoHao.clear();
                 boolean flag = true;
                 do{
                 	//登录
