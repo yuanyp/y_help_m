@@ -859,7 +859,7 @@ public class Layout extends JFrame{
     			robot.delay(200);
     			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
     			robot.delay(200);
-    			login();
+    			return login();
     		}
     		Base.addLog("没有找到登录按钮login_1");
     		Base.screenImage("login_1");
@@ -884,7 +884,7 @@ public class Layout extends JFrame{
 			list = Base.findPic(Constant.login_e,5000);
 			if(list.size() > 0){//如果账号密码不正确
 				clearInput2();
-				login();//重新登录
+				return login();//重新登录
 			}
     		list = Base.findPic(Constant.login_success,30000);
     		if(list.size() > 0){

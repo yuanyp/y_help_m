@@ -1772,7 +1772,7 @@ public class MYDemo extends JFrame{
             	int ys = list.get(0).getY();
             	int xe = list.get(0).getX();
             	int ye = list.get(0).getY() + 180;
-        		int[] result = Base.color.findColor(xs, ys, xe, ye, "ff2c2d-002d2d", 0.9,0);
+        		int[] result = color.findColor(xs, ys, xe, ye, "ff2c2d-002d2d", 0.9,0);
         		if(result.length > 0 && result[0] != -1){
         			mouse.mouseClick((result[0] - 10), (result[1] +20), true);
         		}
