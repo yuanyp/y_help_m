@@ -815,7 +815,7 @@ public class Layout extends JFrame{
     }
     
 	private void wb_2(){
-		xunlu();
+		Base.xunlu();
 		List<CoordBean> list = Base.findPic(Constant.wb_2,145,318,269,365,10000);
 		if(list.size() > 0){
 			Base.addLog("藏宝图NPC 0/5 " + list.get(0).getX() + "," + list.get(0).getY());
