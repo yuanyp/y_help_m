@@ -71,8 +71,7 @@ public class SysHotKey implements HotkeyListener {
 //            			dim MyArray
 //            			MyArray = Split(XY, "|")
 //            			X = CInt(MyArray(0)): Y = CInt(MyArray(1))
-            	List<CoordBean> list = Base.findPic(cangbaotu,0,0,800,600,500);
-            	
+            	List<CoordBean> list = Base.findPic(cangbaotu,0,0,800,600,0.8);
         		for(CoordBean item : list){
         			System.out.println(item.getX());
         			System.out.println(item.getY());

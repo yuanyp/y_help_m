@@ -211,11 +211,15 @@ public class Base{
     	screenHeight = ey;
     }
     
-    public static List<CoordBean> findPic(String img,int sx,int sy,int ex,int ey){
-    	return findPic(img, sx, sy, ex, ey, false);
+    public static List<CoordBean> findPic(String img,int sx,int sy,int ex,int ey,double sim){
+    	return findPic(img, sx, sy, ex, ey,sim,false);
     }
     
-    public static List<CoordBean> findPic(String img,int sx,int sy,int ex,int ey,boolean log){
+    public static List<CoordBean> findPic(String img,int sx,int sy,int ex,int ey){
+    	return findPic(img, sx, sy, ex, ey,0.9,false);
+    }
+    
+    public static List<CoordBean> findPic(String img,int sx,int sy,int ex,int ey,double sim,boolean log){
     	List<CoordBean> list = new ArrayList<CoordBean>();
     	String imgs = "";
     	if(img.indexOf("|") != -1){
@@ -227,7 +231,7 @@ public class Base{
     	}else{
     		imgs = getRealPath(img);
     	}
-    	int[] a = findPic.findPic(sx,sy,ex,ey, imgs, "", 0.9, 0);
+    	int[] a = findPic.findPic(sx,sy,ex,ey, imgs, "",sim, 0);
     	if(a[0] == -1){
     		if(log){
     			addLog("未找到IMG【"+imgs+"】");

@@ -45,7 +45,7 @@ public class Constant {
 	public static String baoxiang_click = "baoxiang_click.bmp";
 	
 	//背包关闭按钮 ;任务栏:228*42 x-228 y+42
-	public static String beibao_close = "beibao_close.bmp";
+	public static String beibao_close = "beibao_close.bmp|beibao_close1.bmp|beibao_close2.bmp|beibao_close3.bmp";
 	
 	public static String logout_ok = "logout_ok.bmp";
 	public static String logout = "logout.bmp";
