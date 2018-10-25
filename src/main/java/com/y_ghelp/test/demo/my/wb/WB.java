@@ -97,14 +97,6 @@ public class WB extends Base{
         }
     });
 	
-	public static boolean isMove(){
-		//748 * 35 40*10
-		file.screenImage(748,35,(748+40),(35+10), "c:\\logs\\bcd.png");
-    	boolean a = findPic.isDisplayDead(748,35,(748+40),(35+10),2);
-    	addLog("isMove " + !a);
-    	return !a;
-    }
-	
 	public static void main(String[] args) {
 		setImgHomeFolder(Constant.img_home);
 		setDic(0, Constant.dm_dic);

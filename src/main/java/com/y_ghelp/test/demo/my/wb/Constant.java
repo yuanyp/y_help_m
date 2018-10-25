@@ -88,4 +88,11 @@ public class Constant {
 	public static String fuhuo_1 = "fuhuo_1.bmp";
 	public static String fuhuo_2 = "fuhuo_2.bmp";
 	public static String fuhuo_3 = "fuhuo_3.bmp";
+	
+	
+	public static String huangjia_go = "huangjia_go.bmp";
+	public static String huangjia_go_npc = "huangjia_go_npc.bmp";
+	public static String huangjia_go_npc_confirm = "huangjia_go_npc_confirm.bmp";
+	public static String huangjia_1_chuansongmen = "huangjia_1_chuansongmen.bmp";
+	public static String huangjia_1_chuansongmen_1 = "huangjia_1_chuansongmen_1.bmp";
 }

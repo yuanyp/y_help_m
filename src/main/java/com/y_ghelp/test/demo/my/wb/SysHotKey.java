@@ -16,7 +16,8 @@ import com.y_ghelp.test.demo.my.MYDemo;
 
 public class SysHotKey implements HotkeyListener {
     
-	public static final int start = 1;//开始
+	public static final int start_huangjia = 0;//开始皇家
+	public static final int start = 1;//开始挖宝
 	public static final int end = 2;//结束
 	public static final int state = 3;//切换窗口,显示\隐藏
 	public static final int cut = 4;//截图
@@ -31,6 +32,11 @@ public class SysHotKey implements HotkeyListener {
     
     public void onHotKey(int key) {
         switch (key) {
+	        case start_huangjia:
+	            System.out.println("start_huangjia..");
+	            WB.execute = true;
+	            WB.threadPool.execute(WB.start_huangjia);
+	            break;
             case start:
                 System.out.println("start..");
                 WB.execute = true;
@@ -93,6 +99,7 @@ public class SysHotKey implements HotkeyListener {
      * 解除注册
      * */
     public static void destroy() {
+    	JIntellitype.getInstance().unregisterHotKey(start_huangjia);
         JIntellitype.getInstance().unregisterHotKey(start);
         JIntellitype.getInstance().unregisterHotKey(end);
         JIntellitype.getInstance().unregisterHotKey(cut);
@@ -106,6 +113,7 @@ public class SysHotKey implements HotkeyListener {
      * 
      */
     void initHotkey() {
+    	JIntellitype.getInstance().registerHotKey(start_huangjia,"ALT+F8");
         JIntellitype.getInstance().registerHotKey(start,"ALT+F9");
         JIntellitype.getInstance().registerHotKey(end,"ALT+F10");
         JIntellitype.getInstance().registerHotKey(cut,"ALT+F11");

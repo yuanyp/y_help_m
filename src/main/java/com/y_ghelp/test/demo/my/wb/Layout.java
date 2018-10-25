@@ -55,6 +55,27 @@ public class Layout extends JFrame{
         Base.addLog("结束..");
     }
     
+    public void execute_huangjia(){
+    	//打开模拟器
+    	openApp();
+    	robot.delay(5000);
+    	active();
+        //进入游戏
+        openGameApp();
+        //检查是否需要更新
+        update();
+        boolean flag = true;
+        do{
+        	//登录
+        	flag = login();
+        	if(flag){
+        		//开始皇家
+        		
+        	}
+        }while(flag);
+        Base.addLog("结束皇家..");
+    }
+    
     /**
      * 出征宝宝
      */
@@ -103,6 +124,54 @@ public class Layout extends JFrame{
             window.moveWindow(hwnd, 0, 0);
             window.setWindowActivate(hwnd); //激活窗口
         }
+    }
+    
+    public void huangjia(){
+    	active();
+    	//465 233
+        List<CoordBean> list = Base.findPic(Constant.login_success,20000);
+        if(list.size() > 0){
+        	Base.addLog("huangjia 登录成功");
+        }
+        
+        list = Base.findPic(Constant.do_ok,3000);
+		if(list.size() > 0){
+			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
+			robot.delay(500);
+		}
+    	//收起任务栏
+    	list = Base.findPic(Constant.go_index_1 + "|" + Constant.go_index_1_1,5000);
+    	int x = -1;
+    	int y = -1;
+    	if(list.size() > 0){
+    		x = list.get(0).getX();
+    		y = list.get(0).getY();
+    		mouse.mouseClick(x, y, true);
+    		robot.delay(1000);
+    	}else{
+    		Base.addLog("没有找到收起人物栏的图标");
+    		return;
+    	}
+    	//出征宝宝
+    	chuzhengbaobao(x, y);
+    	
+    	//判断是否在雷鸣领奖处
+    	list = Base.findStrE("罗兰", "29ce21-2a3121", 0.9, 0,5000);
+    	if(list.size() > 0){
+    		Base.addLog("在雷鸣领奖处..");
+    	}else{
+    		list = Base.findStrE("德兰", "0bb10b-0b4e0c", 0.9, 0,5000);
+    		if(list.size() > 0){//13 51
+    			mouse.mouseClick(list.get(0).getX() + 13, list.get(0).getY() + 51, true);
+    		}
+    		//判断是否在环保练功场（未成神）
+    		list = Base.findPic(Constant.go_index,20000);
+    		if(list.size() > 0){
+    			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
+    		}
+    	}
+		robot.delay(500);
+    	new AutoHuangJia().execute();
     }
     
     public void wb(){
@@ -332,22 +401,6 @@ public class Layout extends JFrame{
 			Base.addLog("没有藏宝图了...");
     	}
     	return false;
-    }
-    
-    public void xunlu(){
-		boolean flag = true;
-		Base.addLog("开始自动寻路中...");
-		do{
-			//自动寻路
-			List<CoordBean> list = Base.findPic(Constant.xunlu);
-			if(list.size() <= 0){
-				//自动寻路完毕
-    			Base.addLog("自动寻路完毕...");
-				flag = false;
-			}
-			robot.delay(1000);
-		}while(flag);
-		Base.addLog("结束自动寻路中...");
     }
     
     private List<CoordBean> open_beibao(){
@@ -583,7 +636,7 @@ public class Layout extends JFrame{
     	//点击藏宝图，自动寻路挖宝
     	boolean xunlu = open_cbt(list);
     	if(xunlu){
-    		xunlu();//寻路
+    		Base.xunlu();//寻路
     	}else{
     		wbz();
     		list =  null;
@@ -650,7 +703,7 @@ public class Layout extends JFrame{
     	List<CoordBean> list = Base.findPic(Constant.wb_0,10000);
     	if(list.size() > 0){
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-        	robot.delay(500);
+        	robot.delay(2000);
         	list = Base.findPic(Constant.wb_4,140,219,288,260,3000);//是否已经挖过宝了
         	if(list.size() > 0){
         		//115

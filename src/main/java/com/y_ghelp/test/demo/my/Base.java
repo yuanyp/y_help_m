@@ -24,6 +24,7 @@ import com.xnx3.microsoft.Press;
 import com.xnx3.microsoft.Window;
 import com.xnx3.robot.Robot;
 import com.xnx3.robot.support.CoordBean;
+import com.y_ghelp.test.demo.my.wb.Constant;
 import com.y_ghelp.test.demo.my.wb.Layout;
 
 public class Base{
@@ -54,6 +55,7 @@ public class Base{
             new ThreadPoolExecutor.DiscardOldestPolicy());
 	
 	public static Thread start;
+	public static Thread start_huangjia;
 	public static boolean execute = false;
 	public static LinkedList<String[]> listUsers = new LinkedList<String[]>();//判断账号是否已经处理过
 	public static LinkedList<String> listUserXiaoHao = new LinkedList<String>();//判断大号的小号是否已经处理过
@@ -80,6 +82,16 @@ public class Base{
                 try {
                    robot.delay(100);
                    frame.execute();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        start_huangjia = new Thread(new Runnable() {
+            public void run() {
+                try {
+                   robot.delay(100);
+                   frame.execute_huangjia();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -133,6 +145,14 @@ public class Base{
 			list.add(item);
 		}
 		return list;
+    }
+    
+	public static boolean isMove(int time){
+		//748 * 35 40*10
+		file.screenImage(748,35,(748+40),(35+10), "c:\\logs\\bcd.png");
+    	boolean a = findPic.isDisplayDead(748,35,(748+40),(35+10),time);
+    	addLog("isMove " + !a);
+    	return !a;
     }
     
     public static void doubleClick(){
@@ -221,6 +241,22 @@ public class Base{
     		addLog("找到IMG【"+imgs+"】坐標【"+item.getX()+","+item.getY()+"】..");
     	}
     	return list;
+    }
+    
+    public static void xunlu(){
+		boolean flag = true;
+		Base.addLog("开始自动寻路中...");
+		do{
+			//自动寻路
+			List<CoordBean> list = Base.findPic(Constant.xunlu);
+			if(list.size() <= 0){
+				//自动寻路完毕
+    			Base.addLog("自动寻路完毕...");
+				flag = false;
+			}
+			robot.delay(1000);
+		}while(flag);
+		Base.addLog("结束自动寻路中...");
     }
     
     public static void addLog(Object str){
