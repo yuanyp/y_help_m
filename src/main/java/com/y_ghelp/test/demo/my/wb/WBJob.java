@@ -1,4 +1,4 @@
-package com.y_ghelp.test.demo.my;
+package com.y_ghelp.test.demo.my.wb;
 
 import java.util.Date;
 
@@ -7,18 +7,20 @@ import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-public class DemoJob implements Job{
+import com.y_ghelp.test.demo.my.Base;
 
-    public DemoJob(){
+public class WBJob implements Job{
+
+    public WBJob(){
     }
     
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         JobDataMap data = context.getJobDetail().getJobDataMap();
-        MYDemo mydemo = (MYDemo)data.get("mydemo");
-        mydemo.addLog("WBJob execute start " + new Date());
+        WB wbjob = (WB)data.get("wbjob");
+        wbjob.addLog("WBJob execute start " + new Date());
         Base.resetUsers();
-        mydemo.threadPool.execute(mydemo.playGameTh);
-        mydemo.addLog("WBJob execute end " + new Date());
+        wbjob.threadPool.execute(wbjob.start);
+        wbjob.addLog("WBJob execute end " + new Date());
     }
 }

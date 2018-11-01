@@ -149,8 +149,8 @@ public class Base{
     
 	public static boolean isMove(int time){
 		//748 * 35 40*10
-		file.screenImage(748,35,(748+40),(35+10), "c:\\logs\\bcd.png");
-    	boolean a = findPic.isDisplayDead(748,35,(748+40),(35+10),time);
+		file.screenImage(748,30,(748+45),(30+15), "c:\\logs\\bcd.png");
+    	boolean a = findPic.isDisplayDead(748,30,(748+45),(30+15),time);
     	addLog("isMove " + !a);
     	return !a;
     }
@@ -266,5 +266,35 @@ public class Base{
     public static void addLog(Object str){
     	log.info(str);
         System.out.println(str);
+    }
+    
+    public static boolean go_to_lm(){
+    	boolean f = false;
+    	List<CoordBean> list = Base.findStrE("交易", 
+				"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013|9a9782-36352f", 0.9, 0,1000);
+		if(list.size() > 0){
+			mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
+			f = true;
+		}
+		robot.delay(500);
+		return f;
+    }
+    
+    public static void close_wb_page(){
+    	List<CoordBean> list = Base.findPic(Constant.wb_close,2000);
+		if(list.size() > 0){
+			Base.addLog("执行关闭click..");
+			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
+		}else{
+			Base.addLog("执行关闭ESC..");
+			press.keyPress(press.ESC);
+		}
+		robot.delay(2000);
+    }
+    
+    public static void resetUsers(){
+    	Base.listUsers.clear();
+		Base.xiaohao.clear();
+		Base.listUserXiaoHao.clear();
     }
 }

@@ -39,7 +39,7 @@ public class MYConfig {
             InputStream is = MYConfig.class.getResourceAsStream("/config.json");
             String configstr = IOUtils.toString(is,"utf-8");
             config = JSONObject.fromObject(configstr);
-            logger.info("MYConfig.json load end .." + configstr);
+            logger.info("MYConfig.json load end ..");
         } catch (Exception e) {
             logger.error("MYConfig.json load error..", e);
         }

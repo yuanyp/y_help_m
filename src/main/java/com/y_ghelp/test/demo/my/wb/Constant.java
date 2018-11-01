@@ -29,6 +29,8 @@ public class Constant {
 	
 	public static String go_index = "go_index.bmp";
 	
+	public static String huanbaoliangongshagn01 = "huanbaoliangongshagn01.bmp";
+	
 	public static String go_index_1 = "go_index_1.bmp";
 	public static String go_index_1_1 = "go_index_1_1.bmp";
 	
@@ -91,6 +93,9 @@ public class Constant {
 	
 	
 	public static String huangjia_go = "huangjia_go.bmp";
+	public static String huangjia_go_1 = "huangjia_go_1.bmp";
+	public static String huangjia_go_2 = "huangjia_go_2.bmp";
+	public static String huangjia_go_3 = "huangjia_go_3.bmp";
 	public static String huangjia_go_npc = "huangjia_go_npc.bmp";
 	public static String huangjia_go_npc_confirm = "huangjia_go_npc_confirm.bmp";
 	public static String huangjia_1_chuansongmen = "huangjia_1_chuansongmen.bmp";

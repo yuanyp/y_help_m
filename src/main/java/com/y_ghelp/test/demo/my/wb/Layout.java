@@ -3,6 +3,7 @@ package com.y_ghelp.test.demo.my.wb;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,6 +13,14 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import org.apache.commons.lang3.StringUtils;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerFactory;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
 
 import com.xnx3.microsoft.Color;
 import com.xnx3.microsoft.Com;
@@ -35,6 +44,7 @@ public class Layout extends JFrame{
     com.xnx3.microsoft.File file = Base.file;
     
     public void execute(){
+    	Base.resetUsers();
     	//打开模拟器
     	openApp();
     	robot.delay(5000);
@@ -70,7 +80,7 @@ public class Layout extends JFrame{
         	flag = login();
         	if(flag){
         		//开始皇家
-        		
+        		huangjia();
         	}
         }while(flag);
         Base.addLog("结束皇家..");
@@ -160,7 +170,7 @@ public class Layout extends JFrame{
     	if(list.size() > 0){
     		Base.addLog("在雷鸣领奖处..");
     	}else{
-    		list = Base.findStrE("德兰", "0bb10b-0b4e0c", 0.9, 0,5000);
+    		list = Base.findStrE("德兰", "0bb10b-0b4e0c", 0.9, 0,1000);
     		if(list.size() > 0){//13 51
     			mouse.mouseClick(list.get(0).getX() + 13, list.get(0).getY() + 51, true);
     		}
@@ -171,7 +181,13 @@ public class Layout extends JFrame{
     		}
     	}
 		robot.delay(500);
-    	new AutoHuangJia().execute();
+		
+		new AutoHuangJia().execute();
+		
+		boolean a = new Layout().switchUser();
+    	if(a){
+    		huangjia();
+    	}
     }
     
     public void wb(){
@@ -208,10 +224,18 @@ public class Layout extends JFrame{
     	if(list.size() > 0){
     		Base.addLog("在雷鸣领奖处..");
     	}else{
-    		list = Base.findStrE("德兰", "0bb10b-0b4e0c", 0.9, 0,5000);
+    		list = Base.findStrE("德兰", "0bb10b-0b4e0c", 0.9, 0,1000);
     		if(list.size() > 0){//13 51
     			mouse.mouseClick(list.get(0).getX() + 13, list.get(0).getY() + 51, true);
     			robot.delay(1500);
+    		}else{
+    			list = Base.findPic(Constant.huanbaoliangongshagn01,1000);
+    			if(list.size() > 0){
+    				int sx = 322;
+    	    		int sy = 165;
+    				mouse.mouseClick(sx, sy, true);
+        			robot.delay(1500);
+    			}
     		}
     		//判断是否在环保练功场（未成神）
     		list = Base.findPic(Constant.go_index,20000);
@@ -226,7 +250,10 @@ public class Layout extends JFrame{
     	//处理挖宝（山贼、宝树等）
     	do_all(null);
     	//切换账号
-    	switchUser();
+    	boolean a = switchUser();
+    	if(a){
+    		wb();
+    	}
     }
     
     /**
@@ -296,7 +323,7 @@ public class Layout extends JFrame{
     	WB.die_count = 0;
     }
     
-    public void switchUser(){
+    public boolean switchUser(){
     	Base.addLog("开始切换账号..");
     	clearData();//清空死亡次数
     	robot.delay(2000);
@@ -318,7 +345,7 @@ public class Layout extends JFrame{
     		robot.delay(500);
     		if(list.size() <= 0){
     			Base.addLog("找不到" + Constant.xiaohao_close);
-    			return;
+    			return false;
     		}
     		if(xiaohao.get(0).getId() == 1){
     			mouse.mouseClick(list.get(0).getX() - 266, list.get(0).getY() + 89,true);
@@ -340,7 +367,7 @@ public class Layout extends JFrame{
         		mouse.mouseClick(list.get(0).getX() - 210, list.get(0).getY() + 247,true);
         	}
         	robot.delay(5000);
-    		wb();
+        	return true;
     	}else{
     		//无小号
     		Base.addLog("无小号..");
@@ -369,6 +396,7 @@ public class Layout extends JFrame{
     			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);//回到登录页面
     			robot.delay(2000);
     		}
+    		return false;
     	}
     }
     
@@ -714,41 +742,30 @@ public class Layout extends JFrame{
         		if(list.size() > 0){
         			mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 15, true);
             		robot.delay(500);
-            		close_wb_page();
+            		Base.close_wb_page();
         		}else{
-        			close_wb_page();
+        			Base.close_wb_page();
         		}
         	}else{
-        		close_wb_page();
+        		Base.close_wb_page();
         	}
     	}
-    }
-    
-    private void close_wb_page(){
-    	List<CoordBean> list = Base.findPic(Constant.wb_close,2000);
-		if(list.size() > 0){
-			Base.addLog("执行关闭click..");
-			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-		}else{
-			Base.addLog("执行关闭ESC..");
-			press.keyPress(press.ESC);
-		}
-		robot.delay(2000);
     }
     
     /**
      * 领藏宝图
      */
     public void lcbt(){
-    	robot.delay(200);
-    	List<CoordBean> list = Base.findPic(Constant.wb_0,17000);
+    	robot.delay(3000);
+    	List<CoordBean> list = Base.findPic(Constant.wb_0,12000);
     	if(list.size() > 0){
+    		robot.delay(2000);
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
         	robot.delay(2000);
         	list = Base.findPic(Constant.wb_4,140,219,288,260,3000);//是否已经挖过宝了
         	if(list.size() > 0){
         		Base.addLog("该账号已经挖过宝..");
-        		close_wb_page();
+        		Base.close_wb_page();
         		return;
         	}
         	list = Base.findPic(Constant.wb_1,140,219,288,260,5000);
@@ -769,50 +786,33 @@ public class Layout extends JFrame{
     				//检查是否已经到了神界
     				list = Base.findStrE("神界", 
     						"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013", 0.9, 0,10000);
-    				if(list.size() > 0){//50 80
-    					mouse.mouseClick(list.get(0).getX() + 50, list.get(0).getY() + 80, true);//点击传送师
+    				
+    				if(list.size() > 0){
+    					press.keyPressTime(press.W, 380);
     					robot.delay(500);
-    					boolean a = go_to_lm();
+    					press.keyPress(press.SPACE);
+    					robot.delay(800);
+    					boolean a = Base.go_to_lm();
     					if(a){
     						lcbt();
     					}else{
-    						Base.addLog("传送员可能被挡住了，查找上面弹出的NPC..");
-    						list = Base.findStrE("神界", "808012-737312", 0.9, 0, 1000);
-    						if(list.size() > 0){
-    							Base.mouse.mouseClick(list.get(0).getX(), list.get(0).getY(),true);
-    							robot.delay(500);
-    							a = go_to_lm();
-    							if(a){
-    	    						lcbt();
-    							}
-    						}else{
-    							Base.addLog("没有找到神界传送师NPC");
-    						}
+    						Base.addLog("没有找到传送到雷鸣的对话框");
     					}
+    				}else{
+    					Base.addLog("没有找到神界的传送师");
     				}
     			}else{
     				Base.addLog("当前人物在雷鸣");
     				wb_2();
     			}
         	}else{
-        		close_wb_page();
+        		Base.close_wb_page();
         	}
     	}else{
     		Base.addLog("没有找到wb_0");
     	}
     }
 
-    private boolean go_to_lm(){
-    	boolean f = false;
-    	List<CoordBean> list = Base.findStrE("交易", 
-				"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013|9a9782-36352f", 0.9, 0,1000);
-		if(list.size() > 0){
-			mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
-			f = true;
-		}
-		robot.delay(500);
-		return f;
-    }
     
 	private void wb_2(){
 		Base.xunlu();
@@ -869,11 +869,9 @@ public class Layout extends JFrame{
             	if(Base.listUsers.size() > 0){
             		//账号没有处理过
             		if(!existsUser(userInfo[0],Base.listUsers)){
-            			Base.listUsers.add(userInfo);
             			return userInfo;
             		}
             	}else{
-            		Base.listUsers.add(userInfo);
             		return userInfo;
             	}
             }else{
@@ -903,22 +901,26 @@ public class Layout extends JFrame{
      * 登录
      */
     public boolean login(){
-    	List<CoordBean> list = Base.findPic(Constant.login_1,5000);
-    	if(list.size() > 0){
-    		robot.delay(3000);
-    		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-    	}else{
-    		list = Base.findPic(Constant.update_4,2000);
-    		if(list.size() > 0){
-    			Base.addLog("找到更新内容界面，关闭界面然后重新登录");
-    			robot.delay(200);
-    			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-    			robot.delay(200);
-    			return login();
-    		}
-    		Base.addLog("没有找到登录按钮login_1");
-    		Base.screenImage("login_1");
-    		return false;
+    	Base.addLog("login start ..");
+    	List<CoordBean> list = Base.findPic(Constant.login_u+"|"+Constant.login_p,2000);//账号输入框
+    	if(null == list || list.size() == 0){
+    		list = Base.findPic(Constant.login_1,3000);
+        	if(list.size() > 0){
+        		robot.delay(3000);
+        		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
+        	}else{
+        		list = Base.findPic(Constant.update_4,2000);
+        		if(list.size() > 0){
+        			Base.addLog("找到更新内容界面，关闭界面然后重新登录");
+        			robot.delay(200);
+        			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
+        			robot.delay(200);
+        			return login();
+        		}
+        		Base.addLog("没有找到登录按钮login_1");
+        		Base.screenImage("login_1");
+        		return false;
+        	}
     	}
     	String[] user = loadUserInfo();
     	if(null == user){
@@ -932,18 +934,20 @@ public class Layout extends JFrame{
     	if(list.size() > 0){
     		//点击登录
     		mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
-    		list = Base.findPic(Constant.login_3,5000);
-			if(list.size() > 0){
-				mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
-			}
 			list = Base.findPic(Constant.login_e,5000);
 			if(list.size() > 0){//如果账号密码不正确
 				clearInput2();
 				return login();//重新登录
 			}
+			list = Base.findPic(Constant.login_3,10000);
+			if(list.size() > 0){
+				mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
+			}
     		list = Base.findPic(Constant.login_success,30000);
     		if(list.size() > 0){
     			Base.addLog("登录成功..");
+    			//登录成功才添加进来
+    			Base.listUsers.add(user);
     		}else{
         		Base.addLog("没有找到login_success");
         		Base.screenImage("login_success");
@@ -953,7 +957,7 @@ public class Layout extends JFrame{
         			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
         			return login();
         		}else{
-        			list = Base.findPic(Constant.login_u,2000);
+        			list = Base.findPic(Constant.login_u+"|"+Constant.login_1,2000);
         			if(list.size() > 0){
         				Base.addLog("还停留在输入账号密码界面，重新登录");
         				return login();
@@ -1086,9 +1090,7 @@ public class Layout extends JFrame{
     	btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	active();
-            	Base.listUsers.clear();
-    			Base.xiaohao.clear();
-    			Base.listUserXiaoHao.clear();
+            	Base.resetUsers();
                 boolean flag = true;
                 do{
                 	//登录
@@ -1102,10 +1104,21 @@ public class Layout extends JFrame{
             }
         });
     	
-    	JButton button = new JButton("\u5F00\u59CB\u6316\u5B9D");
+    	JButton button = new JButton("开始皇家");
     	button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	do_all(null);
+            	active();
+            	Base.resetUsers();
+                boolean flag = true;
+                do{
+                	//登录
+                	flag = login();
+                	if(flag){
+                		//开始皇家
+                		huangjia();
+                	}
+                }while(flag);
+                Base.addLog("结束..");
             }
         });
     	
@@ -1120,9 +1133,7 @@ public class Layout extends JFrame{
     	JButton btn_reset = new JButton("\u91CD\u7F6E");
     	btn_reset.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent arg0) {
-    			Base.listUsers.clear();
-    			Base.xiaohao.clear();
-    			Base.listUserXiaoHao.clear();
+    			Base.resetUsers();
     		}
     	});
     	
@@ -1162,8 +1173,47 @@ public class Layout extends JFrame{
     					.addComponent(btn_exit))
     				.addGap(18)
     				.addComponent(button_1)
-    				.addContainerGap(90, Short.MAX_VALUE))
+    				.addContainerGap(101, Short.MAX_VALUE))
     	);
     	getContentPane().setLayout(groupLayout);
+    }
+    
+    public void initJob(WB wb){
+        try {
+        	Base.addLog("initJob");
+            //1.创建Scheduler的工厂
+            SchedulerFactory sf = new StdSchedulerFactory();
+            //2.从工厂中获取调度器实例
+            Scheduler scheduler = sf.getScheduler();
+
+            //3.创建JobDetail
+            JobDetail job = JobBuilder.newJob(WBJob.class)
+                    .withDescription("this is a ram job") //job的描述
+                    .withIdentity("ramJob", "ramGroup") //job 的name和group
+                    .build();
+            job.getJobDataMap().put("wbjob", wb);  
+
+            //任务运行的时间，SimpleSchedle类型触发器有效
+            long time=  System.currentTimeMillis() + 10*1000L; //10秒后启动任务
+            Date statTime = new Date(time);
+
+            //4.创建Trigger
+                //使用SimpleScheduleBuilder或者CronScheduleBuilder
+            Trigger t = TriggerBuilder.newTrigger()
+                        .withDescription("")
+                        .withIdentity("ramTrigger", "ramTriggerGroup")
+                        .startAt(statTime)  //10秒后启动任务 0 0 11 * * ?
+                        .withSchedule(CronScheduleBuilder.cronSchedule(MYConfig.getInstance().getConfig("quartz_con_wb").toString())) //60秒执行一次 --0/60 * * * * ? --0 0 0,09,12,22 * * ? --"0 0 0,09,12 * * ?"
+                        .build();
+
+            //5.注册任务和定时器
+            scheduler.scheduleJob(job, t);
+
+            //6.启动 调度器
+            scheduler.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Base.addLog(e.getMessage());
+        }
     }
 }

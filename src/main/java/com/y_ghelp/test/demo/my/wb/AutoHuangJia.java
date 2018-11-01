@@ -38,14 +38,67 @@ public class AutoHuangJia {
 	4. 切换账号
 	 */
     public void execute() {
+    	List<CoordBean> list = Base.findPic(Constant.wb_0,10000);
+    	if(list.size() > 0){
+    		robot.delay(2000);
+    		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
+        	robot.delay(2000);
+        	list = get_huangjia_go();
+        	if(list.size() > 0){
+        		//x+371,y-8
+        		robot.delay(200);
+        		mouse.mouseMoveTo(list.get(0).getX() + 365, list.get(0).getY() + 28);
+        		robot.delay(500);
+        		mouse.mouseClick(list.get(0).getX() + 365, list.get(0).getY() + 28, true);
+        		robot.delay(1000);
+        		//判断是否在寻路
+        		list = Base.findPic(Constant.xunlu);
+    			if(list.size() <= 0){
+    				//检查是否已经到了神界
+    				list = Base.findStrE("神界", 
+    						"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013", 0.9, 0,3000);
+    				if(list.size() > 0){
+    					Base.addLog("当前人物在神界");
+    					press.keyPressTime(press.W, 380);
+    					robot.delay(500);
+    					press.keyPress(press.SPACE);
+    					robot.delay(800);
+    					boolean a = Base.go_to_lm();
+    					if(a){
+    						Base.addLog("点击传送到雷鸣");
+    					}else{
+    						Base.addLog("没有找到传送到雷鸣的对话框");
+    					}
+    				}else{
+    					Base.addLog("不在神界");
+    				}
+    			}else{
+    				Base.close_wb_page();
+    			}
+        	}else{
+        		Base.close_wb_page();
+        	}
+    	}else{
+    		Base.addLog("没有找到wb_0");
+    		return;
+    	}
+    	
     	Base.addLog("开始皇家..");
-    	go_to_npc();
-    	clear_monster();
-    	boolean flag = go_to_4();
-    	if(flag) {
-    		go_back();	
-    	}else {
-    		Base.addLog("未能到达第四层..");
+    	boolean go_to_npc = go_to_npc();
+    	if(go_to_npc){
+    		clear_monster();
+        	boolean flag = go_to_4();
+        	if(flag) {
+        		go_back();	
+        	}else {
+        		Base.addLog("未能到达第四层..");
+        	}
+    	}else{
+    		Base.close_wb_page();
+    	}
+    	list = Base.findStrE("确定","c7bd97-383e38", 1, 0,5000);
+    	if(list.size() > 0){
+			mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
     	}
     	Base.addLog("结束皇家..");
     }
@@ -56,7 +109,20 @@ public class AutoHuangJia {
      */
     private void go_back(){
     	Base.addLog("返回雷鸣大陆..");
-    	mouse.mouseClick(800, 600, true);
+    	mouse.mouseClick(579, 207, true);
+    	robot.delay(1000);
+    	mouse.mouseClick(86, 338, true);
+    }
+    
+    public List<CoordBean> get_chuansong_men(){
+    	List<CoordBean> list = Base.findStrE("传", "29ce21-2a3121", 0.9, 1000);//= Base.findStrE("传|传", "29ce21-2a3121|0bb10b-0b4e0c", 0.9, 1000);
+    	if(null == list || list.size() == 0){
+    		list = Base.findStrE("传", "1e9614-1e6914", 0.9, 1000);
+    		if(null == list || list.size() == 0){
+    			list = Base.findPic(Constant.huangjia_1_chuansongmen);
+    		}
+    	}
+    	return list;
     }
     
     /**
@@ -76,18 +142,28 @@ public class AutoHuangJia {
     			key = press.D;
     		}
         	press.keyPressTime(key, 500);
-        	list = Base.findPic(Constant.huangjia_1_chuansongmen);
+        	list = get_chuansong_men();
         	if(list.size() > 0 || i >= 20) {
         		flag = false;
         	}
     	}while(flag);
     	
     	if(null != list && list.size() > 0) {
+    		//TODO
+    		
     		Base.addLog("找到传送门，并传送..");
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
+    		robot.delay(3000);
+    		//往下走一点
+    		press.keyPressTime(press.S, 300);
+    		robot.delay(500);
+    		press.keyPress(press.SPACE);
     		robot.delay(1000);
     		//查找对话框
-    		list = Base.findPic(Constant.huangjia_1_chuansongmen_1);
+    		list = Base.findPic(Constant.huangjia_1_chuansongmen_1,1000);
+    		if(null == list || list.size() == 0){
+    			list = Base.findStrE("4","bab69e-242420", 0.9, 0,1000);
+    		}
     		if(list.size() > 0) {
     			Base.addLog("点击传送门的对话框，执行传送..");
     			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
@@ -99,41 +175,63 @@ public class AutoHuangJia {
     	return false;
     }
     
+    
+    public List<CoordBean> get_huangjia_go(){
+    	List<CoordBean> list = Base.findStrE("武场","a4a5a6-555453", 1, 3000);
+    	if(null == list || list.size() == 0){
+    		list = Base.findPic(huangjia_go());
+    	}
+    	return list;
+    }
+    
+    private String huangjia_go(){
+    	return Constant.huangjia_go+"|"+Constant.huangjia_go_1+"|"+Constant.huangjia_go_2+"|"+Constant.huangjia_go_3;
+    }
+    
     /**
      * 前往皇家NPC
      */
-    private void go_to_npc() {
+    private boolean go_to_npc() {
     	Base.addLog("前往皇家NPC..");
-    	List<CoordBean> list = Base.findPic(Constant.wb_0,17000);
+    	List<CoordBean> list = Base.findPic(Constant.wb_0,10000);
     	if(list.size() > 0){
     		Base.addLog("点击活动中心..");
+    		robot.delay(2000);
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
     	}
     	robot.delay(2000);
     	//点击前往皇家NPC按钮
-    	list = Base.findPic(Constant.huangjia_go,3000);
+    	list = get_huangjia_go();
     	if(list.size() > 0) {
-    		Base.addLog("点击活动中心的前往“皇家”按钮..");
-    		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
+    		Base.addLog("点击活动中心的前往“皇家”按钮..");//365 28
+    		mouse.mouseClick(list.get(0).getX() + 365, list.get(0).getY() + 28, true);
+    	}else{
+    		return false;
     	}
     	//开始寻路
-    	Base.xunlu();
-    	//检查是否已经到了NPC身边（与NPC对话的关闭按钮）
-    	list = Base.findPic(Constant.huangjia_go_npc,3000);
-    	if(list.size() > 0) {
-    		Base.addLog("与皇家NPC对话，点击前往皇家..");
-    		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
+    	list = Base.findPic(Constant.xunlu,1000);
+    	if(list.size() > 0){
+    		Base.xunlu();
+    	}else{
+    		return false;
     	}
+    	//检查是否已经到了NPC身边（与NPC对话的关闭按钮）
+		Base.addLog("与皇家NPC对话，点击前往皇家..");
+		mouse.mouseClick(65, 339, true);
     	robot.delay(1000);
     	//再次确认框
-    	list = Base.findPic(Constant.huangjia_go_npc_confirm,3000);
-    	if(list.size() > 0) {
-    		Base.addLog("与皇家NPC对话，再次确认前往皇家..");
-    		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-    	}
-    	robot.delay(3000);
+		Base.addLog("与皇家NPC对话，再次确认前往皇家..");
+		mouse.mouseClick(71, 340, true);
+    	robot.delay(5000);
+    	//620 180
+    	mouse.mouseClick(620, 180, true);
+    	robot.delay(1000);
+    	mouse.mouseClick(82, 385, true);
+    	robot.delay(1000);
+    	mouse.mouseClick(75, 338, true);
     	//进入皇家第一层
     	Base.addLog("进入皇家第一层..");
+    	return true;
     }
     
     /**
@@ -141,23 +239,27 @@ public class AutoHuangJia {
      */
     private void clear_monster() {
     	Base.addLog("开始清理怪物..");
-    	boolean flag = true;
-    	do {
-    		press.keyPress(press.SPACE);
-        	boolean a = Base.isMove(2);
-        	if(a) {
-        		Base.addLog("人物有移动继续清理怪物..");
-        		robot.delay(1000);
-        		//人物有移动
-        		for(int i=0,j=3;i<j;i++) {
-            		press.keyPress(press.F3);
-            		robot.delay(800);
-        		}
-        	}else {
-        		//怪物清理完毕,跳出循环
-        		flag = false;
-        	}
-    	}while(flag);
+    	mouse.mouseClick(701, 353,true);
+    	robot.delay(3000);
+    	for(int k=0,v=3;k<v;k++){
+    		boolean flag = true;
+    		do {
+        		press.keyPress(press.SPACE);
+            	boolean a = Base.isMove(3);
+            	if(a) {
+            		Base.addLog("人物有移动继续清理怪物..");
+            		robot.delay(2000);
+            		//人物有移动
+            		for(int i=0,j=3;i<j;i++) {
+                		press.keyPress(press.F3);
+                		robot.delay(2000);
+            		}
+            	}else {
+            		//怪物清理完毕,跳出循环
+            		flag = false;
+            	}
+        	}while(flag);
+    	}
     	Base.addLog("结束清理怪物..");
     }
 	

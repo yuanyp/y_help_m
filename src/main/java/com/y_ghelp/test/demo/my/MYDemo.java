@@ -1903,6 +1903,7 @@ public class MYDemo extends JFrame{
         if(findImg(Common.jixuyouxiImg, 1000, list)){
         	addLog("等待退出...");
         	robot.delay(8000);
+        	forceCloseChrome();
         }
     }
     
