@@ -56,24 +56,21 @@ public class SysHotKey implements HotkeyListener {
                 break;
             case test_search_img:
             	Base.addLog("test_search_img start..");
-//            	List<CoordBean> list = Base.findStrE("德兰", "0bb10b-0b4e0c", 0.9, 0);
-            	
-            	//检查是否已经到了神界
-            	List<CoordBean> list = new AutoHuangJia().get_chuansong_men();
-            	
-//            	String color = "a22513|aa2c15|9d2b11|ac1f10|a42a16|ac2210|a62918|a22a16";
-//            	int[] caobaotu = Base.color.findColor(440, 219, 736, 462, color, 0.9, 0);
-//            	CoordBean coordBean = new CoordBean();
-            	
-            	//
-//            	XY=Plugin.Color.FindMutiColor(0,0,1280,1024,"162AA4","-6|6|3A5C6A,-19|10|0D257B,-17|-5|3A5B6B",1)
-//            			dim MyArray
-//            			MyArray = Split(XY, "|")
-//            			X = CInt(MyArray(0)): Y = CInt(MyArray(1))
+            	List<CoordBean> list = Base.findPic(Constant.xiaohao_qiehuan); 
         		for(CoordBean item : list){
         			System.out.println(item.getX());
         			System.out.println(item.getY());
         		}
+        		list = Base.findPic(Constant.xiaohao_close); 
+         		for(CoordBean item : list){
+        			System.out.println(item.getX());
+        			System.out.println(item.getY());
+        		}
+//         		Constant.logout
+//         		Constant.wb_close
+//         		list = Base.findStrE("退出", 
+//						"d9d8d7-262728", 1, 0);
+//         		Constant.logout_ok
 //        		Base.mouse.mouseMoveTo(list.get(0).getX(), list.get(0).getY());
         		Base.addLog("test_search_img end..");
                 break;

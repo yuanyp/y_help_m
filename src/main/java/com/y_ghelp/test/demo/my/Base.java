@@ -247,6 +247,18 @@ public class Base{
     	return list;
     }
     
+    /**
+     * 判断是否在子信托寻路
+     * @return
+     */
+    public static boolean is_xunlu() {
+    	List<CoordBean> list = Base.findPic(Constant.xunlu);
+    	if(list.size() <= 0){
+    		return false;
+    	}
+    	return true;
+    }
+    
     public static void xunlu(){
 		boolean flag = true;
 		Base.addLog("开始自动寻路中...");
