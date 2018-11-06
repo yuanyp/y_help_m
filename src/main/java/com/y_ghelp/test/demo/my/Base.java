@@ -136,7 +136,7 @@ public class Base{
     }
     
     public static List<CoordBean> findStrE(String str,int w,int h,String color,double sim,int useDict){
-		int[] strs = Base.findStr.findStrE(0, 0, w, h, str, color, 1, 0);
+		int[] strs = Base.findStr.findStrE(0, 0, w, h, str, color, sim, useDict);
 		CoordBean item = new CoordBean();
 		List<CoordBean> list = new ArrayList<CoordBean>();
 		if(strs[0] != -1){
@@ -292,8 +292,19 @@ public class Base{
 		return f;
     }
     
+    public static List<CoordBean> getWB_CLOSE(int time){
+    	List<CoordBean> list = Base.findPic(Constant.wb_close+"|"+Constant.wb_close_1,time);//272 383
+    	if(null != list && list.size() > 0){
+    		CoordBean item = list.get(0);
+        	item.setX(item.getX() + 5);
+        	item.setY(item.getY() + 5);
+        	return list;
+    	}
+    	return new ArrayList<CoordBean>();
+    }
+    
     public static void close_wb_page(){
-    	List<CoordBean> list = Base.findPic(Constant.wb_close,2000);
+    	List<CoordBean> list = getWB_CLOSE(2000);
 		if(list.size() > 0){
 			Base.addLog("执行关闭click..");
 			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);

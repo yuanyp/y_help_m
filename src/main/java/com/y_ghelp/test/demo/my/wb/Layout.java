@@ -215,16 +215,18 @@ public class Layout extends JFrame{
     	}
     }
     
+
+    
     /**
      * 判断是否有小号
      * @return
      */
     private List<CoordBean> has_xiaohao(){
-    	List<CoordBean> list = Base.findPic(Constant.wb_close,5000);//272 383
+    	List<CoordBean> list = Base.getWB_CLOSE(5000);//272 383
     	if(list.size() > 0){
     		robot.delay(500);
     		//点击切换小号
-    		list = Base.findPic(Constant.xiaohao_qiehuan,3000);
+    		list = Base.findPic(Constant.xiaohao_qiehuan_1 + "|" + Constant.xiaohao_qiehuan_2,3000);
     		if(list.size() > 0){
     			mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);	
     		}else{
@@ -333,18 +335,19 @@ public class Layout extends JFrame{
     		if(list.size() > 0){
         		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(),true);
         	}
-        	list = Base.findPic(Constant.logout,5000);
+        	list = Base.findPic(Constant.logout +"|" + Constant.logout_1,5000);
     		if(list.size() > 0){
-    			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
+    			Base.addLog("找到图片logout");
+    			mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 12, true);
     		}else{
-    			list = Base.findPic(Constant.wb_close,5000);
+    			list = Base.getWB_CLOSE(5000);
     			//272 383//切换角色
     			//126 383//退出游戏
     			if(list.size() > 0){
-    				list = Base.findStrE("退出", 
-    						"d9d8d7-262728", 1, 0);
+    				list = Base.findStrE("退出","84b2a2-47484a", 0.9, 0);
     				if(list.size() > 0){
-    					mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
+    					Base.addLog("找到文字退出");
+    					mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 12, true);
     				}else{
     					mouse.mouseClick(list.get(0).getX() - 126, list.get(0).getY() + 383, true);
     				}
@@ -737,8 +740,7 @@ public class Layout extends JFrame{
         		mouse.mouseClick(list.get(0).getX() + 366, list.get(0).getY() - 9, true);
         		robot.delay(500);
         		//判断当前是在雷鸣还是在神界
-        		list = Base.findStrE("确定", 
-    					"c7bd97-383e38", 1, 0,2000);
+        		list = Base.findStrE("确定","c7bd97-383e38", 1, 0,2000);
     			if(list.size() > 0){
     				mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
     				robot.delay(500);
@@ -780,17 +782,27 @@ public class Layout extends JFrame{
 			}
 		}else{
 			Base.addLog("没有找到神界的传送师");
+			hallowmas_to_lm();
 		}
 		Base.addLog("神界去雷鸣结束..");
     }
     
     private void hallowmas_to_lm() {
     	Base.addLog("万圣节期间,去雷鸣开始..");
-    	press.keyPressTime(press.A, 380);
-		robot.delay(500);
-		press.keyPress(press.SPACE);
-		robot.delay(800);
-		boolean a = Base.go_to_lm();
+    	//打开背包，关闭背包
+    	open_beibao();
+    	robot.delay(1000);
+    	close_beibao();
+    	List<CoordBean> list = Base.findStrE("传送", "30eb37-311437", 0.8, 0);
+    	if(list.size() > 0){
+    		Base.addLog("找到传送门...");
+    		mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 50, true);
+    	}else{
+    		Base.addLog("直接点击坐标(180, 213)...");
+    		mouse.mouseClick(180, 213, true);
+    	}
+    	robot.delay(1000);
+    	boolean a = Base.go_to_lm();
 		if(a){
 			lcbt();
 		}else{

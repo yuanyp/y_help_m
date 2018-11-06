@@ -56,22 +56,12 @@ public class SysHotKey implements HotkeyListener {
                 break;
             case test_search_img:
             	Base.addLog("test_search_img start..");
-            	List<CoordBean> list = Base.findPic(Constant.xiaohao_qiehuan); 
+            	List<CoordBean> list = Base.findStrE("传送", "30eb37-311437", 0.8, 0);
+            	Base.addLog("list.size" + list.size());
         		for(CoordBean item : list){
         			System.out.println(item.getX());
         			System.out.println(item.getY());
         		}
-        		list = Base.findPic(Constant.xiaohao_close); 
-         		for(CoordBean item : list){
-        			System.out.println(item.getX());
-        			System.out.println(item.getY());
-        		}
-//         		Constant.logout
-//         		Constant.wb_close
-//         		list = Base.findStrE("退出", 
-//						"d9d8d7-262728", 1, 0);
-//         		Constant.logout_ok
-//        		Base.mouse.mouseMoveTo(list.get(0).getX(), list.get(0).getY());
         		Base.addLog("test_search_img end..");
                 break;
             case state:

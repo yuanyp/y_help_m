@@ -44,6 +44,7 @@ public class Constant {
 	public static String wb_3 = "wb_3.bmp";
 	public static String wb_4 = "wb_4.bmp";
 	public static String wb_close = "wb_close.bmp";
+	public static String wb_close_1 = "wb_close_1.bmp";
 	public static String baoxiang_click = "baoxiang_click.bmp";
 	
 	//背包关闭按钮 ;任务栏:228*42 x-228 y+42
@@ -51,6 +52,7 @@ public class Constant {
 	
 	public static String logout_ok = "logout_ok.bmp";
 	public static String logout = "logout.bmp";
+	public static String logout_1 = "logout_1.bmp";
 	
 	public static String cangbaotu_2 = "cangbaotu_2.bmp";
 	public static String cangbaotu_3 = "cangbaotu_3.bmp";
@@ -63,6 +65,8 @@ public class Constant {
 	
 	public static String xiaohao_close = "xiaohao_close.bmp";
 	public static String xiaohao_qiehuan = "xiaohao_qiehuan.bmp";
+	public static String xiaohao_qiehuan_1 = "xiaohao_qiehuan_1.bmp";
+	public static String xiaohao_qiehuan_2 = "xiaohao_qiehuan_2.bmp";
 	
 	public static String xunlu = "xunlu.bmp";
 	

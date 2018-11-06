@@ -30,45 +30,51 @@ public class Layout extends JFrame{
     private JRadioButton rdo2_2;
     private JRadioButton rdo3_1;
     private JRadioButton rdo3_2;
+    private JTextField textField_key;
+    private JTextField textField_key_delay;
     
     public void execute(){
         String strXY1 = textField_1.getText();
         String strXY2 = textField_2.getText();
         String strXY3 = textField_3.getText();
+        String str_key = textField_key.getText();
+        String str_key_delay = textField_key_delay.getText();
         //1
-        if(StringUtils.isBlank(strXY1)){
-            return;
-        }
         String delay1 = textField_delay1.getText();
         if(StringUtils.isBlank(delay1)){
             delay1 = "500";
         }
         detail(getXY(strXY1),Integer.parseInt(delay1),rdo1_1.isSelected());
         
-        //2
-        if(StringUtils.isBlank(strXY2)){
-            return;
-        }
         String delay2 = textField_delay2.getText();
         if(StringUtils.isBlank(delay2)){
             delay2 = "500";
         }
         detail(getXY(strXY2),Integer.parseInt(delay2),rdo2_1.isSelected());
         
-        //3
-        if(StringUtils.isBlank(strXY3)){
-            return;
-        }
         String delay3 = textField_delay3.getText();
         if(StringUtils.isBlank(delay3)){
             delay3 = "500";
         }
         detail(getXY(strXY3),Integer.parseInt(delay3),rdo3_1.isSelected());
+        //4 处理键盘
+        detail_key(str_key,str_key_delay);
+    }
+    
+    private void detail_key(String str_key,String str_key_delay){
+    	System.out.println(str_key + "," + str_key_delay);
+    	if(StringUtils.isNotBlank(str_key) && StringUtils.isNotBlank(str_key_delay)){
+    		int keyCode = MouseTool.robot.StringToKey(str_key.toLowerCase());
+        	MouseTool.press.keyPress(keyCode);
+        	MouseTool.robot.delay(Integer.parseInt(str_key_delay));
+    	}
     }
     
     private void detail(List<Integer> xy,int delay,boolean mouse){
-        MouseTool.robot.delay(delay);
-        MouseTool.mouse.mouseClick(xy.get(0), xy.get(1), mouse);
+    	if(null != xy && xy.size() > 0){
+            MouseTool.mouse.mouseClick(xy.get(0), xy.get(1), mouse);
+            MouseTool.robot.delay(delay);
+    	}
     }
     
     private List<Integer> getXY(String strXY){
@@ -147,100 +153,110 @@ public class Layout extends JFrame{
         textField_delay3 = new JTextField();
         textField_delay3.setText("500");
         textField_delay3.setColumns(10);
+        
+        textField_key = new JTextField();
+        textField_key.setColumns(10);
+        
+        textField_key_delay = new JTextField();
+        textField_key_delay.setText("500");
+        textField_key_delay.setColumns(10);
         GroupLayout groupLayout = new GroupLayout(getContentPane());
         groupLayout.setHorizontalGroup(
-            groupLayout.createParallelGroup(Alignment.LEADING)
-                .addGroup(groupLayout.createSequentialGroup()
-                    .addGap(41)
-                    .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-                        .addComponent(label, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
-                        .addGroup(groupLayout.createSequentialGroup()
-                            .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-                                .addGroup(groupLayout.createSequentialGroup()
-                                    .addComponent(lblNewLabel)
-                                    .addPreferredGap(ComponentPlacement.UNRELATED)
-                                    .addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
-                                .addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-                                    .addGroup(groupLayout.createSequentialGroup()
-                                        .addComponent(label_2, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(ComponentPlacement.RELATED)
-                                        .addComponent(textField_3, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(groupLayout.createSequentialGroup()
-                                        .addComponent(label_1, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(ComponentPlacement.RELATED)
-                                        .addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))))
-                            .addGap(18)
-                            .addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-                                .addGroup(groupLayout.createSequentialGroup()
-                                    .addComponent(label_3, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(textField_delay1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addGroup(groupLayout.createSequentialGroup()
-                                    .addComponent(label_4, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(ComponentPlacement.RELATED)
-                                    .addComponent(textField_delay2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addGroup(groupLayout.createSequentialGroup()
-                                    .addComponent(label_5, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(ComponentPlacement.RELATED)
-                                    .addComponent(textField_delay3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                            .addGap(18)
-                            .addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-                                .addComponent(rdo3_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(rdo1_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(rdo2_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE))
-                            .addGap(27)
-                            .addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-                                .addComponent(rdo1_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(rdo2_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(rdo3_2, GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE))))
-                    .addGap(33))
+        	groupLayout.createParallelGroup(Alignment.LEADING)
+        		.addGroup(groupLayout.createSequentialGroup()
+        			.addGap(41)
+        			.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+        				.addComponent(label, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
+        				.addGroup(groupLayout.createSequentialGroup()
+        					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+        						.addGroup(groupLayout.createSequentialGroup()
+        							.addComponent(lblNewLabel)
+        							.addPreferredGap(ComponentPlacement.UNRELATED)
+        							.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
+        						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+        							.addGroup(groupLayout.createSequentialGroup()
+        								.addComponent(label_2, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
+        								.addPreferredGap(ComponentPlacement.RELATED)
+        								.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
+        							.addGroup(groupLayout.createSequentialGroup()
+        								.addComponent(label_1, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
+        								.addPreferredGap(ComponentPlacement.RELATED)
+        								.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
+        							.addComponent(textField_key, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)))
+        					.addGap(18)
+        					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+        						.addGroup(groupLayout.createSequentialGroup()
+        							.addComponent(label_3, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        							.addComponent(textField_delay1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        						.addGroup(groupLayout.createSequentialGroup()
+        							.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(textField_delay2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        						.addGroup(groupLayout.createSequentialGroup()
+        							.addComponent(label_5, GroupLayout.PREFERRED_SIZE, 42, GroupLayout.PREFERRED_SIZE)
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+        								.addComponent(textField_key_delay, GroupLayout.PREFERRED_SIZE, 66, GroupLayout.PREFERRED_SIZE)
+        								.addComponent(textField_delay3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+        					.addPreferredGap(ComponentPlacement.RELATED)
+        					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+        						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+        							.addComponent(rdo2_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        							.addComponent(rdo1_1, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        						.addComponent(rdo3_1))
+        					.addGap(18)
+        					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+        						.addGroup(groupLayout.createSequentialGroup()
+        							.addPreferredGap(ComponentPlacement.RELATED)
+        							.addComponent(rdo3_2, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
+        						.addComponent(rdo2_2, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
+        						.addComponent(rdo1_2))
+        					.addGap(97)))
+        			.addGap(33))
         );
         groupLayout.setVerticalGroup(
-            groupLayout.createParallelGroup(Alignment.LEADING)
-                .addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-                    .addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-                        .addGroup(groupLayout.createSequentialGroup()
-                            .addContainerGap()
-                            .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-                                .addGroup(groupLayout.createSequentialGroup()
-                                    .addGap(3)
-                                    .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-                                        .addComponent(label_5)
-                                        .addComponent(textField_delay3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-                                    .addComponent(rdo3_1)
-                                    .addComponent(rdo3_2))))
-                        .addGroup(groupLayout.createSequentialGroup()
-                            .addGap(25)
-                            .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-                                .addComponent(lblNewLabel)
-                                .addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(label_3)
-                                .addComponent(rdo1_1)
-                                .addComponent(rdo1_2)
-                                .addComponent(textField_delay1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                            .addGap(18)
-                            .addComponent(label)
-                            .addPreferredGap(ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
-                            .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-                                .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-                                    .addComponent(rdo2_1)
-                                    .addComponent(rdo2_2))
-                                .addGroup(Alignment.TRAILING, groupLayout.createParallelGroup(Alignment.LEADING)
-                                    .addGroup(groupLayout.createSequentialGroup()
-                                        .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-                                            .addComponent(label_1)
-                                            .addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                        .addGap(24)
-                                        .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-                                            .addComponent(label_2)
-                                            .addComponent(textField_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(groupLayout.createSequentialGroup()
-                                        .addGap(3)
-                                        .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-                                            .addComponent(label_4)
-                                            .addComponent(textField_delay2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))))
-                    .addGap(230))
+        	groupLayout.createParallelGroup(Alignment.TRAILING)
+        		.addGroup(groupLayout.createSequentialGroup()
+        			.addGap(25)
+        			.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(lblNewLabel)
+        				.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(label_3)
+        				.addComponent(rdo1_1)
+        				.addComponent(textField_delay1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(rdo1_2))
+        			.addGap(18)
+        			.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+        				.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+        					.addComponent(label_5)
+        					.addComponent(textField_delay3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        					.addComponent(rdo2_2)
+        					.addComponent(rdo3_1))
+        				.addGroup(groupLayout.createSequentialGroup()
+        					.addComponent(label)
+        					.addPreferredGap(ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
+        					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+        						.addGroup(groupLayout.createSequentialGroup()
+        							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+        								.addComponent(label_1)
+        								.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        							.addGap(24)
+        							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+        								.addComponent(label_2)
+        								.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+        						.addGroup(groupLayout.createSequentialGroup()
+        							.addGap(3)
+        							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+        								.addComponent(label_4)
+        								.addComponent(textField_delay2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        								.addComponent(rdo2_1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+        								.addComponent(rdo3_2, GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))))))
+        			.addGap(18)
+        			.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(textField_key, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        				.addComponent(textField_key_delay, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        			.addGap(114))
         );
         getContentPane().setLayout(groupLayout);
     }
