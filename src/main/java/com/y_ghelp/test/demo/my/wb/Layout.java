@@ -915,7 +915,7 @@ public class Layout extends JFrame{
     		Base.addLog("没有找到用户，可能已经全部处理过了..");
     		return false;
     	}
-    	Base.addLog("开始登录：" + user);
+    	Base.addLog("开始登录：" + user[0]);
     	input_user(user);
     	robot.delay(200);
     	list = Base.findPic(Constant.login_2,2000);
