@@ -595,6 +595,7 @@ public class Layout extends JFrame{
      */
     public void do_all(List<CoordBean> list){
     	active();
+    	clearOK();
     	if(null == list){
     		list = find_cbt();//找到藏宝图的话.
     	}
@@ -636,6 +637,25 @@ public class Layout extends JFrame{
     	do_all(list);//继续挖宝
     }
     
+    /**
+     * 判断是否出现确定按钮，如果有确认按钮 清空掉；
+     */
+    private void clearOK(){
+    	Base.addLog("清空确认按钮开始..");
+    	List<CoordBean> list = Base.findPic(Constant.do_ok);
+    	if(list.size() > 0){
+    		robot.delay(200);
+    		mouse.mouseClick(list.get(0).getX() + 5,list.get(0).getY() + 5, true);
+    	}
+    	robot.delay(200);
+    	list = Base.findStrE("确定","c7bd97-383e38", 1, 0,200);
+    	if(list.size() > 0){
+    		robot.delay(200);
+    		mouse.mouseClick(list.get(0).getX() + 5,list.get(0).getY() + 5, true);
+    	}
+    	Base.addLog("清空确认按钮结束..");
+    }
+    
     public void clear_gw(){
     	//清理小怪,避免打断挖宝
         robot.delay(200);
@@ -673,6 +693,9 @@ public class Layout extends JFrame{
             			mouse.mouseClick(list.get(0).getX() + 125,list.get(0).getY() + 55, true);
             		}
             		i++;
+            		if(i == 20 || i == 30 || i == 40){
+            			do_0();
+            		}
             		Base.addLog("点击宝箱...");
             		mouse.mouseMoveTo(list.get(0).getX() + 30,list.get(0).getY() + 55);
             		robot.delay(200);
@@ -695,7 +718,7 @@ public class Layout extends JFrame{
     	if(list.size() > 0){
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
         	robot.delay(2000);
-        	list = Base.findPic(Constant.wb_4,140,219,288,260,3000);//是否已经挖过宝了
+        	list = Base.findPic(Constant.wb_4,3000);//是否已经挖过宝了
         	if(list.size() > 0){
         		//115
         		mouse.mouseClick(list.get(0).getX() + 115, list.get(0).getY(), true);
@@ -725,13 +748,13 @@ public class Layout extends JFrame{
     		robot.delay(2000);
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
         	robot.delay(2000);
-        	list = Base.findPic(Constant.wb_4,140,219,288,260,3000);//是否已经挖过宝了
+        	list = Base.findPic(Constant.wb_4,3000);//是否已经挖过宝了
         	if(list.size() > 0){
         		Base.addLog("该账号已经挖过宝..");
         		Base.close_wb_page();
         		return;
         	}
-        	list = Base.findPic(Constant.wb_1,140,219,288,260,5000);
+        	list = Base.findPic(Constant.wb_1,5000);
         	if(list.size() > 0){
         		//x+371,y-8
         		robot.delay(200);
@@ -793,7 +816,7 @@ public class Layout extends JFrame{
     	open_beibao();
     	robot.delay(1000);
     	close_beibao();
-    	List<CoordBean> list = Base.findStrE("传送", "30eb37-311437", 0.8, 0);
+    	List<CoordBean> list = Base.findStrE("传送", "30eb37-311437", 0.8, 0,5000);
     	if(list.size() > 0){
     		Base.addLog("找到传送门...");
     		mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 50, true);
