@@ -8,10 +8,12 @@ public class Common {
 	
 	static String searchImg = "search1.png";
 	
-    static String startImg = "start_game.png";
     static String inputUserImg = "input_user.png";
     static String errorImg = "error.png";
     static String error1Img = "error1.png";
+    
+    static String start_img = "start.bmp";
+    static String start1_img = "start1.bmp";
     
     static String baoxiang_r_1 = "baoxiang_r_1.bmp";
     static String baoxiang_r_2 = "baoxiang_r_2.bmp";
@@ -48,7 +50,8 @@ public class Common {
     static String zhuziImg = "zhuzi.png";
     static String jiaoyiImg = "jiaoyi.png";
     static String quxiaoImg = "quxiao.png";
-    static String quanbudengluImg = "quanbudenglu.png";
+    static String quanbudengluImg = "quanbudenglu.bmp";
+    static String quanbudenglu1Img = "quanbudenglu1.bmp";
     static String yihouzaishuoImg = "yihouzaishuo.png";
     
     static String jzt_pucong = "jzt_pucong.bmp";

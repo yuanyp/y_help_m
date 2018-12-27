@@ -1512,7 +1512,8 @@ public class MYDemo extends JFrame{
             }
         }while(flag);
         robot.setSourcePath(MYDemo.class);
-        boolean showGame = robot.imageDelaySearch(0, 0, robot.screenWidth, robot.screenHeight, robot.getResourceImage(Common.startImg), Robot.SIM_ACCURATE, 10000);
+        List<CoordBean> startImg = findPic(Common.start_img+"|"+Common.start1_img, 60000);
+        boolean showGame = startImg.size() > 0;
         if(!showGame){
         	addLog("未能打开游戏..");
         	return;
@@ -1521,11 +1522,15 @@ public class MYDemo extends JFrame{
         if(hwnd > 0){
             window.setWindowActivate(hwnd); //激活窗口
             robot.setSourcePath(MYDemo.class);
-            List<CoordBean> list = robot.imageSearch(0, 0, robot.screenWidth, robot.screenHeight, Common.startImg, Robot.SIM_ACCURATE);
+            List<CoordBean> list = findPic(Common.start_img+"|"+Common.start1_img, 60000);
             if(null == list || list.size() == 0){
                 addLog("未能找到【"+gameName+"】的“开始游戏”按钮..");
             }
-            mouse.mouseClick(list.get(0).getX() - 60, list.get(0).getY() - 60, true);//移动之后，左键点击
+            
+            int x = list.get(0).getX() - 95;
+            int y = list.get(0).getY() - 60;
+            addLog("点击进入游戏【坐标"+x+","+y+"】..");
+            mouse.mouseClick(x, y, true);//移动之后，左键点击
             
             flag = true;
             do{
@@ -1820,7 +1825,7 @@ public class MYDemo extends JFrame{
     	press.keyPress(press.X);
     	robot.delay(500);
     	robot.setSourcePath(MYDemo.class);
-    	List<CoordBean> list = robot.imageSearch(0, 0, robot.screenWidth, robot.screenHeight, Common.quanbudengluImg, Robot.SIM_ACCURATE);
+    	List<CoordBean> list = findPic(Common.quanbudengluImg+"|"+Common.quanbudenglu1Img, 500);
         if(null == list || list.size() == 0){
             addLog("未能找到图片【"+Common.quanbudengluImg+"】..");
             return;

@@ -38,6 +38,7 @@ public class Constant {
 	public static String wb_0 = "wb_0.bmp";
 	//挖宝自动寻路
 	public static String wb_1 = "wb_1.bmp";//x+371,y-8
+	public static String wb_1_1 = "wb_1_1.bmp";//x+371,y-8
 	//领取藏宝图
 	public static String wb_2 = "wb_2.bmp";
 	//领取完毕
@@ -53,7 +54,11 @@ public class Constant {
 	public static String logout_ok = "logout_ok.bmp";
 	public static String logout = "logout.bmp";
 	public static String logout_1 = "logout_1.bmp";
+	public static String logout_2 = "logout_2.bmp";
+	public static String logout_3 = "logout_3.bmp";
 	
+	public static String cangbaotu_shiyong = "cangbaotu_shiyong.bmp";
+	public static String cangbaotu_shiyong_1 = "cangbaotu_shiyong_1.bmp";
 	public static String cangbaotu_2 = "cangbaotu_2.bmp";
 	public static String cangbaotu_3 = "cangbaotu_3.bmp";
 	public static String cangbaotu_4 = "cangbaotu_4.bmp";

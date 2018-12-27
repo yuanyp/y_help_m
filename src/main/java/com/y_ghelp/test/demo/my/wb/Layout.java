@@ -226,11 +226,12 @@ public class Layout extends JFrame{
     	if(list.size() > 0){
     		robot.delay(500);
     		//点击切换小号
-    		list = Base.findPic(Constant.xiaohao_qiehuan_1 + "|" + Constant.xiaohao_qiehuan_2,3000);
-    		if(list.size() > 0){
-    			mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);	
+    		List<CoordBean> list1 = Base.findPic(Constant.xiaohao_qiehuan_1 + "|" + Constant.xiaohao_qiehuan_2,3000);
+    		if(list1.size() > 0){
+    			mouse.mouseClick(list1.get(0).getX() + 5, list1.get(0).getY() + 5, true);	
     		}else{
-    			mouse.mouseClick(list.get(0).getX() - 272, list.get(0).getY() + 383, true);
+    			//154 350
+    			mouse.mouseClick(list.get(0).getX() - 154, list.get(0).getY() + 350, true);
     		}
     	}else{
     		Base.addLog("发生错误未能找到wb_close..");
@@ -335,7 +336,8 @@ public class Layout extends JFrame{
     		if(list.size() > 0){
         		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(),true);
         	}
-        	list = Base.findPic(Constant.logout +"|" + Constant.logout_1,5000);
+        	list = Base.findPic(Constant.logout +"|" + Constant.logout_1  
+        			+"|" + Constant.logout_2  +"|" + Constant.logout_3,5000);
     		if(list.size() > 0){
     			Base.addLog("找到图片logout");
     			mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 12, true);
@@ -344,12 +346,12 @@ public class Layout extends JFrame{
     			//272 383//切换角色
     			//126 383//退出游戏
     			if(list.size() > 0){
-    				list = Base.findStrE("退出","84b2a2-47484a", 0.9, 0);
-    				if(list.size() > 0){
+    				List<CoordBean> list1 = Base.findStrE("退出","84b2a2-47484a", 0.9, 0);
+    				if(list1.size() > 0){
     					Base.addLog("找到文字退出");
-    					mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 12, true);
+    					mouse.mouseClick(list1.get(0).getX() + 15, list1.get(0).getY() + 12, true);
     				}else{
-    					mouse.mouseClick(list.get(0).getX() - 126, list.get(0).getY() + 383, true);
+    					mouse.mouseClick(list.get(0).getX() - 53, list.get(0).getY() + 347, true);
     				}
     			}
     		}
@@ -376,8 +378,11 @@ public class Layout extends JFrame{
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
     		robot.delay(500);
 			Base.addLog("使用藏宝图...");
-			//75 * 43
-			mouse.mouseClick(list.get(0).getX() - 75, list.get(0).getY() + 43, true);
+			list = Base.findPic(Constant.cangbaotu_shiyong+"|"+Constant.cangbaotu_shiyong_1,1000);
+			if(list.size() > 0){
+				//75 * 43
+				mouse.mouseClick(list.get(0).getX() + 8, list.get(0).getY() + 8, true);
+			}
 			robot.delay(500);
 			list = Base.findPic(Constant.beibao_close,1500);
 			if(list.size() > 0){
@@ -754,7 +759,7 @@ public class Layout extends JFrame{
         		Base.close_wb_page();
         		return;
         	}
-        	list = Base.findPic(Constant.wb_1,5000);
+        	list = Base.findPic(Constant.wb_1+"|"+Constant.wb_1_1,5000);
         	if(list.size() > 0){
         		//x+371,y-8
         		robot.delay(200);

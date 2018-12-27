@@ -56,7 +56,7 @@ public class SysHotKey implements HotkeyListener {
                 break;
             case test_search_img:
             	Base.addLog("test_search_img start..");
-            	List<CoordBean> list = Base.findStrE("传送", "30eb37-311437", 0.8, 0);
+            	List<CoordBean> list = Base.findPic(Constant.logout_ok,1000);
             	Base.addLog("list.size" + list.size());
         		for(CoordBean item : list){
         			System.out.println(item.getX());
