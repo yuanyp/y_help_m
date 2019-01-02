@@ -57,7 +57,7 @@ import com.y_ghelp.test.demo.config.MYConfig;
 public class MYDemo extends JFrame{
 	
 	public MYDemo() {
-//		init_layout();
+		init_layout();
 	}
 	
 	static Logger log = Logger.getLogger(MYDemo.class);
@@ -1512,8 +1512,8 @@ public class MYDemo extends JFrame{
             }
         }while(flag);
         robot.setSourcePath(MYDemo.class);
-        List<CoordBean> startImg = findPic(Common.start_img+"|"+Common.start1_img, 60000);
-        boolean showGame = startImg.size() > 0;
+        List<CoordBean> list = findPic(Common.start_img+"|"+Common.start1_img, 60000);
+        boolean showGame = list.size() > 0;
         if(!showGame){
         	addLog("未能打开游戏..");
         	return;
@@ -1522,16 +1522,10 @@ public class MYDemo extends JFrame{
         if(hwnd > 0){
             window.setWindowActivate(hwnd); //激活窗口
             robot.setSourcePath(MYDemo.class);
-            List<CoordBean> list = findPic(Common.start_img+"|"+Common.start1_img, 60000);
-            if(null == list || list.size() == 0){
-                addLog("未能找到【"+gameName+"】的“开始游戏”按钮..");
-            }
-            
             int x = list.get(0).getX() - 95;
             int y = list.get(0).getY() - 60;
             addLog("点击进入游戏【坐标"+x+","+y+"】..");
             mouse.mouseClick(x, y, true);//移动之后，左键点击
-            
             flag = true;
             do{
                 login(user);
@@ -1628,7 +1622,7 @@ public class MYDemo extends JFrame{
     }
     
     private void login(String[] user) throws Exception{
-    	addLog("开始登录..." + user[0]);
+    	addLog("login start..." + user[0]);
     	robot.delay(5000);//休息5秒，等待打开游戏登录界面
         
         boolean flag = findInputPass(80000);
@@ -1825,12 +1819,12 @@ public class MYDemo extends JFrame{
     	press.keyPress(press.X);
     	robot.delay(500);
     	robot.setSourcePath(MYDemo.class);
-    	List<CoordBean> list = findPic(Common.quanbudengluImg+"|"+Common.quanbudenglu1Img, 500);
+    	List<CoordBean> list = findPic(Common.quanbudengluImg+"|"+Common.quanbudenglu1Img, 1500);
         if(null == list || list.size() == 0){
             addLog("未能找到图片【"+Common.quanbudengluImg+"】..");
             return;
         }
-        mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() - 5, true);//移动之后，左键点击
+        mouse.mouseClick(list.get(0).getX() + 8, list.get(0).getY() + 8, true);//移动之后，左键点击
         list.clear();
         
         sing_xiaohao(list, hwnd, Common.xiaohao_1Img);
