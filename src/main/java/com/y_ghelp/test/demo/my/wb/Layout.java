@@ -806,7 +806,15 @@ public class Layout extends JFrame{
 			if(a){
 				lcbt();
 			}else{
-				Base.addLog("没有找到传送到雷鸣的对话框");
+				Base.addLog("没有找到传送到雷鸣的对话框，尝试点击坐标（319,150）；");
+				mouse.mouseClick(319, 150, true);
+				robot.delay(800);
+				a = Base.go_to_lm();
+				if(a){
+					lcbt();
+				}else{
+					Base.addLog("未能到达雷鸣");
+				}
 			}
 		}else{
 			Base.addLog("没有找到神界的传送师");
