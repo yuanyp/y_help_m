@@ -16,9 +16,9 @@ public class DemoJob implements Job{
     public void execute(JobExecutionContext context) throws JobExecutionException {
         JobDataMap data = context.getJobDetail().getJobDataMap();
         MYDemo mydemo = (MYDemo)data.get("mydemo");
-        mydemo.addLog("WBJob execute start " + new Date());
-        Base.resetUsers();
+        mydemo.addLog("DemoJob execute start " + new Date());
+        mydemo.listUsers.clear();
         mydemo.threadPool.execute(mydemo.playGameTh);
-        mydemo.addLog("WBJob execute end " + new Date());
+        mydemo.addLog("DemoJob execute end " + new Date());
     }
 }
