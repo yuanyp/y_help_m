@@ -1437,7 +1437,17 @@ public class MYDemo extends JFrame{
     
     private List<CoordBean> findPic(String img){
     	List<CoordBean> list = new ArrayList<CoordBean>();
-    	int[] a = findPic.findPic(0, 0, robot.screenWidth, robot.screenHeight, getRealPath(img), "", 0.9, 0);
+    	String imgs = "";
+    	if(img.indexOf("|") != -1){
+    		String[] imgarr = img.split("\\|");
+    		for(String item_img : imgarr){
+    			imgs += getRealPath(item_img) + "|";	
+    		}
+    		imgs = imgs.substring(0, imgs.length() - 1);
+    	}else{
+    		imgs = getRealPath(img);
+    	}
+    	int[] a = findPic.findPic(0, 0, robot.screenWidth, robot.screenHeight, imgs, "", 0.9, 0);
     	if(a[0] != 0){
     		addLog("未能找到IMG【"+img+"】..");
     		return list;

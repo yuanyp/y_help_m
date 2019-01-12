@@ -401,6 +401,13 @@ public class Layout extends JFrame{
     
     private List<CoordBean> open_beibao(){
     	Base.addLog("wb open_cbt..");
+    	Base.addLog("打开背包前检查活动界面是否关闭..");
+    	List<CoordBean> list_wb_close = Base.getWB_CLOSE(200);
+		if(list_wb_close.size() > 0){
+			Base.addLog("关闭活动界面");
+			mouse.mouseClick(list_wb_close.get(0).getX(), list_wb_close.get(0).getY(), true);
+			robot.delay(200);
+		}
     	//打开背包
     	Base.addLog("打开背包...");
     	press.keyPress(press.I);
