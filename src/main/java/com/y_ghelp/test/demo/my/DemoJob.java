@@ -18,7 +18,7 @@ public class DemoJob implements Job{
         MYDemo mydemo = (MYDemo)data.get("mydemo");
         mydemo.addLog("DemoJob execute start " + new Date());
         mydemo.listUsers.clear();
-        mydemo.press.groupPress(mydemo.robot.StringToKey("alt"), mydemo.robot.StringToKey("f9"));
+        mydemo.threadPool.execute(mydemo.playGameTh);
         mydemo.addLog("DemoJob execute end " + new Date());
     }
 }

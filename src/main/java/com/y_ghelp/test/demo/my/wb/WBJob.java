@@ -20,7 +20,7 @@ public class WBJob implements Job{
         WB wbjob = (WB)data.get("wbjob");
         wbjob.addLog("WBJob execute start " + new Date());
         Base.resetUsers();
-        wbjob.threadPool.execute(wbjob.start);
+        Base.press.groupPress(Base.robot.StringToKey("alt"), Base.robot.StringToKey("f9"));
         wbjob.addLog("WBJob execute end " + new Date());
     }
 }
