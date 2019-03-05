@@ -5,8 +5,10 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -60,6 +62,7 @@ public class Base{
 	public static LinkedList<String[]> listUsers = new LinkedList<String[]>();//判断账号是否已经处理过
 	public static LinkedList<String> listUserXiaoHao = new LinkedList<String>();//判断大号的小号是否已经处理过
 	public static LinkedList<CoordBean> xiaohao = new LinkedList<CoordBean>();//判断小号
+	public static Map<String,String> runRole = new HashMap<>();//当前正在进行的角色
     static{
         com = new Com();
         window = new Window(com.getActiveXComponent());    //窗口操作类
@@ -278,6 +281,9 @@ public class Base{
     public static void addLog(Object str){
     	log.info(str);
         System.out.println(str);
+    }
+    public static void addErrorLog(Object str){
+    	log.error(str);
     }
     
     public static boolean go_to_lm(){

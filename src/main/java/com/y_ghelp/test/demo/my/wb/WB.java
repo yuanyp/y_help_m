@@ -49,7 +49,7 @@ public class WB extends Base{
 		List<CoordBean> list = findPic(Constant.die,sx,sy,ex,ey,0.9,false);
 		if(list.size() > 0){
 			Base.screenDieImage();
-			Base.addLog("检测到人物死亡");
+			addErrorLog("检测到人物死亡【"+Base.runRole.toString()+"】");
 			_list.addAll(list);//返回坐标
 			WB.die = true;
 			return true;

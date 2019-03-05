@@ -296,9 +296,8 @@ public class Layout extends JFrame{
     	//系统设置坐标 776*438
     	mouse.mouseClick(776, 438, true);
     	robot.delay(500);
-    	
-    	//判断是否有小号
     	List<CoordBean> xiaohao = has_xiaohao();
+    	//判断是否有小号
     	robot.delay(1500);
     	//210 247
 		List<CoordBean> list = Base.findPic(Constant.xiaohao_close,1500);
@@ -309,18 +308,9 @@ public class Layout extends JFrame{
     			Base.addLog("找不到" + Constant.xiaohao_close);
     			return false;
     		}
-    		if(xiaohao.get(0).getId() == 1){
-    			mouse.mouseClick(list.get(0).getX() - 266, list.get(0).getY() + 89,true);
-    		}else if(xiaohao.get(0).getId() == 2){
-    			mouse.mouseClick(list.get(0).getX() - 153, list.get(0).getY() + 89,true);
-    		}else if(xiaohao.get(0).getId() == 3){
-    			mouse.mouseClick(list.get(0).getX() - 41, list.get(0).getY() + 89,true);
-    		}else if(xiaohao.get(0).getId() == 4){
-    			mouse.mouseClick(list.get(0).getX() - 376, list.get(0).getY() + 178,true);
-    		}else if(xiaohao.get(0).getId() == 5){
-    			mouse.mouseClick(list.get(0).getX() - 266, list.get(0).getY() + 178,true);
-    		}
+    		mouse.mouseClick(xiaohao.get(0).getX(), xiaohao.get(0).getY(),true);
     		Base.addLog("移除.." + xiaohao + "中的：" + xiaohao.get(0));
+    		Base.runRole.put("main_role_sub", xiaohao.get(0).getId() + "");
     		Base.xiaohao.removeFirst();
     		robot.delay(500);
         	if(list.size() > 0){
@@ -988,6 +978,7 @@ public class Layout extends JFrame{
 			}
     		list = Base.findPic(Constant.login_success,30000);
     		if(list.size() > 0){
+    			Base.runRole.put("main_role", user[0]);
     			Base.addLog("登录成功..");
     			//登录成功才添加进来
     			Base.listUsers.add(user);
