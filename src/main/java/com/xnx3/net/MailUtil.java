@@ -98,6 +98,7 @@ public class MailUtil {
 	}  
 	
 	public static void main(String[] args) {
+		//witttmxgsxhcbchg --颠三倒四
 		MailUtil.sendMail("418040445@qq.com", "这是标题", "这是内容");
 	}
 

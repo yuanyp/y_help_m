@@ -2,6 +2,8 @@ package com.y_ghelp.test.demo.my.wb;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -12,6 +14,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
@@ -349,9 +352,39 @@ public class Layout extends JFrame{
     		if(list.size() > 0){
     			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);//回到登录页面
     			robot.delay(2000);
+    			//标记该账号已经完成挖宝
+    			finshRole();
     		}
     		return false;
     	}
+    }
+    
+    public void finshRole() {
+    	try {
+	    	String date = Base.getDate("YYYYMMdd");
+	    	String folder = Base.home + File.separator + "finsh_role";
+	    	File file1 = new File(folder);
+	    	if(!file1.exists()){
+	    		file1.mkdirs();
+	    	}
+	    	String fileStore = folder + File.separator + date + ".txt";
+	    	File file = new File(fileStore);
+	    	if(!file.exists()) {
+				file.createNewFile();
+	    	}
+	    	String str = FileUtils.readFileToString(file);
+	    	Object ruStr = Base.runRole.get("main_role");
+	    	StringBuilder sb = new StringBuilder(str);
+	    	if(sb.length() > 0) {
+	    		sb.append("," + ruStr);
+	    	}else {
+	    		sb.append(ruStr);
+	    	}
+	    	FileUtils.writeStringToFile(file, sb.toString());
+    	} catch (IOException e) {
+			e.printStackTrace();
+			Base.addLog(e.getMessage());
+		}
     }
     
     /**
@@ -486,13 +519,13 @@ public class Layout extends JFrame{
     	int i = 0;//15次
     	boolean flag = true;
     	do{
+    		i++;
     		do_0();
     		press.keyPress(press.F3);
-    		if(i == 2){
+    		if(i % 3 == 0){
     			press.keyPress(press.F2);
     			robot.delay(500);
     		}
-    		i++;
     		Base.addLog("处理山贼... i " + i);
     		flag = Base.findPic(getBaoXiangImg()).size() <= 0;
     		if(flag){
@@ -512,7 +545,7 @@ public class Layout extends JFrame{
 		robot.delay(1000);
 		press.keyPress(press.F1);
 		robot.delay(1000);
-		press.keyPress(press.F3);
+		press.keyPress(press.SPACE);
 		robot.delay(1000);
     }
     
@@ -574,13 +607,13 @@ public class Layout extends JFrame{
     	int i = 0;//15次
     	boolean flag = true;
     	do{
+    		i++;
     		do_0();
-    		if(i == 2){
+    		if(i % 3 == 0){
     			press.keyPress(press.F2);
     			robot.delay(500);
     		}
     		press.keyPress(press.SPACE);
-    		i++;
     		Base.addLog("处理宝树... i " + i);
 			if(i >= 15){
 				flag = false;
@@ -727,7 +760,7 @@ public class Layout extends JFrame{
         		robot.delay(500);
         		list = Base.findPic(Constant.baoxiang_click,3000);
         		if(list.size() > 0){
-        			mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 15, true);
+        			mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 10, true);
             		robot.delay(500);
             		Base.close_wb_page();
         		}else{
@@ -967,7 +1000,8 @@ public class Layout extends JFrame{
     	if(list.size() > 0){
     		//点击登录
     		mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
-			list = Base.findPic(Constant.login_e,5000);
+    		robot.delay(2000);
+			list = Base.findPic(Constant.login_e+"|"+Constant.login_2,3000);
 			if(list.size() > 0){//如果账号密码不正确
 				clearInput2();
 				return login();//重新登录

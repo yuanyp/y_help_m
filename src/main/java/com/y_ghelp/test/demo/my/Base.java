@@ -43,6 +43,7 @@ public class Base{
 	public static FindStr findStr;
 	public static com.xnx3.microsoft.File file;
 	
+	public static final String home = "c:\\temp_img";
 	public static String imgHomeFolder = "game_img";
 	public static int screenWidth;
 	public static int screenHeight;
@@ -169,7 +170,7 @@ public class Base{
     }
     
     public static void screenImage(String name){
-    	String dir = "c:\\temp_img\\"+name;
+    	String dir = home + File.separator + name;
     	File file1 = new File(dir);
     	if(!file1.exists()){
     		file1.mkdirs();
@@ -179,7 +180,7 @@ public class Base{
     
     public static void screenDieImage(){
     	String date = getDate("YYYYMMdd");
-    	String dir = "c:\\temp_img\\"+date;
+    	String dir = home + File.separator + date;
     	File file1 = new File(dir);
     	if(!file1.exists()){
     		file1.mkdirs();

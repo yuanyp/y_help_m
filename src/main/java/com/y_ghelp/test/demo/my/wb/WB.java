@@ -5,25 +5,13 @@ import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import org.quartz.CronScheduleBuilder;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerFactory;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
-import org.quartz.impl.StdSchedulerFactory;
 
 import com.xnx3.Lang;
 import com.xnx3.microsoft.SystemUtil;
 import com.xnx3.robot.support.CoordBean;
 import com.y_ghelp.test.demo.config.MYConfig;
 import com.y_ghelp.test.demo.my.Base;
-import com.y_ghelp.test.demo.my.DemoJob;
-import com.y_ghelp.test.demo.my.MYDemo;
 
 /**
  * 夜神模拟器挖宝
@@ -121,7 +109,6 @@ public class WB extends Base{
 		/********创建界面********/
 		final SysHotKey sysHotKey = new SysHotKey(frame);
         sysHotKey.initHotkey();
-        
 		/************创建托盘************/
 		//添加右键弹出按钮
 		PopupMenu popupMenu=new PopupMenu();
@@ -130,8 +117,6 @@ public class WB extends Base{
 		menuItemExit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			    boolean unbind = com.unbind();
-			    addLog("com.unbind " + unbind);
 			    sysHotKey.destroy();
 			}
 		});

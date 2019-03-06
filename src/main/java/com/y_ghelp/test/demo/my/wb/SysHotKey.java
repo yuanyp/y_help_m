@@ -89,6 +89,8 @@ public class SysHotKey implements HotkeyListener {
         JIntellitype.getInstance().unregisterHotKey(cut);
         JIntellitype.getInstance().unregisterHotKey(test_search_img);
         JIntellitype.getInstance().unregisterHotKey(state);
+        boolean unbind = Base.com.unbind();
+	    Base.addLog("com.unbind " + unbind);
         System.exit(0);
     }
     
