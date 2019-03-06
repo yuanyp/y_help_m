@@ -148,10 +148,21 @@ public class Layout extends JFrame{
     	}
     }
     
+    private String getHDClose(){
+    	return Constant.hd_close +"|"+ Constant.hd_close1+"|"+ Constant.hd_close2;
+    }
+    
     private void login_after() {
     	active();
+        
+    	List<CoordBean> list = Base.findPic(getHDClose(),20000);
+        if(list.size() > 0){
+			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
+			robot.delay(500);
+		}
+    	
     	//465 233
-        List<CoordBean> list = Base.findPic(Constant.login_success,20000);
+        list = Base.findPic(Constant.login_success,20000);
         if(list.size() > 0){
         	Base.addLog("登录成功");
         }
@@ -1010,6 +1021,13 @@ public class Layout extends JFrame{
 			if(list.size() > 0){
 				mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
 			}
+			
+			list = Base.findPic(getHDClose(),20000);
+	        if(list.size() > 0){
+				mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
+				robot.delay(500);
+			}
+	        
     		list = Base.findPic(Constant.login_success,30000);
     		if(list.size() > 0){
     			Base.runRole.put("main_role", user[0]);

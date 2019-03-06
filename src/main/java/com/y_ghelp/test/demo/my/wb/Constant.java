@@ -92,7 +92,9 @@ public class Constant {
 	public static String do_baoxiang_12 = "do_baoxiang_12.bmp";
 	public static String do_jingyan = "do_jingyan.bmp";
 	public static String do_ok = "do_ok.bmp";
-	
+	public static String hd_close = "hd_close.bmp";
+	public static String hd_close1 = "hd_close1.bmp";
+	public static String hd_close2 = "hd_close2.bmp";
 	
 	/////////////////////////////////////
 	public static String die = "die.bmp";
