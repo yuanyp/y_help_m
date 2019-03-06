@@ -47,6 +47,7 @@ import com.xnx3.microsoft.Window;
 import com.xnx3.robot.Robot;
 import com.xnx3.robot.support.CoordBean;
 import com.y_ghelp.test.demo.config.MYConfig;
+import com.y_ghelp.test.demo.my.wb.Constant;
 /**
  * 
  * win8 || win10 需要手动注册；用管理员打开cmd 
@@ -102,6 +103,7 @@ public class MYDemo extends JFrame{
     
     boolean flag_dx = true;
     boolean flag_gw = true;
+    boolean die_pc = false;
     
     // 构造一个线程池
     ThreadPoolExecutor threadPool = new ThreadPoolExecutor(2, 4, 3, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(3),
@@ -109,6 +111,71 @@ public class MYDemo extends JFrame{
     private JTextField m3_textField_cd;
     private JTextField m3_textField_x;
     private JTextField m3_textField_y;
+    
+    public Thread checkDie = new Thread(new Runnable() {
+        public void run() {
+            try {
+            	//处理如果人物死亡自动复活
+            	//检测人物死亡开始
+            	addLog("检测人物是否已经死亡开始..");
+            	do{
+            		List<CoordBean> list = new ArrayList<>();
+            		die(list);
+            		if(die_pc){
+            			robot.delay(200);
+            			int x = list.get(0).getX() + 5;
+            			int y = list.get(0).getY() + 5;
+            			addLog("鼠标点击复活坐标1【"+x+","+y+"】..");
+        				mouse.mouseClick(x, y, true);
+        				robot.delay(1000);
+        				fit_bb();
+            		}
+            		addLog("检测人物是否已经死亡结束..60秒之后再继续检测..");
+            		robot.delay(60000);
+            	}while(die_pc);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    });
+    
+    /**
+     * 1. 使用复活药剂 复活bb
+     * 2. 合体bb
+     */
+    public void fit_bb() {
+    	addLog("使用复活药水,并合体宝宝 start...");
+    	robot.press(press.NUM_1);
+    	robot.delay(1000);
+    	boolean flag = true;
+    	while(flag) {
+    		List<CoordBean> list = findPic(Constant.pc_bb_ht+"|"+Constant.pc_bb_ht_1);
+    		if(list.size() > 0){
+    			flag = true;
+    			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
+    			robot.delay(500);
+        	}else {
+        		flag = false;
+        	}
+    	}
+    	addLog("使用复活药水,并合体宝宝 end...");
+    }
+    
+	public void die(List<CoordBean> _list) {
+		if(null != _list){
+			_list.clear();
+		}
+		robot.delay(500);
+		List<CoordBean> list = findPic(Constant.die_pc);
+		if(list.size() > 0){
+			addLog("检测到PC人物死亡");
+			die_pc = true;
+			_list.addAll(list);//返回坐标
+		}else {
+			addLog("未检测到PC人物死亡");
+			die_pc = false;
+		}
+	}
     
     private void init(){
         com = new Com();
@@ -354,6 +421,7 @@ public class MYDemo extends JFrame{
         button_start_yongsheng.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 threadPool.execute(m3startTh);
+                threadPool.execute(checkDie);
             }
         });
         
@@ -513,6 +581,10 @@ public class MYDemo extends JFrame{
         addLog("m3_start_yongsheng...");
         m3_end = true;
         while(m3_end){
+        	if(die_pc) {
+        		addLog("人物已经死亡等待120秒..");
+        		robot.delay(120000);
+        	}
             robot.delay(500);
             addLog("m3_start_yongsheng work...");
             robot.press(press.F2);//放技能
@@ -570,9 +642,13 @@ public class MYDemo extends JFrame{
         if(jiao1){
             int x = Integer.parseInt(m3_textField_x.getText());
             int y = Integer.parseInt(m3_textField_y.getText());
+            f1(x,y);
             mouse.mouseClick(list.get(0).getX() + x, list.get(0).getY() + y, true);
         }else if(findImg(Common.m3_jiao1_2, 1000, list)){
-        	mouse.mouseClick(list.get(0).getX() + 450 , list.get(0).getY(), true);
+        	int x = list.get(0).getX() + 450;
+            int y = list.get(0).getY();
+        	f1(x,y);
+        	mouse.mouseClick(x,y, true);
         }
         robot.delay(500);
     }
@@ -583,12 +659,25 @@ public class MYDemo extends JFrame{
         boolean jiao1 = findImg(Common.m3_jiao1_2, 1000, list);
         if(jiao1){
         	//360 55
-            mouse.mouseClick(list.get(0).getX() + 360, list.get(0).getY() - 55, true);
+        	int x = list.get(0).getX() + 360;
+        	int y = list.get(0).getY() - 55;
+        	f1(x,y);
+            mouse.mouseClick(x, y, true);
         }else if(findImg(Common.m3_jiao1_2_top, 1000, list)){
         	//144 203
-        	mouse.mouseClick(list.get(0).getX() - 144, list.get(0).getY() - 203, true);
+        	int x = list.get(0).getX() - 144;
+        	int y = list.get(0).getY() - 203;
+        	f1(x,y);
+        	mouse.mouseClick(x, y, true);
         }
         robot.delay(500);
+    }
+    
+    private void f1(int x,int y) {
+    	mouse.mouseMoveTo(x, y);
+    	robot.press(press.F1);
+		log.info("按下F1");
+		robot.delay(200);
     }
     
     private void m3_end_yongsheng(){

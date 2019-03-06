@@ -96,6 +96,9 @@ public class Constant {
 	
 	/////////////////////////////////////
 	public static String die = "die.bmp";
+	public static String die_pc = "die_pc.bmp";
+	public static String pc_bb_ht = "pc_bb_ht.bmp";
+	public static String pc_bb_ht_1 = "pc_bb_ht_1.bmp";
 	public static String fuhuo_1 = "fuhuo_1.bmp";
 	public static String fuhuo_2 = "fuhuo_2.bmp";
 	public static String fuhuo_3 = "fuhuo_3.bmp";
