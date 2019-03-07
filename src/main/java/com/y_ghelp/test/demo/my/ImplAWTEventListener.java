@@ -21,10 +21,10 @@ public class ImplAWTEventListener implements AWTEventListener {
     }  
     
     private void keyPressed(KeyEvent event) {
-    	MYUtil.addLog("keyPressed ：" + event.getKeyCode() + "");
+    	System.out.println("keyPressed ：" + event.getKeyCode() + "");
     }
     
     private void keyReleased(KeyEvent event) {
-    	MYUtil.addLog("keyReleased ：" + event.getKeyCode() + "");
+    	System.out.println("keyReleased ：" + event.getKeyCode() + "");
     }
 }

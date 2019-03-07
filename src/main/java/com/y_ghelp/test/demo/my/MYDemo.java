@@ -42,6 +42,7 @@ import com.xnx3.microsoft.Com;
 import com.xnx3.microsoft.FindPic;
 import com.xnx3.microsoft.Mouse;
 import com.xnx3.microsoft.Press;
+import com.xnx3.microsoft.Sleep;
 import com.xnx3.microsoft.SystemUtil;
 import com.xnx3.microsoft.Window;
 import com.xnx3.robot.Robot;
@@ -72,7 +73,7 @@ public class MYDemo extends JFrame{
     private JTextField textField;
     private JTextField textField1;
     private JButton button_start_yongsheng;
-    private boolean m3_end = false;
+    private boolean m3_start = false;
     
     private int m_var = 120 + 28;
     private int rw_hight = 130;
@@ -89,9 +90,13 @@ public class MYDemo extends JFrame{
     
     Thread openGameTh;
     Thread playGameTh;
+    Thread login;
     Thread sclTh;
     Thread m3startTh;
     Thread testTh;
+    boolean m3startInitThFlag = false;
+    boolean testThInitFlag = false;
+    boolean checkDieInitFlag = false;
     List<String> listUsers = new ArrayList<String>();//判断账号是否已经处理过
     
     String btnStartName = "启动";
@@ -117,22 +122,22 @@ public class MYDemo extends JFrame{
             try {
             	//处理如果人物死亡自动复活
             	//检测人物死亡开始
-            	addLog("检测人物是否已经死亡开始..");
+            	addLog("检测人物是否死亡开始..");
             	do{
             		List<CoordBean> list = new ArrayList<>();
             		die(list);
             		if(die_pc){
-            			robot.delay(200);
+            			new Sleep().sleep(200);
             			int x = list.get(0).getX() + 5;
             			int y = list.get(0).getY() + 5;
             			addLog("鼠标点击复活坐标1【"+x+","+y+"】..");
         				mouse.mouseClick(x, y, true);
-        				robot.delay(1000);
+        				Thread.sleep(1000);
         				fit_bb();
             		}
-            		addLog("检测人物是否已经死亡结束..60秒之后再继续检测..");
-            		robot.delay(60000);
-            	}while(die_pc);
+            		addLog("检测人物是否死亡结束..60秒之后再继续检测..");
+            		Thread.sleep(60000);
+            	}while(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -146,14 +151,14 @@ public class MYDemo extends JFrame{
     public void fit_bb() {
     	addLog("使用复活药水,并合体宝宝 start...");
     	robot.press(press.NUM_1);
-    	robot.delay(1000);
+    	new Sleep().sleep(1500);
     	boolean flag = true;
     	while(flag) {
     		List<CoordBean> list = findPic(Constant.pc_bb_ht+"|"+Constant.pc_bb_ht_1);
     		if(list.size() > 0){
     			flag = true;
     			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-    			robot.delay(500);
+    			new Sleep().sleep(500);
         	}else {
         		flag = false;
         	}
@@ -165,7 +170,7 @@ public class MYDemo extends JFrame{
 		if(null != _list){
 			_list.clear();
 		}
-		robot.delay(500);
+		new Sleep().sleep(500);
 		List<CoordBean> list = findPic(Constant.die_pc);
 		if(list.size() > 0){
 			addLog("检测到PC人物死亡");
@@ -234,14 +239,8 @@ public class MYDemo extends JFrame{
             public void run() {
                 try {
                     activeGame();
-                    robot.delay(1000);
-                    if(button_start_yongsheng.getText().equals("开始")){
-                        button_start_yongsheng.setText("暂停");
-                        m3_start_yongsheng(1);
-                    }else if(button_start_yongsheng.getText().equals("暂停")){
-                        button_start_yongsheng.setText("开始");
-                        m3_end_yongsheng();
-                    }
+                    new Sleep().sleep(1000);
+                    m3_start(1);
                 } catch (Exception e) {
                     addLog(e.getMessage());
                     e.printStackTrace();
@@ -253,8 +252,8 @@ public class MYDemo extends JFrame{
             public void run() {
                 try {
                     activeGame();
-                    robot.delay(1000);
-                    m3_start_yongsheng(2);
+                    new Sleep().sleep(1000);
+                    m3_start(2);
                 } catch (Exception e) {
                     addLog(e.getMessage());
                     e.printStackTrace();
@@ -273,6 +272,31 @@ public class MYDemo extends JFrame{
             }
         });
         
+        login = new Thread(new Runnable() {
+            public void run() {
+                try {
+                	addLog("开始登录账号..");
+                	String user = (String)MYConfig.getInstance().getConfig("user_login");
+                    if(StringUtils.isBlank(user)){
+                        addLog("未能找到账号..");
+                        return;
+                    }
+                    String[] users = user.split(";");
+                    addLog("users .." + users.length);
+                    for(String itemUser : users){
+                        String[] userInfo = itemUser.split(",");//下标：第0个账号，第1个密码，第2个是否含有小号
+                        if(userInfo.length == 3){
+                        	start_game(userInfo, false);
+                        }
+                    }
+                    addLog("结束登录账号..");
+                } catch (Exception e) {
+                    addLog(e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        });
+        
         //找图
         final JButton btnSearchImg = new JButton("找图");
         btnSearchImg.addActionListener(new ActionListener() {
@@ -283,7 +307,7 @@ public class MYDemo extends JFrame{
                 	if(null != list){
                 		mouse.mouseMoveTo(list.get(0).getX(), list.get(0).getY());
                 	}
-                	robot.delay(1000);
+                	new Sleep().sleep(1000);
             	}
             }
         });
@@ -408,7 +432,7 @@ public class MYDemo extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 try {
                 	activeGame();
-                	robot.delay(1000);
+                	new Sleep().sleep(1000);
                 	shua_m3_zoulu();
                 } catch (Exception e1) {
                     addLog(e1.getMessage());
@@ -420,8 +444,21 @@ public class MYDemo extends JFrame{
         button_start_yongsheng = new JButton("开始");
         button_start_yongsheng.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                threadPool.execute(m3startTh);
-                threadPool.execute(checkDie);
+            	if(button_start_yongsheng.getText().equals("开始")){
+            		start_m();
+                    button_start_yongsheng.setText("暂停");
+                }else if(button_start_yongsheng.getText().equals("暂停")){
+                	end_m();
+                    button_start_yongsheng.setText("开始");
+                }
+            	if(!m3startInitThFlag) {
+            		m3startInitThFlag = true;
+            		threadPool.execute(m3startTh);
+            	}
+            	if(!checkDieInitFlag) {
+            		checkDieInitFlag = true;
+            		threadPool.execute(checkDie);
+            	}
             }
         });
         
@@ -443,14 +480,28 @@ public class MYDemo extends JFrame{
         
         JLabel lblY = new JLabel("Y");
         
-        JButton button_test = new JButton("\u5237\u4E0A\u9762");
+        final JButton button_test = new JButton("刷上面");
         button_test.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                threadPool.execute(testTh);
+            	if(button_test.getText().equals("刷上面")){
+            		start_m();
+            		button_test.setText("暂停");
+                }else if(button_test.getText().equals("暂停")){
+                	end_m();
+                	button_test.setText("刷上面");
+                }
+            	if(!testThInitFlag) {
+            		testThInitFlag = true;
+            		threadPool.execute(testTh);
+            	}
+            	if(!checkDieInitFlag) {
+            		checkDieInitFlag = true;
+            		threadPool.execute(checkDie);
+            	}
             }
         });
         
-        JButton test_btn_move = new JButton("\u6FC0\u6D3B\u79FB\u52A8");
+        JButton test_btn_move = new JButton("激活移动");
         test_btn_move.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
             	int hwnd = window.findWindow(0, null, gameName);
@@ -577,20 +628,23 @@ public class MYDemo extends JFrame{
         contentPane.setLayout(gl_contentPane);
     }
     
-    private void m3_start_yongsheng(int flag){
-        addLog("m3_start_yongsheng...");
-        m3_end = true;
-        while(m3_end){
-        	if(die_pc) {
-        		addLog("人物已经死亡等待120秒..");
-        		robot.delay(120000);
+    private void m3_start(int flag){
+        while(true){
+        	if(!m3_start) {
+        		new Sleep().sleep(1000);
+        		continue;
         	}
-            robot.delay(500);
-            addLog("m3_start_yongsheng work...");
-            robot.press(press.F2);//放技能
-            robot.delay(800);
+        	if(die_pc) {
+        		addLog("人物已经死亡等待5秒..");
+        		new Sleep().sleep(5000);
+        		continue;
+        	}
+        	new Sleep().sleep(500);
+            addLog("释放技能F2 F3...");
+            new Sleep().sleep(press.F2);//放技能
+            new Sleep().sleep(800);
             robot.press(press.F3);//放技能
-            robot.delay(6000);
+            new Sleep().sleep(6000);
             if(flag == 1){
             	goto_xy();//回到中间	
             }else if(flag == 2){
@@ -598,6 +652,9 @@ public class MYDemo extends JFrame{
             }
             int cd = Integer.parseInt(m3_textField_cd.getText()) * 1000;
             for(int i=0,j=5;i<j;i++){
+            	if(!m3_start) {
+            		break;
+            	}
             	shua_m3jy();
                 if(flag == 1){
                 	goto_xy();//回到中间	
@@ -605,7 +662,7 @@ public class MYDemo extends JFrame{
                 	goto_xy_top();
                 }
 			}
-            robot.delay(cd);//等CD
+            new Sleep().sleep(cd);//等CD
         }
     }
     
@@ -617,17 +674,17 @@ public class MYDemo extends JFrame{
                 log.info("找到材料");
                 robot.press(press.F4);
                 log.info("按下F4");
-                robot.delay(500);
+                new Sleep().sleep(500);
                 List<CoordBean> c2 = findPic(Common.m3_yuangushouling);
-                robot.delay(200);
+                new Sleep().sleep(200);
                 List<CoordBean> c3 = findPic(Common.m3_shuguanglaoying);
-                robot.delay(200);
+                new Sleep().sleep(200);
                 if( (null != c2 && c2.size() > 0) || 
                         (null != c3 && c3.size() > 0) ){
                     log.info("找到材料");
                     robot.press(press.F4);
                     log.info("按下F4");
-                    robot.delay(500);
+                    new Sleep().sleep(500);
                 }
             }else{
                 f = false;
@@ -636,24 +693,32 @@ public class MYDemo extends JFrame{
     }
     
     private void goto_xy(){
+        if(!m3_start) {
+        	return;
+        }
         addLog("goto_xy start ..");
         List<CoordBean> list = new ArrayList<CoordBean>();
         boolean jiao1 = findImg(Common.m3_jiao1_1, 1000, list);
         if(jiao1){
             int x = Integer.parseInt(m3_textField_x.getText());
             int y = Integer.parseInt(m3_textField_y.getText());
+            x = list.get(0).getX() + x;
+            y = list.get(0).getY() + y;
             f1(x,y);
-            mouse.mouseClick(list.get(0).getX() + x, list.get(0).getY() + y, true);
+            mouse.mouseClick(x, y, true);
         }else if(findImg(Common.m3_jiao1_2, 1000, list)){
         	int x = list.get(0).getX() + 450;
             int y = list.get(0).getY();
         	f1(x,y);
         	mouse.mouseClick(x,y, true);
         }
-        robot.delay(500);
+        new Sleep().sleep(500);
     }
     
     private void goto_xy_top(){
+        if(!m3_start) {
+        	return;
+        }
         addLog("goto_xy_top start ..");
         List<CoordBean> list = new ArrayList<CoordBean>();
         boolean jiao1 = findImg(Common.m3_jiao1_2, 1000, list);
@@ -670,19 +735,25 @@ public class MYDemo extends JFrame{
         	f1(x,y);
         	mouse.mouseClick(x, y, true);
         }
-        robot.delay(500);
+        new Sleep().sleep(500);
     }
     
     private void f1(int x,int y) {
     	mouse.mouseMoveTo(x, y);
+    	new Sleep().sleep(200);
     	robot.press(press.F1);
 		log.info("按下F1");
-		robot.delay(200);
+		new Sleep().sleep(200);
     }
     
-    private void m3_end_yongsheng(){
-        addLog("m3_end_yongsheng...");
-        m3_end = false;
+    private void start_m(){
+        addLog("start_m...");
+        m3_start = true;
+    }
+    
+    private void end_m(){
+        addLog("end_m...");
+        m3_start = false;
     }
     
     /**
@@ -694,13 +765,13 @@ public class MYDemo extends JFrame{
             window.moveWindow(hwnd, 0, 0);
             window.setWindowActivate(hwnd); //激活窗口
             
-            robot.delay(1000);
+            new Sleep().sleep(1000);
             
 //            List<CoordBean> list = new ArrayList<CoordBean>();
 //            if(findImg(zhuziImg, 500, list)){
 //            	mouse.mouseClick(list.get(0).getX(),list.get(0).getY() + 150,true);
 //            }
-//            robot.delay(1000);
+//            new Sleep().sleep(1000);
 //            //点击对话框释放怪物
 //            list = findPic(fangguaiwuImg);
 //            if(null == list){
@@ -708,7 +779,7 @@ public class MYDemo extends JFrame{
 //            	return;
 //            }
 //            mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5,true);
-//            robot.delay(500);
+//            new Sleep().sleep(500);
         	daguai();
         	
         	if(num == 1){
@@ -742,28 +813,28 @@ public class MYDemo extends JFrame{
     	boolean jiao1 = findImg(Common.m3_jiao1, 1000, list);
     	if(jiao1){
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY() - 140, true);
-    		robot.delay(4000);
+    		new Sleep().sleep(4000);
     	}
     	shua_m3();
     	
     	boolean jiao2 = findImg(Common.m3_jiao2, 1000, list);
     	if(jiao2){
     		mouse.mouseClick(list.get(0).getX() + 70, list.get(0).getY(), true);
-    		robot.delay(4000);
+    		new Sleep().sleep(4000);
     	}
     	
     	shua_m3();
     	boolean jiao3 = findImg(Common.m3_jiao3, 1000, list);
     	if(jiao3){
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-    		robot.delay(4000);
+    		new Sleep().sleep(4000);
     	}
     	shua_m3();
     	
     	boolean jiao4 = findImg(Common.m3_jiao4, 1000, list);
     	if(jiao4){
     		mouse.mouseClick(list.get(0).getX() - 70, list.get(0).getY(), true);
-    		robot.delay(4000);
+    		new Sleep().sleep(4000);
     	}
     	shua_m3();
     }
@@ -803,14 +874,14 @@ public class MYDemo extends JFrame{
     
     private void shua_m3jy(){
 		List<CoordBean> guaiwu = findPic(Common.m3_jingying);
-		robot.delay(200);
+		new Sleep().sleep(200);
 		if(null != guaiwu && guaiwu.size() > 0){
 			log.info("找到怪物坐标为：" + guaiwu.get(0).getX() + "," + guaiwu.get(0).getY());
 			mouse.mouseMoveTo(guaiwu.get(0).getX(), guaiwu.get(0).getY() + 50);
-			robot.delay(200);
+			new Sleep().sleep(200);
 			robot.press(press.F1);
 			log.info("按下F1");
-			robot.delay(2500);
+			new Sleep().sleep(2500);
 		}
     }
     
@@ -822,11 +893,11 @@ public class MYDemo extends JFrame{
 			log.info("找到材料");
 			press.keyPress(press.F4);
 			log.info("按下F4");
-			robot.delay(2000);
+			new Sleep().sleep(2000);
 			List<CoordBean> c2 = findPic(Common.m3_yuangushouling);
-			robot.delay(2000);
+			new Sleep().sleep(2000);
 			List<CoordBean> c3 = findPic(Common.m3_shuguanglaoying);
-			robot.delay(2000);
+			new Sleep().sleep(2000);
 			if( (null != c2 && c2.size() > 0) || 
 					(null != c3 && c3.size() > 0) ){
 				log.info("找到材料");
@@ -843,16 +914,16 @@ public class MYDemo extends JFrame{
     	while(true){
     		activeGame();
     		addLog("shuacail_main 1>" + flag);
-        	robot.delay(500);
+        	new Sleep().sleep(500);
         	press.keyPress(press.NUM_8);
-        	robot.delay(500);
+        	new Sleep().sleep(500);
         	shuacailiao(Common.juyanlingzhu_Img,Common.juyanlingzhu_zsImg,Common.juyanlingzhu_ysImg
         			,Common.baoxiang_r_1,Common.baoxiang_r_2
         			,Common.baoxiang_r_3,Common.baoxiang_r_4
         			,Common.baoxiang_r_5,flag);
-        	robot.delay(500);
+        	new Sleep().sleep(500);
         	press.keyPress(press.NUM_9);
-        	robot.delay(500);
+        	new Sleep().sleep(500);
         	addLog("shuacail_main 2>" + flag);
         	shuacailiao(Common.kuangfengbaojun,Common.kuangfen_left,Common.kuangfen_right
         			,Common.baoxiang_k_1,Common.baoxiang_k_2
@@ -867,15 +938,15 @@ public class MYDemo extends JFrame{
      */
     private void shuacailiao(String lingzhuImg,String leftImg,String rightImg,
     		String cail1,String cail2,String cail3,String cail4,String cail5,boolean flag){
-		robot.delay(500);
+		new Sleep().sleep(500);
 		closeAll();
 		List<CoordBean> list = findPic(lingzhuImg,1000);
-		robot.delay(200);
+		new Sleep().sleep(200);
 		if(null != list && list.size() > 0 && flag){
 			flag = false;
 			log.info("找到主坐标为：" + list.get(0).getX() + "," + list.get(0).getY());
 			robot.press(press.F3);
-			robot.delay(5000);
+			new Sleep().sleep(5000);
 			list = findPic(Common.zhanlipinbaoxiang_Img,5000);
 			if(null != list && list.size() > 0 ){
 				jian_zhanlipinbaoxiang(leftImg,rightImg,cail1,cail2,cail3,cail4,cail5);
@@ -894,12 +965,12 @@ public class MYDemo extends JFrame{
     	for(int i=0,j=4;i<j;i++){
 			list = findPic(guaiwuImg,1000);
 			if(null != list && list.size() > 0){
-				robot.delay(200);
+				new Sleep().sleep(200);
 				mouse.mouseMoveTo(list.get(0).getX(), list.get(0).getY() + 50);
-				robot.delay(200);
+				new Sleep().sleep(200);
     			robot.press(press.F1);
     			log.info("按下F1");
-    			robot.delay(3000);
+    			new Sleep().sleep(3000);
 			}
 		}
     }
@@ -919,18 +990,18 @@ public class MYDemo extends JFrame{
     private void jian_zhanlipinbaoxiang(String leftImg,String rightImg,
     		String cail1,String cail2,String cail3,String cail4,String cail5){
     	int[] b = findzhanlipinbaoxiang();
-		robot.delay(200);
+		new Sleep().sleep(200);
 		if(b.length == 3 && b[1] != -1){
 			log.info("找到宝箱坐标为：" + b[1] + "," + b[2]);
 			press.keyPress(press.F4);
 			log.info("按下F4");
-			robot.delay(1000);
+			new Sleep().sleep(1000);
 			List<CoordBean> list = new ArrayList<CoordBean>();
 			if(findImg(Common.shiquImg, 1000, list)){
 				if(list.size() == 1){
-					robot.delay(200);
+					new Sleep().sleep(200);
 					mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-    				robot.delay(200);
+    				new Sleep().sleep(200);
     				reset_zb(leftImg,rightImg);
     				for(int i=0,j=2;i<j;i++){
     					aotuFenJie(cail1,cail2,cail3,cail4,cail5);	
@@ -965,7 +1036,7 @@ public class MYDemo extends JFrame{
     	//y-120;
     	//打开背包
     	press.keyPress(press.I);
-    	robot.delay(500);
+    	new Sleep().sleep(500);
     	//查找宝箱
     	int x = 0;
     	int y = 0;
@@ -981,29 +1052,29 @@ public class MYDemo extends JFrame{
         	}
     	}while(list.size() > 0 && i < 10);
     	if(i == 0 && addCaiLiao(cail1,cail2,cail3,cail4,cail5) == 0){
-    		robot.delay(200);
+    		new Sleep().sleep(200);
     		press.keyPress(press.ESC);
-    		robot.delay(200);
+    		new Sleep().sleep(200);
     		return;
     	}
     	//点击神性
-    	robot.delay(500);
+    	new Sleep().sleep(500);
     	if(findImg(Common.shenxing, 1000, list)){
     		x = list.get(0).getX();
     		y = list.get(0).getY();
     		mouse.mouseClick(x, y, true);
     		//点击神仆
-    		robot.delay(500);
+    		new Sleep().sleep(500);
     		mouse.mouseClick(x, (y - 120), true);
     	}
     	//点击分解圣物按钮
-    	robot.delay(500);
+    	new Sleep().sleep(500);
     	if(findImg(Common.fenjieshengwu, 1000, list)){
     		x = list.get(0).getX();
     		y = list.get(0).getY();
     		mouse.mouseClick(x, y, true);
     	}
-    	robot.delay(500);
+    	new Sleep().sleep(500);
     	if(findImg(Common.kaishifenjie_huise, 1000, list)){
     		x = list.get(0).getX();
     		y = list.get(0).getY();
@@ -1011,10 +1082,10 @@ public class MYDemo extends JFrame{
     		addCaiLiao(cail1,cail2,cail3,cail4,cail5);
     		//执行分解
     		mouse.mouseClick(x, y, true);
-    		robot.delay(5000);
+    		new Sleep().sleep(5000);
     		press.keyPress(press.ESC);
     	}
-    	robot.delay(500);
+    	new Sleep().sleep(500);
     	closeAll();
     }
     
@@ -1042,7 +1113,7 @@ public class MYDemo extends JFrame{
      * @return
      */
     private int addCaiLiao(String cail){
-    	robot.delay(500);
+    	new Sleep().sleep(500);
     	int startX = 877;
     	int startY = 568;
     	int x = 0;
@@ -1071,17 +1142,17 @@ public class MYDemo extends JFrame{
     private void reset_zb(String leftImg,String rightImg){
     	log.info("重新回到坐标 start..");
     	List<CoordBean> list = new ArrayList<CoordBean>();
-    	robot.delay(2000);
+    	new Sleep().sleep(2000);
     	if(findImg(rightImg, 3000, list)){
     		log.info("rightImg ..");
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-			robot.delay(200);
+			new Sleep().sleep(200);
     		return;
     	}
     	if(findImg(leftImg, 3000, list)){
     		log.info("leftImg ..");
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-			robot.delay(200);
+			new Sleep().sleep(200);
     		return;
     	}
     	log.info("重新回到坐标 end..");
@@ -1095,39 +1166,39 @@ public class MYDemo extends JFrame{
 			if(null != list && list.size() > 0){//找怪
 				addLog("找到怪物..");
 				mouse.mouseClick(list.get(0).getX(), list.get(0).getY() + 25,true);
-				robot.delay(1000);
+				new Sleep().sleep(1000);
 				if(findImg(Common.jzt_close, 500, list)){//如果左键点击之后,弹出窗口,则关闭窗口.
 					mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5,true);
 				}
-				robot.delay(200);
+				new Sleep().sleep(200);
 				list = find_jzt_guaiwu();
 				if(null == list || list.size() == 0){
 					flag_gw = false;
         			flag_dx = true;
 					return;
 				}
-				robot.delay(200);
+				new Sleep().sleep(200);
 				mouse.mouseMoveTo(list.get(0).getX() + 5, list.get(0).getY() + 5);
 				robot.press(press.F1);
-				robot.delay(200);
+				new Sleep().sleep(200);
 				robot.press(press.F1);
-				robot.delay(200);
+				new Sleep().sleep(200);
 				for(int i=0,j=20;i<j;i++){
 					mouse.mouseClick(false);//点击10次鼠标右键技能
-					robot.delay(700);
+					new Sleep().sleep(700);
 				}
-				robot.delay(200);
+				new Sleep().sleep(200);
 				press.keyPress(press.F3);//然后按F3技能
-				robot.delay(1000);
+				new Sleep().sleep(1000);
 				for(int i=0,j=27;i<j;i++){//启动大风车技能,快速捡东西
 					press.keyPress(press.F4);
-					robot.delay(300);
+					new Sleep().sleep(300);
 				}
     		}else{
     			addLog("没有找到怪物..");
     			boolean f = moveCenter();
     			if(f){
-    				robot.delay(500);
+    				new Sleep().sleep(500);
     				list = find_jzt_guaiwu();
     				if(null == list || list.size() == 0){
     					addLog("没有怪物了");
@@ -1148,7 +1219,7 @@ public class MYDemo extends JFrame{
 		do{
 			if(find_cailiao()){//找東西
 				press.keyPress(press.F4);
-        		robot.delay(500);
+        		new Sleep().sleep(500);
     		}else{
     			flag_dx = false;
     			flag_gw = true;
@@ -1163,16 +1234,16 @@ public class MYDemo extends JFrame{
             if(findImg(Common.zhuziImg, 500, list)){
             	mouse.mouseClick(list.get(0).getX(),list.get(0).getY(),true);
             }
-            robot.delay(1000);
+            new Sleep().sleep(1000);
             if(findImg(Common.zhuziImg, 500, list)){
             	mouse.mouseClick(list.get(0).getX(),list.get(0).getY() + 310,true);	
             }
-            robot.delay(1000);
+            new Sleep().sleep(1000);
             list = findPic(Common.jzt_1_01);
             if(list.size() > 0){
             	mouse.mouseClick(list.get(0).getX(),list.get(0).getY(),true);
             }
-            robot.delay(1000);
+            new Sleep().sleep(1000);
     		boolean f = true;
     		list = find_jzt_guaiwu();
 			if(null == list || list.size() == 0){//没有找到怪物
@@ -1231,12 +1302,12 @@ public class MYDemo extends JFrame{
             	mouse.mouseClick(list.get(0).getX(),list.get(0).getY(),true);
             }
             addLog("找中间柱子.");
-            robot.delay(1000);
+            new Sleep().sleep(1000);
             if(findImg(Common.zhuziImg, 500, list)){
             	addLog("2找到中间柱子.");
             	mouse.mouseClick(list.get(0).getX(),list.get(0).getY() + 310,true);	
             }
-            robot.delay(1000);
+            new Sleep().sleep(1000);
     		boolean f = true;
     		do{
     			f = moveLeft();
@@ -1330,7 +1401,7 @@ public class MYDemo extends JFrame{
     				List<CoordBean> list2 = new ArrayList<CoordBean>();
     				if(findImg(Common.tu3jinkou,500,list2)){
     					mouse.mouseClick(list2.get(0).getX(), list2.get(0).getY(), true);
-    					robot.delay(2000);
+    					new Sleep().sleep(2000);
     				}
     			}
     			list = find_jzt_guaiwu();
@@ -1382,7 +1453,7 @@ public class MYDemo extends JFrame{
     			List<CoordBean> list2 = new ArrayList<CoordBean>();
     			if(findImg(Common.tu3jinkou_4,500,list2)){//图3入口
     				mouse.mouseClick(list2.get(0).getX(), list2.get(0).getY(), true);
-    				robot.delay(1500);
+    				new Sleep().sleep(1500);
     				f = false;
     			}
     			if(null != list && list.size() > 0){//找怪
@@ -1415,34 +1486,34 @@ public class MYDemo extends JFrame{
     	List<CoordBean> list = new ArrayList<CoordBean>();
     	if(findImg(Common.jzt_close, 500, list)){//如果左键点击之后,弹出窗口,则关闭窗口.
     		mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5,true);
-    		robot.delay(100);
+    		new Sleep().sleep(100);
     	}
     	List<CoordBean> list_qd = new ArrayList<CoordBean>(); 
     	if(findImg(Common.qdImg, 200, list_qd)){
     		if(findImg(Common.no_guaiwu,200,list)){
     			mouse.mouseClick(list_qd.get(0).getX(), list_qd.get(0).getY(), true);
-        		robot.delay(200);
+        		new Sleep().sleep(200);
         		return null;
     		}else{
     			mouse.mouseClick(list_qd.get(0).getX(), list_qd.get(0).getY(), true);
-        		robot.delay(200);
+        		new Sleep().sleep(200);
     		}
     	}
     	list = findPic(Common.jzt_pucong);
     	if(list.size() > 0){
     		return list;
     	}
-    	robot.delay(100);
+    	new Sleep().sleep(100);
     	list = findPic(Common.jzt_guibian);
     	if(list.size() > 0){
     		return list;
     	}
-    	robot.delay(100);
+    	new Sleep().sleep(100);
     	list = findPic(Common.jzt_lingzhu);
     	if(list.size() > 0){
     		return list;
     	}
-    	robot.delay(100);
+    	new Sleep().sleep(100);
     	list = findPic(Common.guaiwu_01);
     	if(list.size() > 0){
     		return list;
@@ -1455,47 +1526,47 @@ public class MYDemo extends JFrame{
     	if(list1.size() > 0){
     		return true;
     	}
-    	robot.delay(100);
+    	new Sleep().sleep(100);
     	List<CoordBean> list2 = findPic(Common.jzt_shenyouzhilei);
     	if(list2.size() > 0){
     		return true;
     	}
-    	robot.delay(100);
+    	new Sleep().sleep(100);
     	List<CoordBean> list3 = findPic(Common.jzt_yinghunjingquan);
     	if(list3.size() > 0){
     		return true;
     	}
-    	robot.delay(100);
+    	new Sleep().sleep(100);
     	List<CoordBean> list4 = findPic(Common.jzt_shouguhuashi);
     	if(list4.size() > 0){
     		return true;
     	}
-    	robot.delay(100);
+    	new Sleep().sleep(100);
        	List<CoordBean> list5 = findPic(Common.jzt_chongshenglingye);
     	if(list5.size() > 0){
     		return true;
     	}
-    	robot.delay(100);
+    	new Sleep().sleep(100);
        	List<CoordBean> list6 = findPic(Common.jzt_fenghuashouji);
     	if(list6.size() > 0){
     		return true;
     	}
-    	robot.delay(100);
+    	new Sleep().sleep(100);
        	List<CoordBean> list7 = findPic(Common.jzt_shengshicaipian);
     	if(list7.size() > 0){
     		return true;
     	}
-    	robot.delay(100);
+    	new Sleep().sleep(100);
        	List<CoordBean> list8 = findPic(Common.jzt_jinghuazhilu);
     	if(list8.size() > 0){
     		return true;
     	}
-    	robot.delay(100);
+    	new Sleep().sleep(100);
        	List<CoordBean> list9 = findPic(Common.jzt_qianguzhisha);
     	if(list9.size() > 0){
     		return true;
     	}
-    	robot.delay(100);
+    	new Sleep().sleep(100);
     	return false;
     }
 
@@ -1517,7 +1588,7 @@ public class MYDemo extends JFrame{
 			if(list.size()>0){
 				return list;
 			}else{
-				robot.delay(200);
+				new Sleep().sleep(200);
 				time+=200;
 			}
 		}
@@ -1568,6 +1639,7 @@ public class MYDemo extends JFrame{
     	String user = (String)MYConfig.getInstance().getConfig("user");
         if(StringUtils.isBlank(user)){
             addLog("未能找到账号..");
+            return;
         }
         String[] users = user.split(";");
         addLog("users .." + users.length);
@@ -1577,10 +1649,10 @@ public class MYDemo extends JFrame{
                 if(!listUsers.contains(userInfo[0])){//账号没有处理过
                 	addLog("listUsers add .." + userInfo[0]);
                     listUsers.add(userInfo[0]);
-                    robot.delay(500);
+                    new Sleep().sleep(500);
                     forceCloseChrome();
-                    robot.delay(500);
-                    start_game(userInfo);
+                    new Sleep().sleep(500);
+                    start_game(userInfo,true);
                 }
             }else{
                 addLog("账号配置错误..");    
@@ -1596,12 +1668,12 @@ public class MYDemo extends JFrame{
      * TODO <功能详细描述>
      * @throws Exception
      */
-    private void start_game(String[] user) throws Exception{
+    private void start_game(String[] user,boolean exit) throws Exception{
     	threadPool.execute(openGameTh);
-    	robot.delay(3000);
+    	new Sleep().sleep(3000);
         boolean flag = true;
         do{
-        	robot.delay(500);
+        	new Sleep().sleep(500);
         	int hwnd = window.findWindow(0, null, gameName);
             if(hwnd > 0){
             	addLog("hwnd : " + hwnd);
@@ -1667,7 +1739,7 @@ public class MYDemo extends JFrame{
             if(findImg(Common.closeImg, 3000, list)){
             	mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 10, true);
             }
-            robot.delay(500);
+            new Sleep().sleep(500);
             list.clear();
             if(findImg(Common.quxiao_1Img, 1500, list)){
             	mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 10, true);
@@ -1675,20 +1747,24 @@ public class MYDemo extends JFrame{
             
             //签到
             singIn(hwnd);
-            //小号签到
-            login_xiaohao_sing(hwnd);
-            //切换到主号然后退出
-            addLog("切换到主号..");
-            list.clear();
-            if(findImg(Common.zhuhaoImg, 1500, list)){
-            	mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
-            }else{
-            	addLog("未能找到图片【"+Common.zhuhaoImg+"】..");
+            if("1".equals(user[2])) {//判断是否签到小号
+            	//小号签到
+                login_xiaohao_sing(hwnd);
+                //切换到主号然后退出
+                addLog("切换到主号..");
+                list.clear();
+                if(findImg(Common.zhuhaoImg, 1500, list)){
+                	mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
+                }else{
+                	addLog("未能找到图片【"+Common.zhuhaoImg+"】..");
+                }
+                addLog("延迟1秒..");
+                new Sleep().sleep(1000);
             }
-            addLog("延迟1秒..");
-            robot.delay(1000);
-            //退出
-            exit();
+            if(exit) {
+                //退出
+                exit();            	
+            }
         }else{
             addLog("未能找到游戏【"+gameName+"】...");
         }
@@ -1722,7 +1798,7 @@ public class MYDemo extends JFrame{
     
     private void login(String[] user) throws Exception{
     	addLog("login start..." + user[0]);
-    	robot.delay(5000);//休息5秒，等待打开游戏登录界面
+    	new Sleep().sleep(5000);//休息5秒，等待打开游戏登录界面
         
         boolean flag = findInputPass(80000);
         addLog("是否找到输入框..." + flag);
@@ -1743,7 +1819,7 @@ public class MYDemo extends JFrame{
         	addLog("发生错误，未能进入到登录界面..." + user[0]);
         	return;
         }
-        robot.delay(200);
+        new Sleep().sleep(200);
         //定位到输入账号的输入框
         mouse.mouseClick(list.get(0).getX() - 50, list.get(0).getY() + 12, true);//移动之后，左键点击
         
@@ -1758,7 +1834,7 @@ public class MYDemo extends JFrame{
     private void clearInput() throws Exception{
     	for(int i=0;i<35;i++){
     		press.keyPress(press.BACKSPACE);
-    		robot.delay(100);
+    		new Sleep().sleep(100);
     	}
     }
     
@@ -1768,13 +1844,13 @@ public class MYDemo extends JFrame{
      */
     private void input_user(String[] user,int px,int py) throws Exception{
         input(user[0], press);//账号
-        robot.delay(200);
+        new Sleep().sleep(200);
         addLog("click password input");
         //点击密码框
         mouse.mouseClick(px, py, true);
-        robot.delay(200);
+        new Sleep().sleep(200);
         input(user[1], press);//密码
-        robot.delay(200);
+        new Sleep().sleep(200);
         enter(user);
     }
     
@@ -1791,7 +1867,7 @@ public class MYDemo extends JFrame{
 		    flag = findImg(Common.inputUserImg, 3000, list);
 	        if(flag){
 	        	mouse.mouseClick(list.get(0).getX() - 50, list.get(0).getY() + 12, true);
-	        	robot.delay(200);
+	        	new Sleep().sleep(200);
 	        	enter(user);
 	        }
     	}
@@ -1822,10 +1898,10 @@ public class MYDemo extends JFrame{
      */
     private void singIn(int hwnd) throws InterruptedException{
     	addLog("开始签到..");
-        robot.delay(2000);
+        new Sleep().sleep(2000);
         addLog("Tab...");
         press.keyPress(press.TAB);
-        robot.delay(1000);
+        new Sleep().sleep(1000);
         boolean success = sigin_detail();
         if(success){
         	return;
@@ -1836,35 +1912,35 @@ public class MYDemo extends JFrame{
         	if(findImg(Common.quxiao_1Img, 1000, list)){
         		addLog("找到取消按钮..");	
         		mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
-        		robot.delay(500);
+        		new Sleep().sleep(500);
         	}
         }
         if(findImg(Common.yihouzaishuoImg, 2000, list)){
         	addLog("找到“以后再说”按钮..");
     		mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
-    		robot.delay(500);
+    		new Sleep().sleep(500);
         }
         
         if(findImg(Common.close_2Img, 1000, list)){
         	mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);//移动之后，左键点击
-            robot.delay(500);
+            new Sleep().sleep(500);
         }
         if(findImg(Common.qdImg, 1000, list)){
         	mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);//移动之后，左键点击
-            robot.delay(500);
+            new Sleep().sleep(500);
         }
         if(findImg(Common.closeImg, 1000, list)){
         	mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);//移动之后，左键点击
-            robot.delay(500);
+            new Sleep().sleep(500);
         }
         if(!findImg(Common.shaiziImg, 1000, list)){
             addLog("未能找到图片【"+Common.shaiziImg+"】..");
             if(findImg(Common.close_1Img, 1000, list)){
             	mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);//移动之后，左键点击
-                robot.delay(500);
+                new Sleep().sleep(500);
             }
             list = findPic(Common.emailImg);
-            robot.delay(200);
+            new Sleep().sleep(200);
         	if(list.size() > 0){
         		int xs = list.get(0).getX() - 200;
             	int ys = list.get(0).getY();
@@ -1885,7 +1961,7 @@ public class MYDemo extends JFrame{
     private boolean sigin_detail(){
     	boolean success = false;
     	List<CoordBean> list = new ArrayList<CoordBean>();
-        robot.delay(500);
+        new Sleep().sleep(500);
         if(findImg(Common.huodong_close, 3000, list)){
         	mouse.mouseClick(list.get(0).getX() + 8, list.get(0).getY() + 8, true);
         }
@@ -1896,14 +1972,14 @@ public class MYDemo extends JFrame{
         	addLog("找到图片【"+list.get(0).getX()+","+list.get(0).getY()+""+Common.dashaziImg+"】..");
         }
         mouse.mouseClick(list.get(0).getX(), list.get(0).getY() - 105, true);//移动之后，左键点击
-        robot.delay(500);
+        new Sleep().sleep(500);
         if(findImg(Common.qdImg, 1000, list)){
         	mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);//移动之后，左键点击
-            robot.delay(500);
+            new Sleep().sleep(500);
         }
         success = true;
         press.keyPress(press.ESC);
-        robot.delay(1000);
+        new Sleep().sleep(1000);
         addLog("sigin_detail return " + success);
         return success;
     }
@@ -1914,9 +1990,9 @@ public class MYDemo extends JFrame{
      */
     private void login_xiaohao_sing(int hwnd) throws InterruptedException{
     	addLog("开始小号签到..");
-    	robot.delay(500);
+    	new Sleep().sleep(500);
     	press.keyPress(press.X);
-    	robot.delay(500);
+    	new Sleep().sleep(500);
     	robot.setSourcePath(MYDemo.class);
     	List<CoordBean> list = findPic(Common.quanbudengluImg+"|"+Common.quanbudenglu1Img, 1500);
         if(null == list || list.size() == 0){
@@ -1935,7 +2011,7 @@ public class MYDemo extends JFrame{
         sing_xiaohao(list, hwnd, Common.xiaohao_4Img);
         list.clear();
         sing_xiaohao(list, hwnd, Common.xiaohao_5Img);
-        robot.delay(1000);
+        new Sleep().sleep(1000);
         addLog("结束小号签到..");
     }
 
@@ -1971,7 +2047,7 @@ public class MYDemo extends JFrame{
     private void exit() throws Exception{
         addLog("开始退出...");
         forceExit();
-        robot.delay(800);
+        new Sleep().sleep(800);
         List<CoordBean> list = new ArrayList<CoordBean>();
         list = findPic(Common.quanbuhuanbao, 1500);
         if(list.size() > 0 || findImg(Common.huanbaoliangongImg, 2000, list)){
@@ -1985,7 +2061,7 @@ public class MYDemo extends JFrame{
         	if(findImg(Common.quxiao_1Img, 1000, list)){
         		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
         	}
-        	robot.delay(1000);
+        	new Sleep().sleep(1000);
         	if(findImg(Common.huanbaoliangongImg, 2000, list)){
         		if(findImg(Common.qdImg, 2000, list)){
         			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);	
@@ -1994,13 +2070,13 @@ public class MYDemo extends JFrame{
         		exit();
         	}
         }
-        robot.delay(1000);
+        new Sleep().sleep(1000);
         if(findImg(Common.qdImg, 2000, list)){
 			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);	
 		}
         if(findImg(Common.jixuyouxiImg, 1000, list)){
         	addLog("等待退出...");
-        	robot.delay(8000);
+        	new Sleep().sleep(8000);
         	forceCloseChrome();
         }
     }
@@ -2016,7 +2092,7 @@ public class MYDemo extends JFrame{
         
         threadPool.execute(openNotepadTh);
         
-        robot.delay(1000);
+        new Sleep().sleep(1000);
         
         int hwnd = window.findWindow(0, null, "记事本");
         if(hwnd > 0){
@@ -2091,10 +2167,10 @@ public class MYDemo extends JFrame{
      * @throws Exception
      */
     private void input(String input,Press press) throws Exception{
-    	robot.delay(200);
+    	new Sleep().sleep(200);
     	/*int fhwnd = window.getForegroundFocus();		
 		addLog("获取焦点窗口句柄： " + fhwnd);
-		robot.delay(1500);
+		new Sleep().sleep(1500);
 		boolean b = window.sendString(fhwnd, input);
 		addLog("输入结果：" + b);*/
         /*for(char s : input.toCharArray()){
@@ -2109,10 +2185,10 @@ public class MYDemo extends JFrame{
                 addLog("shift :" + Integer.valueOf(s));
                 press.groupPress(press.SHIFT, Integer.valueOf(s));
             }
-            robot.delay(200);
+            new Sleep().sleep(200);
         }*/
     	robot.sendString(input);
-        robot.delay(200);
+        new Sleep().sleep(200);
     }
     
     private String getRealPath(String img){
@@ -2127,9 +2203,7 @@ public class MYDemo extends JFrame{
     public void addLog(Object str){
     	log.info(str);
         System.out.println(str);
-        if(null != this.textArea){
-            this.textArea.setText(str+"\n"+this.textArea.getText());    
-        }
+        this.textArea.setText(str.toString());    
     }
     
     /**
@@ -2152,10 +2226,16 @@ public class MYDemo extends JFrame{
 
             //3.创建JobDetail
             JobDetail job = JobBuilder.newJob(DemoJob.class)
-                    .withDescription("this is a ram job") //job的描述
-                    .withIdentity("ramJob", "ramGroup") //job 的name和group
+                    .withDescription("this is a ram Sign") //job的描述
+                    .withIdentity("ramJob", "Sign") //job 的name和group
                     .build();
             job.getJobDataMap().put("mydemo", mydemo);  
+            
+            JobDetail job1 = JobBuilder.newJob(AutoLoginJob.class)
+                    .withDescription("this is a AutoLoginJob") //job的描述
+                    .withIdentity("ramJob", "AutoLoginJob") //job 的name和group
+                    .build();
+            job1.getJobDataMap().put("mydemo", mydemo);  
 
             //任务运行的时间，SimpleSchedle类型触发器有效
             long time=  System.currentTimeMillis() + 10*1000L; //60秒后启动任务
@@ -2165,13 +2245,21 @@ public class MYDemo extends JFrame{
                 //使用SimpleScheduleBuilder或者CronScheduleBuilder
             Trigger t = TriggerBuilder.newTrigger()
                         .withDescription("")
-                        .withIdentity("ramTrigger", "ramTriggerGroup")
+                        .withIdentity("Sign", "Sign")
                         .startAt(statTime)  //60秒后启动任务
                         .withSchedule(CronScheduleBuilder.cronSchedule(MYConfig.getInstance().getConfig("quartz_con").toString())) //60秒执行一次 --0/60 * * * * ? --0 0 0,09,12,22 * * ? --"0 0 0,09,12 * * ?"
                         .build();
+            
+            Trigger t1 = TriggerBuilder.newTrigger()
+                    .withDescription("")
+                    .withIdentity("AutoLoginJob", "AutoLoginJob")
+                    .startAt(statTime)  //60秒后启动任务
+                    .withSchedule(CronScheduleBuilder.cronSchedule(MYConfig.getInstance().getConfig("quartz_con_login").toString())) //60秒执行一次 --0/60 * * * * ? --0 0 0,09,12,22 * * ? --"0 0 0,09,12 * * ?"
+                    .build();
 
             //5.注册任务和定时器
             scheduler.scheduleJob(job, t);
+            scheduler.scheduleJob(job1, t1);
 
             //6.启动 调度器
             scheduler.start();
@@ -2190,7 +2278,7 @@ public class MYDemo extends JFrame{
     	int y = list.get(0).getY();
     	mouse.mouseClick(x + 25, y, true);
     	boolean f = isMove();
-    	robot.delay(1000);
+    	new Sleep().sleep(1000);
     	return f;
     }
     
@@ -2206,11 +2294,11 @@ public class MYDemo extends JFrame{
     		f = findImg(Common.zhuziImg,500,list);
     		if(f){
     			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-    			robot.delay(1000);
+    			new Sleep().sleep(1000);
     			moveCenter();
     		}
     	}
-    	robot.delay(1000);
+    	new Sleep().sleep(1000);
     	addLog("结束移动到中间..");
     	return f;
     }
@@ -2228,7 +2316,7 @@ public class MYDemo extends JFrame{
     	}
     	mouse.mouseClick(x + 25, ry, true);
     	boolean f = isMove();
-    	robot.delay(1000);
+    	new Sleep().sleep(1000);
     	return f;
     }
     
@@ -2245,7 +2333,7 @@ public class MYDemo extends JFrame{
     	}
     	mouse.mouseClick(rx, y, true);
     	boolean f = isMove();
-    	robot.delay(1000);
+    	new Sleep().sleep(1000);
     	return f;
     }
     
@@ -2262,7 +2350,7 @@ public class MYDemo extends JFrame{
     	}
     	mouse.mouseClick(rx, y, true);
     	boolean f = isMove();
-    	robot.delay(1000);
+    	new Sleep().sleep(1000);
     	return f;
     }
     
