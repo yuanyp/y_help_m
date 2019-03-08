@@ -1067,7 +1067,7 @@ public class Layout extends JFrame{
     		return false;
     	}
     	Base.addLog("开始登录：" + user[0]);
-    	input_user(user);
+    	List<CoordBean> listPassword = input_user(user);
     	robot.delay(200);
     	list = Base.findPic(Constant.login_2,2000);
     	if(list.size() > 0){
@@ -1105,6 +1105,13 @@ public class Layout extends JFrame{
         			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
         			return login();
         		}else{
+        			list = Base.findPic(Constant.login_fanmang);
+        			if(list.size() > 0){
+        				Base.addLog("服务器繁忙,继续重试");
+        				mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
+        				robot.delay(200);
+        				return login();
+        			}
         			list = Base.findPic(Constant.login_u+"|"+Constant.login_1,2000);
         			if(list.size() > 0){
         				Base.addLog("还停留在输入账号密码界面，重新登录");
@@ -1114,9 +1121,29 @@ public class Layout extends JFrame{
         		}
         	}
     	}else{
-    		Base.addLog("没有找到login_2");
-    		Base.screenImage("login_2");
-    		//TODO 判断是否有验证码(有验证码换号登录)\服务器人数已满\登录页面变白\
+    		//TODO 判断是否有验证码(有验证码换号登录)
+    		list = Base.findPic(Constant.login_fanmang);//服务器人数已满
+			if(list.size() > 0){
+				Base.addLog("服务器繁忙,继续重试");
+				mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
+				robot.delay(200);
+				return login();
+			}
+			//登录页面变白,处理
+			Base.addLog("没有找到登录按钮login_2,尝试点击密码框(可能页面变白)");
+			mouse.mouseClick(listPassword.get(0).getX() + 90, listPassword.get(0).getY() + 13, true);
+			robot.delay(2000);
+			Base.addLog("没有找到登录按钮login_2,尝试点击账号框(可能页面变白)");
+			mouse.mouseClick(listPassword.get(0).getX() + 90, listPassword.get(0).getY() - 70, true);
+			robot.delay(2000);
+			list = Base.findPic(Constant.login_u);
+	    	if(list.size() > 0){
+	    		Base.addLog("重新找到账号密码输入框，重新登录");
+	    		return login();
+			}else{
+				Base.addLog("没有找到登录按钮login_2");
+				Base.screenImage("login_2");	
+			}
     		return false;
     	}
     	return true;
@@ -1126,7 +1153,7 @@ public class Layout extends JFrame{
      * 输入账号密码
      * @param user
      */
-    public void input_user(String[] user){
+    public List<CoordBean> input_user(String[] user){
     	clearInput();
     	robot.delay(500);
     	List<CoordBean> list = Base.findPic(Constant.login_u,2000);
@@ -1141,6 +1168,7 @@ public class Layout extends JFrame{
     		robot.delay(500);
     		robot.sendString(user[1]);
     	}
+    	return list;
     }
     
     /**

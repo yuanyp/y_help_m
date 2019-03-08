@@ -21,6 +21,7 @@ public class Constant {
 	public static String login_p = "login_p.bmp";
 	public static String login_e = "login_e.bmp";
 	public static String login_success = "login_success.bmp";
+	public static String login_fanmang = "login_fanmang.bmp";
 	public static String login_u = "login_u.bmp";
 	public static String update_1 = "update_1.bmp";
 	public static String update_2 = "update_2.bmp";
