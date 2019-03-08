@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +26,6 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
-import com.xnx3.IntegerUtil;
 import com.xnx3.microsoft.Color;
 import com.xnx3.microsoft.Com;
 import com.xnx3.microsoft.FindPic;
@@ -394,22 +394,15 @@ public class Layout extends JFrame{
     
     public void finshRole() {
     	try {
-	    	String date = Base.getDate("YYYYMMdd");
-	    	String folder = Base.home + File.separator + "finsh_role";
-	    	File file1 = new File(folder);
-	    	if(!file1.exists()){
-	    		file1.mkdirs();
-	    	}
-	    	String fileStore = folder + File.separator + date + ".txt";
-	    	File file = new File(fileStore);
-	    	if(!file.exists()) {
-				file.createNewFile();
-	    	}
+	    	File file = finshRoleInit();
 	    	String str = FileUtils.readFileToString(file);
 	    	Object ruStr = Base.runRole.get("main_role");
 	    	StringBuilder sb = new StringBuilder(str);
 	    	if(sb.length() > 0) {
-	    		sb.append("," + ruStr);
+	    		List<String> arrs = Arrays.asList(str.split(","));
+	    		if(!arrs.contains(ruStr)) {
+	    			sb.append("," + ruStr);	
+	    		}
 	    	}else {
 	    		sb.append(ruStr);
 	    	}
@@ -418,6 +411,42 @@ public class Layout extends JFrame{
 			e.printStackTrace();
 			Base.addLog(e.getMessage());
 		}
+    }
+    
+    /**
+     * 初始化txt存储文件
+     * @return
+     * @throws IOException 
+     */
+    public File finshRoleInit() throws IOException {
+    	String date = Base.getDate("YYYYMMdd");
+    	String folder = Base.home + File.separator + "finsh_role";
+    	File file1 = new File(folder);
+    	if(!file1.exists()){
+    		file1.mkdirs();
+    	}
+    	String fileStore = folder + File.separator + date + ".txt";
+    	File file = new File(fileStore);
+    	if(!file.exists()) {
+			file.createNewFile();
+    	}
+    	return file;
+    }
+    
+    /**
+     * 获取已经挖宝完成的账号
+     * @return
+     */
+    public List<String> getFinshRole() {
+    	String ret = "";
+    	try {
+    		File file = finshRoleInit();
+    		ret = FileUtils.readFileToString(file);
+    	}catch(Exception e) {
+    		e.printStackTrace();
+			Base.addLog(e.getMessage());
+    	}
+    	return Arrays.asList(ret.split(","));
     }
     
     /**
@@ -962,12 +991,14 @@ public class Layout extends JFrame{
             Base.addLog("未能找到账号..");
         }
         String[] users = user.split(";");
+        List<String> listFinshRole = getFinshRole();//已经挖宝完成的账号
+        Base.addLog("已经挖宝完成的账号【"+listFinshRole+"】");
         for(String itemUser : users){
             String[] userInfo = itemUser.split(",");//下标：第0个账号，第1个密码，第2个是否含有小号
             if(userInfo.length == 3){
             	if(Base.listUsers.size() > 0){
-            		//账号没有处理过
-            		if(!existsUser(userInfo[0],Base.listUsers)){
+            		//账号没有处理过,并且没有挖宝完成
+            		if(!existsUser(userInfo[0],Base.listUsers) && !listFinshRole.contains(userInfo[0])){
             			return userInfo;
             		}
             	}else{
@@ -1018,7 +1049,7 @@ public class Layout extends JFrame{
         			robot.delay(200);
         			return login();
         		}
-        		//判断是会否删退到了桌面
+        		//判断是会否闪退到了桌面
         		list = Base.findPic(Constant.app_game,1000);
         		if(list.size() > 0){
         			openGameApp();
