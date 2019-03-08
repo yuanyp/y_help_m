@@ -25,6 +25,7 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
+import com.xnx3.IntegerUtil;
 import com.xnx3.microsoft.Color;
 import com.xnx3.microsoft.Com;
 import com.xnx3.microsoft.FindPic;
@@ -148,14 +149,35 @@ public class Layout extends JFrame{
     	}
     }
     
+    /**
+     * 活动关闭页面的关闭按钮图片
+     * @return
+     */
     private String getHDClose(){
-    	return Constant.hd_close +"|"+ Constant.hd_close1+"|"+ Constant.hd_close2;
+    	String imgs = MYConfig.getInstance().getConfig("hd_close_imgs") + "";
+    	if(StringUtils.isBlank(imgs)) {
+    		imgs = Constant.hd_close +"|"+ Constant.hd_close1+"|"+ Constant.hd_close2;
+    	}
+    	return imgs;
+    }
+    
+    /**
+     * 登录之后，查找活动关闭按钮的时间
+     * @return
+     */
+    private int getHDCloseTime() {
+    	try {
+    		return Integer.parseInt(MYConfig.getInstance().getConfig("hd_close_time") + "");	
+    	}catch(Exception e) {
+    		return 20000;//20秒
+    	}
+    	
     }
     
     private void login_after() {
     	active();
         
-    	List<CoordBean> list = Base.findPic(getHDClose(),20000);
+    	List<CoordBean> list = Base.findPic(getHDClose(),getHDCloseTime());
         if(list.size() > 0){
 			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
 			robot.delay(500);
@@ -974,6 +996,8 @@ public class Layout extends JFrame{
     }
     
     
+    
+    
     /**
      * 登录
      */
@@ -994,9 +1018,16 @@ public class Layout extends JFrame{
         			robot.delay(200);
         			return login();
         		}
-        		Base.addLog("没有找到登录按钮login_1");
-        		Base.screenImage("login_1");
-        		return false;
+        		//判断是会否删退到了桌面
+        		list = Base.findPic(Constant.app_game,1000);
+        		if(list.size() > 0){
+        			openGameApp();
+        			return login();
+        		}else {
+        			Base.addLog("没有找到登录按钮login_1");
+        			Base.screenImage("login_1");
+        			return false;
+        		}
         	}
     	}
     	String[] user = loadUserInfo();
@@ -1011,10 +1042,10 @@ public class Layout extends JFrame{
     	if(list.size() > 0){
     		//点击登录
     		mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
-    		robot.delay(2000);
-			list = Base.findPic(Constant.login_e+"|"+Constant.login_2,3000);
+    		robot.delay(5000);
+			list = Base.findPic(Constant.login_e+"|"+Constant.login_2 +"|"+Constant.login_u+"|"+Constant.login_p,3000);
 			if(list.size() > 0){//如果账号密码不正确
-				clearInput2();
+				clearInput();
 				return login();//重新登录
 			}
 			list = Base.findPic(Constant.login_3,10000);
@@ -1022,7 +1053,7 @@ public class Layout extends JFrame{
 				mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
 			}
 			
-			list = Base.findPic(getHDClose(),20000);
+			list = Base.findPic(getHDClose(),getHDCloseTime());
 	        if(list.size() > 0){
 				mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
 				robot.delay(500);
@@ -1054,6 +1085,7 @@ public class Layout extends JFrame{
     	}else{
     		Base.addLog("没有找到login_2");
     		Base.screenImage("login_2");
+    		//TODO 判断是否有验证码(有验证码换号登录)\服务器人数已满\登录页面变白\
     		return false;
     	}
     	return true;
@@ -1083,24 +1115,6 @@ public class Layout extends JFrame{
     /**
      * 清空输入框
      */
-    public void clearInput2(){
-    	robot.delay(200);
-    	List<CoordBean> list = Base.findPic(Constant.login_u,2000);
-    	if(list.size() > 0){
-    		mouse.mouseClick(list.get(0).getX() + 90, list.get(0).getY() + 13,true);
-    		for(int i=0,j=10;i<j;i++){
-    			robot.delay(100);
-        		press.keyPress(press.DELETE);	
-    		}
-    		for(int i=0,j=10;i<j;i++){
-    			robot.delay(100);
-        		press.keyPress(press.BACKSPACE);	
-    		}
-    	}
-    }
-    /**
-     * 清空输入框
-     */
     public void clearInput(){
     	robot.delay(200);
     	List<CoordBean> list = Base.findPic(Constant.login_u,2000);
@@ -1110,6 +1124,16 @@ public class Layout extends JFrame{
     		Base.doubleClick();
     		robot.delay(200);
     		press.keyPress(press.DELETE);
+    		robot.delay(200);
+    		mouse.mouseClick(list.get(0).getX() + 90, list.get(0).getY() + 13,true);
+    		for(int i=0,j=10;i<j;i++){
+    			robot.delay(100);
+        		press.keyPress(press.DELETE);	
+    		}
+    		for(int i=0,j=10;i<j;i++){
+    			robot.delay(100);
+        		press.keyPress(press.BACKSPACE);	
+    		}
     	}
     }
     
