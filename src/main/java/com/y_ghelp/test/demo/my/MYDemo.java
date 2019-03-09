@@ -127,16 +127,23 @@ public class MYDemo extends JFrame{
             		List<CoordBean> list = new ArrayList<>();
             		die(list);
             		if(die_pc){
-            			new Sleep().sleep(200);
-            			int x = list.get(0).getX() + 5;
-            			int y = list.get(0).getY() + 5;
-            			addLog("鼠标点击复活坐标1【"+x+","+y+"】..");
-        				mouse.mouseClick(x, y, true);
-        				Thread.sleep(1000);
-        				fit_bb();
+            			for(int i=0,j=50;i<j;i++){
+            				die(list);
+            				if(list.size() > 0){
+            					new Sleep().sleep(200);
+                    			int x = list.get(0).getX() + 5;
+                    			int y = list.get(0).getY() + 5;
+                    			addLog("鼠标点击复活坐标1【"+x+","+y+"】..");
+                				mouse.mouseClick(x, y, true);
+                				Thread.sleep(1000);
+            				}else{
+            					break;
+            				}
+            			}
+            			fit_bb();
             		}
-            		addLog("检测人物是否死亡结束..60秒之后再继续检测..");
-            		Thread.sleep(60000);
+            		addLog("检测人物是否死亡结束..30秒之后再继续检测..");
+            		Thread.sleep(30000);
             	}while(true);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -153,28 +160,33 @@ public class MYDemo extends JFrame{
     	//出征死亡BB
     	int i = 0;
     	while(i<3) {
-    		addLog("出征死亡的BB “"+i+"”...");
     		List<CoordBean> list_bb = findPic(Constant.pc_bb_cz+"|"+Constant.pc_bb_cz_1);
         	if(list_bb.size() > 0){
+        		addLog("出征死亡的BB “"+i+"”..." +"("+list_bb.get(0).getX()+","+list_bb.get(0).getY()+")");
         		mouse.mouseClick(list_bb.get(0).getX(), list_bb.get(0).getY(), true);
-        		new Sleep().sleep(500);
+        		new Sleep().sleep(1500);
         	}
         	i++;
     	}
+    	addLog("press.NUM_8 5次”...");
     	new Sleep().sleep(500);
-    	robot.press(press.NUM_1);
-    	new Sleep().sleep(1500);
+    	for(int k=0,l=5;k<l;k++){
+    		addLog("press.NUM_8...");
+    		press.keyPress(press.NUM_8);
+    		new Sleep().sleep(1000);
+    	}
     	boolean flag = true;
     	while(flag) {
     		List<CoordBean> list = findPic(Constant.pc_bb_ht+"|"+Constant.pc_bb_ht_1+"|"+Constant.pc_bb_ht_2);
     		if(list.size() > 0){
     			flag = true;
     			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-    			new Sleep().sleep(500);
+    			new Sleep().sleep(1500);
         	}else {
         		flag = false;
         	}
     	}
+    	die_pc = false;
     	addLog("使用复活药水,并合体宝宝 end...");
     }
     
@@ -188,9 +200,6 @@ public class MYDemo extends JFrame{
 			addLog("检测到PC人物死亡");
 			die_pc = true;
 			_list.addAll(list);//返回坐标
-		}else {
-			addLog("未检测到PC人物死亡");
-			die_pc = false;
 		}
 	}
     
@@ -653,7 +662,7 @@ public class MYDemo extends JFrame{
         	}
         	new Sleep().sleep(500);
             addLog("释放技能F2 F3...");
-            new Sleep().sleep(press.F2);//放技能
+            robot.press(press.F2);//放技能
             new Sleep().sleep(800);
             robot.press(press.F3);//放技能
             new Sleep().sleep(6000);
@@ -664,6 +673,9 @@ public class MYDemo extends JFrame{
             }
             int cd = Integer.parseInt(m3_textField_cd.getText()) * 1000;
             for(int i=0,j=5;i<j;i++){
+            	if(die_pc) {
+            		break;
+            	}
             	if(!m3_start) {
             		break;
             	}
@@ -708,6 +720,9 @@ public class MYDemo extends JFrame{
         if(!m3_start) {
         	return;
         }
+        if(die_pc) {
+        	return;
+    	}
         addLog("goto_xy start ..");
         List<CoordBean> list = new ArrayList<CoordBean>();
         boolean jiao1 = findImg(Common.m3_jiao1_1, 1000, list);
