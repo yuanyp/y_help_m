@@ -150,11 +150,23 @@ public class MYDemo extends JFrame{
      */
     public void fit_bb() {
     	addLog("使用复活药水,并合体宝宝 start...");
+    	//出征死亡BB
+    	int i = 0;
+    	while(i<3) {
+    		addLog("出征死亡的BB “"+i+"”...");
+    		List<CoordBean> list_bb = findPic(Constant.pc_bb_cz+"|"+Constant.pc_bb_cz_1);
+        	if(list_bb.size() > 0){
+        		mouse.mouseClick(list_bb.get(0).getX(), list_bb.get(0).getY(), true);
+        		new Sleep().sleep(500);
+        	}
+        	i++;
+    	}
+    	new Sleep().sleep(500);
     	robot.press(press.NUM_1);
     	new Sleep().sleep(1500);
     	boolean flag = true;
     	while(flag) {
-    		List<CoordBean> list = findPic(Constant.pc_bb_ht+"|"+Constant.pc_bb_ht_1);
+    		List<CoordBean> list = findPic(Constant.pc_bb_ht+"|"+Constant.pc_bb_ht_1+"|"+Constant.pc_bb_ht_2);
     		if(list.size() > 0){
     			flag = true;
     			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);

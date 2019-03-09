@@ -132,7 +132,7 @@ public class Layout extends JFrame{
     }
     
     private void active(){
-    	int hwnd = window.findWindow(0, null, Constant.appName);
+    	int hwnd = window.findWindow(0, null, Base.getAppName());
         if(hwnd > 0){
         	Base.addLog("模拟器句柄：" + hwnd);
             window.moveWindow(hwnd, 0, 0);
@@ -578,12 +578,11 @@ public class Layout extends JFrame{
     public void do_1(int x,int y){
     	mouse.mouseClick(x, y, true);
     	Base.addLog("处理山贼...");
-    	int i = 0;//15次
+    	int i = 0;//18次
     	boolean flag = true;
     	do{
     		i++;
     		do_0();
-    		press.keyPress(press.F3);
     		if(i % 3 == 0){
     			press.keyPress(press.F2);
     			robot.delay(500);
@@ -591,7 +590,7 @@ public class Layout extends JFrame{
     		Base.addLog("处理山贼... i " + i);
     		flag = Base.findPic(getBaoXiangImg()).size() <= 0;
     		if(flag){
-    			if(i >= 15){
+    			if(i >= 18){
     				flag = false;
     			}
     		}else{
@@ -607,7 +606,7 @@ public class Layout extends JFrame{
 		robot.delay(1000);
 		press.keyPress(press.F1);
 		robot.delay(1000);
-		press.keyPress(press.SPACE);
+		press.keyPress(press.F3);
 		robot.delay(1000);
     }
     
@@ -749,6 +748,11 @@ public class Layout extends JFrame{
     	if(list.size() > 0){
     		robot.delay(200);
     		mouse.mouseClick(list.get(0).getX() + 5,list.get(0).getY() + 5, true);
+    	}
+    	list = Base.findPic(Constant.close_liaotian+"|"+Constant.close_liaotian_1);
+    	if(list.size() > 0){
+    		robot.delay(200);
+    		mouse.mouseClick(list.get(0).getX() +2,list.get(0).getY() + 2, true);
     	}
     	Base.addLog("清空确认按钮结束..");
     }
@@ -996,14 +1000,10 @@ public class Layout extends JFrame{
         for(String itemUser : users){
             String[] userInfo = itemUser.split(",");//下标：第0个账号，第1个密码，第2个是否含有小号
             if(userInfo.length == 3){
-            	if(Base.listUsers.size() > 0){
-            		//账号没有处理过,并且没有挖宝完成
-            		if(!existsUser(userInfo[0],Base.listUsers) && !listFinshRole.contains(userInfo[0])){
-            			return userInfo;
-            		}
-            	}else{
-            		return userInfo;
-            	}
+        		//账号没有处理过,并且没有挖宝完成
+        		if(!existsUser(userInfo[0],Base.listUsers) && !listFinshRole.contains(userInfo[0])){
+        			return userInfo;
+        		}
             }else{
                 Base.addLog("账号配置错误..");    
             }
@@ -1034,7 +1034,7 @@ public class Layout extends JFrame{
      */
     public boolean login(){
     	Base.addLog("login start ..");
-    	List<CoordBean> list = Base.findPic(Constant.login_u+"|"+Constant.login_p,2000);//账号输入框
+    	List<CoordBean> list = Base.findPic(Constant.login_u+"|"+Constant.login_p,20000);//账号输入框
     	if(null == list || list.size() == 0){
     		list = Base.findPic(Constant.login_1,3000);
         	if(list.size() > 0){
@@ -1200,24 +1200,26 @@ public class Layout extends JFrame{
      * 打开游戏app
      */
     public void openGameApp(){
+    	String img = Constant.app_game + "|" + Constant.app_game1+ "|" +Constant.app_game2;
     	//1分钟内循环查找游戏app。如果进入了桌面 肯定能找到
-    	List<CoordBean> list = Base.findPic(Constant.app_game,60000);
+    	List<CoordBean> list = Base.findPic(img,60000);
     	if(list.size() > 0){
     		robot.delay(10000);
-    		Base.addLog("找到"+ Constant.app_game +"点击..");
+    		Base.addLog("找到"+ img +"点击..");
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
     		robot.delay(500);
-    		list = Base.findPic(Constant.app_game,1000);
+    		list = Base.findPic(img,1000);
     		if(list.size() > 0){
     			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
     		}
-    		list = Base.findPic(Constant.app_game,1000);
+    		list = Base.findPic(img,1000);
     		if(list.size() > 0){
     			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
     		}
     	}
     	robot.delay(500);
     }
+    
     
     /**
      * 游戏更新

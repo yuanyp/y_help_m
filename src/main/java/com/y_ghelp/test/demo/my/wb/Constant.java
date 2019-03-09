@@ -2,10 +2,6 @@ package com.y_ghelp.test.demo.my.wb;
 
 public class Constant {
 	
-	public static String appName = "夜神模拟器";
-	
-	public static String appPath = "D:\\Program Files\\Nox\\bin\\Nox.exe";
-	
 	public static String img_home = "wb_img";
 	
 	public static String dm_dic = "C://dm_dic/dm_soft.txt";
@@ -14,7 +10,12 @@ public class Constant {
 	public static String chuzheng_02 = "chuzheng_02.bmp";
 	public static String chuzheng_03 = "chuzheng_03.bmp";
 	
+	public static String close_liaotian = "close_liaotian.bmp";
+	public static String close_liaotian_1 = "close_liaotian_1.bmp";
+	
 	public static String app_game = "app.bmp";
+	public static String app_game1 = "app_1.bmp";
+	public static String app_game2 = "app_2.bmp";
 	public static String login_1 = "login_1.bmp";
 	public static String login_2 = "login_2.bmp";
 	public static String login_3 = "login_3.bmp";
@@ -100,8 +101,11 @@ public class Constant {
 	/////////////////////////////////////
 	public static String die = "die.bmp";
 	public static String die_pc = "die_pc.bmp";
+	public static String pc_bb_cz = "pc_bb_cz.bmp";
+	public static String pc_bb_cz_1 = "pc_bb_cz_1.bmp";
 	public static String pc_bb_ht = "pc_bb_ht.bmp";
 	public static String pc_bb_ht_1 = "pc_bb_ht_1.bmp";
+	public static String pc_bb_ht_2 = "pc_bb_ht_2.bmp";
 	public static String fuhuo_1 = "fuhuo_1.bmp";
 	public static String fuhuo_2 = "fuhuo_2.bmp";
 	public static String fuhuo_3 = "fuhuo_3.bmp";

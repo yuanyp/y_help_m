@@ -85,9 +85,6 @@ public class WB extends Base{
         public void run() {
             try {
             	String appPath = (String)MYConfig.getInstance().getConfig("defaultYSPath");
-            	if(org.apache.commons.lang.StringUtils.isBlank(appPath)){
-            		appPath = Constant.appPath;
-            	}
                 // 打开应用,此函数会阻塞当前线程，直到打开的关闭为止。故而须另开辟一个线程执行此函数
                 String cmdExe = " start \"\" \"" + appPath + "\"";
                 SystemUtil.cmd(cmdExe);

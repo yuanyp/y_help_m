@@ -26,6 +26,7 @@ import com.xnx3.microsoft.Press;
 import com.xnx3.microsoft.Window;
 import com.xnx3.robot.Robot;
 import com.xnx3.robot.support.CoordBean;
+import com.y_ghelp.test.demo.config.MYConfig;
 import com.y_ghelp.test.demo.my.wb.Constant;
 import com.y_ghelp.test.demo.my.wb.Layout;
 
@@ -103,6 +104,10 @@ public class Base{
         });
     }
     
+	public static String getAppName(){
+		return MYConfig.getInstance().getConfig("appName") +"";
+	}
+	
     public static void setImgHomeFolder(String imgHome){
     	imgHomeFolder = imgHome;
     	System.out.println("setImgHomeFolder " + imgHomeFolder);
