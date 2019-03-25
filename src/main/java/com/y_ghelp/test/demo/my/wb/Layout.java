@@ -891,7 +891,7 @@ public class Layout extends JFrame{
     	Base.addLog("神界去雷鸣开始..");
     	//检查是否已经到了神界
     	List<CoordBean> list = Base.findStrE("神界", 
-				"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013", 0.9, 0,10000);
+				"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013", 0.8, 0,10000);
 		if(list.size() > 0){
 			Base.addLog("当前人物在神界");
 			press.keyPressTime(press.W, 380);
