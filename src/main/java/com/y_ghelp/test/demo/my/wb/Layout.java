@@ -55,8 +55,6 @@ public class Layout extends JFrame{
     	active();
         //进入游戏
         openGameApp();
-        //检查是否需要更新
-        update();
         boolean flag = true;
         do{
         	//登录
@@ -76,8 +74,6 @@ public class Layout extends JFrame{
     	active();
         //进入游戏
         openGameApp();
-        //检查是否需要更新
-        update();
         boolean flag = true;
         do{
         	//登录
@@ -535,15 +531,6 @@ public class Layout extends JFrame{
     			+ "|" + Constant.cangbaotu_6
     			+ "|" + Constant.cangbaotu_7
     			+ "|" + Constant.cangbaotu_8;
-//    	String color = "a22513|aa2c15|9d2b11|ac1f10|a42a16|ac2210|a62918|a22a16";
-//    	int[] caobaotu = Base.color.findColor(440, 219, 736, 462, color, 0.9, 0);
-//    	CoordBean coordBean = new CoordBean();
-    	
-    	//
-//    	XY=Plugin.Color.FindMutiColor(0,0,1280,1024,"162AA4","-6|6|3A5C6A,-19|10|0D257B,-17|-5|3A5B6B",1)
-//    			dim MyArray
-//    			MyArray = Split(XY, "|")
-//    			X = CInt(MyArray(0)): Y = CInt(MyArray(1))
     	list = Base.findPic(cangbaotu,412,144,756,551,0.8);
     	boolean flag = true;
     	do{
@@ -558,19 +545,7 @@ public class Layout extends JFrame{
     			b_y = list1.get(0).getY();
     		}
     	}while(flag);//防止背包关不掉
-    	
-//    	if(caobaotu[0] != -1){
-//    		list.clear();
-//    		coordBean.setX(caobaotu[0]);
-//        	coordBean.setY(caobaotu[1]);
-//        	list.add(coordBean);
-//    	}else{
-//    		Base.addLog("关闭背包...");
-//    		mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
-//    		list.clear();
-//    	}
     	return list;
-
     }
     
     
@@ -593,8 +568,6 @@ public class Layout extends JFrame{
     			if(i >= 18){
     				flag = false;
     			}
-    		}else{
-    			Base.screenImage("宝箱");
     		}
     	}while(flag);
     	Base.addLog("处理山贼结束...");
@@ -640,8 +613,6 @@ public class Layout extends JFrame{
     			if(i >= 140){
     				flag = false;
     			}
-    		}else{
-    			Base.screenImage("宝箱");
     		}
     	}while(flag);
     	Base.addLog("处理盗墓贼结束...");
@@ -782,27 +753,42 @@ public class Layout extends JFrame{
         	}else if(list3.size() > 0){
         		do_3(list.get(0).getX(),list.get(0).getY());
         	}
+    		robot.delay(200);
     		boolean flag = true;
     		int i = 0;
     		boolean m = true;
     		do{
-    			list = Base.findPic(getBaoXiangImg(),5000);
+    			list = Base.findPic(getBaoXiangImg(),1000);
         		//25 * 65
             	if(list.size() > 0 && i <=60){
+            		i++;
             		if(m){//先移动到宝箱周围,防止过远点不到
             			m = false;
-            			mouse.mouseClick(list.get(0).getX() + 125,list.get(0).getY() + 55, true);
+            			int x = list.get(0).getX() + 125;
+            			int y = list.get(0).getY() + 55;
+            			if(x > Base.screenWidth) {
+            				x = list.get(0).getX() - 125;
+            				Base.addLog("宝箱x超过屏幕宽度:"+x);
+            			}
+            			if(y > Base.screenHeight) {
+            				y = list.get(0).getY() - 55;
+            				Base.addLog("宝箱y超过屏幕高度:"+y);
+            			}
+            			Base.addLog("移动到宝箱周围("+x+","+y+")..");
+            			mouse.mouseClick(x,y, true);
+            			robot.delay(2000);
+            		}else {
+            			if(i == 20 || i == 30 || i == 40){
+                			do_0();//防止怪物与宝箱重叠,释放技能杀怪
+                		}
+                		Base.addLog("点击宝箱...");
+                		mouse.mouseMoveTo(list.get(0).getX() + 30,list.get(0).getY() + 55);
+                		robot.delay(200);
+                		Base.doubleClick();
+                		robot.delay(500);
             		}
-            		i++;
-            		if(i == 20 || i == 30 || i == 40){
-            			do_0();
-            		}
-            		Base.addLog("点击宝箱...");
-            		mouse.mouseMoveTo(list.get(0).getX() + 30,list.get(0).getY() + 55);
-            		robot.delay(200);
-            		Base.doubleClick();
-            		robot.delay(500);
             	}else{
+            		Base.screenImage("宝箱");
             		flag = false;
             	}
     		}while(flag);
@@ -1034,7 +1020,7 @@ public class Layout extends JFrame{
      */
     public boolean login(){
     	Base.addLog("login start ..");
-    	List<CoordBean> list = Base.findPic(Constant.login_u+"|"+Constant.login_p,20000);//账号输入框
+    	List<CoordBean> list = Base.findPic(Constant.login_u+"|"+Constant.login_p,2000);//账号输入框
     	if(null == list || list.size() == 0){
     		list = Base.findPic(Constant.login_1,3000);
         	if(list.size() > 0){
@@ -1218,6 +1204,8 @@ public class Layout extends JFrame{
     		}
     	}
     	robot.delay(500);
+    	//检查是否需要更新
+        update();
     }
     
     

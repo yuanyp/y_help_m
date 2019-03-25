@@ -2277,6 +2277,13 @@ public class MYDemo extends JFrame{
                         .withSchedule(CronScheduleBuilder.cronSchedule(MYConfig.getInstance().getConfig("quartz_con").toString())) //60秒执行一次 --0/60 * * * * ? --0 0 0,09,12,22 * * ? --"0 0 0,09,12 * * ?"
                         .build();
             
+            Trigger t2 = TriggerBuilder.newTrigger()
+                    .withDescription("")
+                    .withIdentity("Sign2", "Sign2")
+                    .startAt(statTime)  //60秒后启动任务
+                    .withSchedule(CronScheduleBuilder.cronSchedule(MYConfig.getInstance().getConfig("quartz_con_2").toString())) //60秒执行一次 --0/60 * * * * ? --0 0 0,09,12,22 * * ? --"0 0 0,09,12 * * ?"
+                    .build();
+            
             Trigger t1 = TriggerBuilder.newTrigger()
                     .withDescription("")
                     .withIdentity("AutoLoginJob", "AutoLoginJob")
@@ -2286,6 +2293,7 @@ public class MYDemo extends JFrame{
 
             //5.注册任务和定时器
             scheduler.scheduleJob(job, t);
+            scheduler.scheduleJob(job, t2);
             scheduler.scheduleJob(job1, t1);
 
             //6.启动 调度器
