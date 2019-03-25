@@ -180,7 +180,7 @@ public class Base{
     	if(!file1.exists()){
     		file1.mkdirs();
     	}
-    	file.screenImage(0, 0, screenWidth, screenWidth, dir + "\\" + System.currentTimeMillis()+".png");
+    	file.screenImage(0, 0, screenWidth, screenHeight, dir + "\\" + System.currentTimeMillis()+".png");
     }
     
     public static void screenDieImage(){
@@ -190,7 +190,7 @@ public class Base{
     	if(!file1.exists()){
     		file1.mkdirs();
     	}
-    	file.screenImage(0, 0, screenWidth, screenWidth, dir + "\\" + System.currentTimeMillis()+".png");
+    	file.screenImage(0, 0, screenWidth, screenHeight, dir + "\\" + System.currentTimeMillis()+".png");
     }
     
     public static String getDate(String fmt){
