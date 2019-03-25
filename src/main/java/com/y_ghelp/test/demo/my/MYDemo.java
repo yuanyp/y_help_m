@@ -204,21 +204,16 @@ public class MYDemo extends JFrame{
 	}
     
     private void init(){
-        com = new Com();
-        window = new Window(com.getActiveXComponent());    //窗口操作类
-        mouse = new Mouse(com.getActiveXComponent());   //鼠标模拟操作类
-        press = new Press(com.getActiveXComponent());   //键盘模拟操作类
-        color = new Color(com.getActiveXComponent());   //颜色相关的取色、判断类
-        findPic = new FindPic(com.getActiveXComponent());
-        file = new com.xnx3.microsoft.File(com.getActiveXComponent());
+        com = Base.com;
+        window = Base.window;    //窗口操作类
+        mouse = Base.mouse;   //鼠标模拟操作类
+        press = Base.press;   //键盘模拟操作类
+        color = Base.color;   //颜色相关的取色、判断类
+        findPic = Base.findPic;
+        file = Base.file;;
         
-        path = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        if(StringUtils.isNotBlank(path)){
-            path = path.replace("/", "\\");
-            path = path.substring(1, path.length());                
-        }
-        PropertyConfigurator.configure(path + "log4j.properties");
-        robot = new Robot();
+        path = Base.path;
+        robot = Base.robot;
         if(!com.isCreateSuccess()){
             addLog("创建Com对象失败");
             return;
@@ -1695,7 +1690,7 @@ public class MYDemo extends JFrame{
      * TODO <功能详细描述>
      * @throws Exception
      */
-    private void start_game(String[] user,boolean exit) throws Exception{
+    public void start_game(String[] user,boolean exit) throws Exception{
     	threadPool.execute(openGameTh);
     	new Sleep().sleep(3000);
         boolean flag = true;
@@ -2258,6 +2253,12 @@ public class MYDemo extends JFrame{
                     .build();
             job.getJobDataMap().put("mydemo", mydemo);  
             
+            JobDetail job2 = JobBuilder.newJob(DemoJob.class)
+                    .withDescription("this is a ram Sign2") //job的描述
+                    .withIdentity("ramJob2", "Sign2") //job 的name和group
+                    .build();
+            job.getJobDataMap().put("mydemo", mydemo);  
+            
             JobDetail job1 = JobBuilder.newJob(AutoLoginJob.class)
                     .withDescription("this is a AutoLoginJob") //job的描述
                     .withIdentity("ramJob", "AutoLoginJob") //job 的name和group
@@ -2293,7 +2294,7 @@ public class MYDemo extends JFrame{
 
             //5.注册任务和定时器
             scheduler.scheduleJob(job, t);
-            scheduler.scheduleJob(job, t2);
+            scheduler.scheduleJob(job2, t2);
             scheduler.scheduleJob(job1, t1);
 
             //6.启动 调度器
