@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -109,6 +110,8 @@ public class MYDemo extends JFrame{
     boolean flag_dx = true;
     boolean flag_gw = true;
     boolean die_pc = false;
+    
+    private String hwnd_title = "";
     
     // 构造一个线程池
     ThreadPoolExecutor threadPool = new ThreadPoolExecutor(2, 4, 3, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(3),
@@ -1793,11 +1796,22 @@ public class MYDemo extends JFrame{
     }
     
     private void activeGame(){
-    	int hwnd = window.findWindow(0, null, gameName);
+    	addLog("activeGame start");
+    	int hwnd = 0;
+    	if(StringUtils.isBlank(hwnd_title)) {
+    		hwnd = window.findWindow(0, null, gameName);
+    		hwnd_title = UUID.randomUUID().toString();
+    		addLog("activeGame set title " + hwnd_title);
+        	window.setWindowTitle(hwnd, hwnd_title);//设置窗口title
+        	window.moveWindow(hwnd, 0, 0);
+    	}else {
+    		hwnd = window.findWindow(0, null, hwnd_title);
+    		addLog("activeGame find title " + hwnd_title + " hwnd " + hwnd);
+    	}
         if(hwnd > 0){
             window.setWindowActivate(hwnd); //激活窗口
-            window.moveWindow(hwnd, 0, 0);
         }
+        addLog("activeGame end");
     }
     
     private boolean findLoingError(int time){
