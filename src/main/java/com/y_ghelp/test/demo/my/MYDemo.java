@@ -111,7 +111,7 @@ public class MYDemo extends JFrame{
     boolean flag_gw = true;
     boolean die_pc = false;
     
-    private String hwnd_title = "";
+    private int hwnd_active = 0;
     
     // 构造一个线程池
     ThreadPoolExecutor threadPool = new ThreadPoolExecutor(2, 4, 3, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(3),
@@ -658,6 +658,7 @@ public class MYDemo extends JFrame{
         		new Sleep().sleep(5000);
         		continue;
         	}
+        	activeGame();
         	new Sleep().sleep(500);
             addLog("释放技能F2 F3...");
             robot.press(press.F2);//放技能
@@ -1797,19 +1798,16 @@ public class MYDemo extends JFrame{
     
     private void activeGame(){
     	addLog("activeGame start");
-    	int hwnd = 0;
-    	if(StringUtils.isBlank(hwnd_title)) {
-    		hwnd = window.findWindow(0, null, gameName);
-    		hwnd_title = UUID.randomUUID().toString();
-    		addLog("activeGame set title " + hwnd_title);
-        	window.setWindowTitle(hwnd, hwnd_title);//设置窗口title
-        	window.moveWindow(hwnd, 0, 0);
-    	}else {
-    		hwnd = window.findWindow(0, null, hwnd_title);
-    		addLog("activeGame find title " + hwnd_title + " hwnd " + hwnd);
+    	if(hwnd_active <= 0) {
+    		hwnd_active = window.findWindow(0, null, gameName);
+    		if(hwnd_active > 0) {
+    			addLog("activeGame find hwnd " + hwnd_active);
+    			window.moveWindow(hwnd_active, 0, 0);	
+    		}
     	}
-        if(hwnd > 0){
-            window.setWindowActivate(hwnd); //激活窗口
+        if(hwnd_active > 0){
+        	addLog("activeGame " + hwnd_active);
+            window.setWindowActivate(hwnd_active); //激活窗口
         }
         addLog("activeGame end");
     }
