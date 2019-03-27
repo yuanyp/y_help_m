@@ -4,11 +4,9 @@ import java.awt.AWTEvent;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +25,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -64,8 +61,7 @@ public class MYDemo extends JFrame{
 	}
 	
 	static Logger log = Logger.getLogger(MYDemo.class);
-	String gameName = (String) MYConfig.getInstance().getConfig("gameName");
-    String defaultGamePath = (String) MYConfig.getInstance().getConfig("defaultGamePath");
+
     
     private MYTwoStars twoStars;
     
@@ -87,14 +83,9 @@ public class MYDemo extends JFrame{
     FindPic findPic;
     com.xnx3.microsoft.File file;
     
+    private Util util;
     
-    
-    Thread openGameTh;
-    Thread playGameTh;
-    Thread login;
-    Thread sclTh;
-    Thread m3startTh;
-    Thread testTh;
+
     boolean m3startInitThFlag = false;
     boolean testThInitFlag = false;
     boolean checkDieInitFlag = false;
@@ -104,8 +95,7 @@ public class MYDemo extends JFrame{
     
     String btnContinueName = "继续";
     String btnStopName = "暂停";
-    String path;
-    String img_folder_name = "game_img";
+    
     
     boolean flag_dx = true;
     boolean flag_gw = true;
@@ -114,8 +104,15 @@ public class MYDemo extends JFrame{
     private int hwnd_active = 0;
     
     // 构造一个线程池
-    ThreadPoolExecutor threadPool = new ThreadPoolExecutor(2, 4, 3, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(3),
+    ThreadPoolExecutor threadPool = new ThreadPoolExecutor(2, 10, 60L, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(3),
             new ThreadPoolExecutor.DiscardOldestPolicy());
+    Thread openGameTh;//打开游戏线程
+    Thread playGameTh;//登录签到线程
+    Thread login;//登录线程
+    Thread sclTh;//刷幻界大陆材料线程
+    Thread m3startTh;//挂机迷3线程
+    Thread markingTh;//自动做神仆材料线程
+    Thread testTh;//挂机迷3线程(刷上面)
     private JTextField m3_textField_cd;
     private JTextField m3_textField_x;
     private JTextField m3_textField_y;
@@ -206,40 +203,28 @@ public class MYDemo extends JFrame{
 		}
 	}
     
+	/**
+	 * 初始化com对象,线程等;
+	 */
     private void init(){
-        com = Base.com;
-        window = Base.window;    //窗口操作类
-        mouse = Base.mouse;   //鼠标模拟操作类
-        press = Base.press;   //键盘模拟操作类
-        color = Base.color;   //颜色相关的取色、判断类
-        findPic = Base.findPic;
-        file = Base.file;;
-        
-        path = Base.path;
-        robot = Base.robot;
+        com = new Com();
         if(!com.isCreateSuccess()){
             addLog("创建Com对象失败");
             return;
         }
+        util = new Util(com);
+        window = util.window;    //窗口操作类
+        mouse = util.mouse;   //鼠标模拟操作类
+        press = util.press;   //键盘模拟操作类
+        color = util.color;   //颜色相关的取色、判断类
+        findPic = util.findPic;
+        file = util.file;;
+        robot = new Robot();
+        Config.initConfig(robot.screenWidth, robot.screenHeight);
+        
         Toolkit tk = Toolkit.getDefaultToolkit();  
-        tk.addAWTEventListener(new ImplAWTEventListener(), AWTEvent.KEY_EVENT_MASK);  
-    }
-    
-    private void init_layout(){
-    	this.setBounds(100, 100, 645, 445);
-        contentPane = new JPanel();
-        this.setContentPane(contentPane);
-        JLabel lblNewLabel = new JLabel("应用路径");
-        
-        //应用程序路径URL
-        textField = new JTextField();
-        textField.setText(defaultGamePath);
-        textField.setColumns(10);
-        
-        //測試找圖
-        textField1 = new JTextField();
-        textField1.setText("qi.bmp");
-        
+        tk.addAWTEventListener(new ImplAWTEventListener(), AWTEvent.KEY_EVENT_MASK);
+
         openGameTh = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -291,6 +276,32 @@ public class MYDemo extends JFrame{
             }
         });
         
+        final MYDemo myDemo = this;
+        markingTh = new Thread(new Runnable() {
+            public void run() {
+                try {
+        	    	String user = (String)MYConfig.getInstance().getConfig("user_login_making");
+        	    	if(StringUtils.isNotBlank(user)) {
+        	    		String[] users = user.split(";");
+        	    		if(users.length <= 0) {
+        	    			return;
+        	    		}
+        	    		for(String itemUser : users) {
+        	    			Com com = new Com();
+                        	if(com.isCreateSuccess()) {
+                            	AutoMaking autoMaking = new AutoMaking(myDemo, robot, com);
+                            	autoMaking.setUser(itemUser);
+                            	autoMaking.main();
+                        	}
+        	    		}
+        	    	}
+                } catch (Exception e) {
+                    addLog(e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        });
+        
         login = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -315,19 +326,38 @@ public class MYDemo extends JFrame{
                 }
             }
         });
+    }
+    
+    
+    /**
+     * 初始化布局配置
+     */
+    private void init_layout(){
+    	this.setBounds(100, 100, 645, 445);
+        contentPane = new JPanel();
+        this.setContentPane(contentPane);
+        JLabel lblNewLabel = new JLabel("应用路径");
+        
+        //应用程序路径URL
+        textField = new JTextField();
+        textField.setText(Config.defaultGamePath);
+        textField.setColumns(10);
+        
+        //测试找图
+        textField1 = new JTextField();
+        textField1.setText("qi.bmp");
         
         //找图
         final JButton btnSearchImg = new JButton("找图");
         btnSearchImg.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	while(true){
-            		List<CoordBean> list = findPic(textField1.getText());
-                	if(null != list){
-                		mouse.mouseMoveTo(list.get(0).getX(), list.get(0).getY());
-                	}
-                	new Sleep().sleep(1000);
+        		List<CoordBean> list = findPic(textField1.getText());
+            	if(null != list){
+            		addLog("找到图片,坐标("+list.get(0).getX()+","+list.get(0).getY()+")");
+            		mouse.mouseMoveTo(list.get(0).getX(), list.get(0).getY());
             	}
+            	new Sleep().sleep(1000);
             }
         });
         
@@ -523,7 +553,7 @@ public class MYDemo extends JFrame{
         JButton test_btn_move = new JButton("激活移动");
         test_btn_move.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-            	int hwnd = window.findWindow(0, null, gameName);
+            	int hwnd = window.findWindow(0, null, Config.gameName);
                 if(hwnd > 0){
                 	addLog("hwnd : " + hwnd);
                     window.setWindowActivate(hwnd); //激活窗口
@@ -532,6 +562,21 @@ public class MYDemo extends JFrame{
                 }
             }
         });
+        
+        JButton button_making = new JButton("制作材料");
+        button_making.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+            	threadPool.execute(markingTh);
+            }
+        });
+        
+        JButton button_login = new JButton("登录");
+        button_making.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+            	threadPool.execute(login);
+            }
+        });
+        
         //布局
         GroupLayout gl_contentPane = new GroupLayout(contentPane);
         gl_contentPane.setHorizontalGroup(
@@ -581,7 +626,9 @@ public class MYDemo extends JFrame{
         				.addGroup(gl_contentPane.createSequentialGroup()
         					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
         						.addComponent(label, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
-        						.addComponent(m3_textField_cd, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE))
+        						.addGroup(gl_contentPane.createSequentialGroup()
+        							.addComponent(m3_textField_cd, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
+        							.addGap(6)))
         					.addPreferredGap(ComponentPlacement.UNRELATED)
         					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
         						.addGroup(gl_contentPane.createSequentialGroup()
@@ -597,7 +644,12 @@ public class MYDemo extends JFrame{
         							.addComponent(lblX, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
         							.addGap(18)
         							.addComponent(lblY, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)))
-        					.addGap(319))))
+        					.addGap(319))
+        				.addGroup(gl_contentPane.createSequentialGroup()
+        					.addComponent(button_making)
+        					.addPreferredGap(ComponentPlacement.UNRELATED)
+        					.addComponent(button_login, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+        					.addGap(511))))
         );
         gl_contentPane.setVerticalGroup(
         	gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -634,7 +686,11 @@ public class MYDemo extends JFrame{
         				.addComponent(button_start_yongsheng)
         				.addComponent(m3_textField_y, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
         				.addComponent(button_test))
-        			.addGap(38)
+        			.addGap(5)
+        			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+        				.addComponent(button_making)
+        				.addComponent(button_login))
+        			.addPreferredGap(ComponentPlacement.UNRELATED)
         			.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
         				.addComponent(btnSearchImg)
         				.addComponent(textField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
@@ -786,26 +842,12 @@ public class MYDemo extends JFrame{
      * 刷金字塔
      */
     private void shua_jzt(int num){
-    	int hwnd = window.findWindow(0, null, gameName);
+    	int hwnd = window.findWindow(0, null, Config.gameName);
         if(hwnd > 0){ 
             window.moveWindow(hwnd, 0, 0);
             window.setWindowActivate(hwnd); //激活窗口
             
             new Sleep().sleep(1000);
-            
-//            List<CoordBean> list = new ArrayList<CoordBean>();
-//            if(findImg(zhuziImg, 500, list)){
-//            	mouse.mouseClick(list.get(0).getX(),list.get(0).getY() + 150,true);
-//            }
-//            new Sleep().sleep(1000);
-//            //点击对话框释放怪物
-//            list = findPic(fangguaiwuImg);
-//            if(null == list){
-//            	addLog("找不到图片["+fangguaiwuImg+"]");
-//            	return;
-//            }
-//            mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5,true);
-//            new Sleep().sleep(500);
         	daguai();
         	
         	if(num == 1){
@@ -829,7 +871,7 @@ public class MYDemo extends JFrame{
         	}
         	
         }else{
-            addLog("未能找到游戏【"+gameName+"】...");
+            addLog("未能找到游戏【"+Config.gameName+"】...");
         }
     }
     
@@ -1597,12 +1639,12 @@ public class MYDemo extends JFrame{
     }
 
     private int[] findjuyanlingzhu(){
-    	int[] a = findPic.findPic(0, 0, robot.screenWidth, robot.screenHeight, getRealPath(Common.juyanlingzhu_Img), "", 0.9, 0);
+    	int[] a = findPic.findPic(0, 0, robot.screenWidth, robot.screenHeight, util.getRealPath(Common.juyanlingzhu_Img), "", 0.9, 0);
     	return a;
     }
     
     private int[] findzhanlipinbaoxiang(){
-    	int[] a = findPic.findPic(0, 0, robot.screenWidth, robot.screenHeight, getRealPath(Common.zhanlipinbaoxiang_Img), "", 0.9, 0);
+    	int[] a = findPic.findPic(0, 0, robot.screenWidth, robot.screenHeight, util.getRealPath(Common.zhanlipinbaoxiang_Img), "", 0.9, 0);
     	return a;
     }
     
@@ -1627,11 +1669,11 @@ public class MYDemo extends JFrame{
     	if(img.indexOf("|") != -1){
     		String[] imgarr = img.split("\\|");
     		for(String item_img : imgarr){
-    			imgs += getRealPath(item_img) + "|";	
+    			imgs += util.getRealPath(item_img) + "|";	
     		}
     		imgs = imgs.substring(0, imgs.length() - 1);
     	}else{
-    		imgs = getRealPath(img);
+    		imgs = util.getRealPath(img);
     	}
     	int[] a = findPic.findPic(0, 0, robot.screenWidth, robot.screenHeight, imgs, "", 0.9, 0);
     	if(a[0] != 0){
@@ -1700,7 +1742,7 @@ public class MYDemo extends JFrame{
         boolean flag = true;
         do{
         	new Sleep().sleep(500);
-        	int hwnd = window.findWindow(0, null, gameName);
+        	int hwnd = window.findWindow(0, null, Config.gameName);
             if(hwnd > 0){
             	addLog("hwnd : " + hwnd);
                 window.setWindowActivate(hwnd); //激活窗口
@@ -1715,7 +1757,7 @@ public class MYDemo extends JFrame{
         	addLog("未能打开游戏..");
         	return;
         }
-        int hwnd = window.findWindow(0, null, gameName);
+        int hwnd = window.findWindow(0, null, Config.gameName);
         if(hwnd > 0){
             window.setWindowActivate(hwnd); //激活窗口
             robot.setSourcePath(MYDemo.class);
@@ -1792,14 +1834,14 @@ public class MYDemo extends JFrame{
                 exit();            	
             }
         }else{
-            addLog("未能找到游戏【"+gameName+"】...");
+            addLog("未能找到游戏【"+Config.gameName+"】...");
         }
     }
     
     private void activeGame(){
     	addLog("activeGame start");
     	if(hwnd_active <= 0) {
-    		hwnd_active = window.findWindow(0, null, gameName);
+    		hwnd_active = window.findWindow(0, null, Config.gameName);
     		if(hwnd_active > 0) {
     			addLog("activeGame find hwnd " + hwnd_active);
     			window.moveWindow(hwnd_active, 0, 0);	
@@ -2202,31 +2244,8 @@ public class MYDemo extends JFrame{
      */
     private void input(String input,Press press) throws Exception{
     	new Sleep().sleep(200);
-    	/*int fhwnd = window.getForegroundFocus();		
-		addLog("获取焦点窗口句柄： " + fhwnd);
-		new Sleep().sleep(1500);
-		boolean b = window.sendString(fhwnd, input);
-		addLog("输入结果：" + b);*/
-        /*for(char s : input.toCharArray()){
-            String items = s + "";
-            if(isNumeric(items)){
-                addLog((int)s);
-                press.keyPress((int)s);
-            }else if(isLetterLower(items)){
-                addLog(Integer.valueOf(items.toUpperCase().toCharArray()[0]));
-                press.keyPress(Integer.valueOf(items.toUpperCase().toCharArray()[0]));
-            }else if(isLetterUpper(items)){
-                addLog("shift :" + Integer.valueOf(s));
-                press.groupPress(press.SHIFT, Integer.valueOf(s));
-            }
-            new Sleep().sleep(200);
-        }*/
     	robot.sendString(input);
         new Sleep().sleep(200);
-    }
-    
-    private String getRealPath(String img){
-    	return path + img_folder_name + File.separator + img;
     }
     
     
@@ -2417,7 +2436,6 @@ public class MYDemo extends JFrame{
     		int xStart = xEnd - 70;
     		int yStart = yEnd - 18;
     		int time = 2;
-//    		file.screenImage(xStart,yStart,xEnd,yEnd, "c:\\logs\\abc.png");
         	boolean a = findPic.isDisplayDead(xStart,yStart,xEnd,yEnd,time);
         	addLog(xStart + "," + yStart + "," + xEnd + "," + yEnd + " r > " + a);
         	return !a;

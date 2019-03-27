@@ -81,6 +81,28 @@ public class Com {
 	private String display="";	//绑定，屏幕方式
 	private String mouse="";	//绑定，鼠标模拟方式
 	private String key="";		//绑定，案件方式
+	/**
+	 * public 字符串: 公共属性 dx模式共有  注意以下列表中,前面打五角星的表示需要管理员权限 
+
+取值可以是以下任意组合. 组合采用"|"符号进行连接 这个值可以为空
+1. ★ "dx.public.active.api" 此模式表示通过封锁系统API来锁定窗口激活状态.  注意，部分窗口在此模式下会耗费大量资源慎用. 
+2. ★ "dx.public.active.message" 此模式表示通过封锁系统消息来锁定窗口激活状态.  注意，部分窗口在此模式下会耗费大量资源 慎用. 另外如果要让此模式生效，必须在绑定前，让绑定窗口处于激活状态,否则此模式将失效. 比如dm.SetWindowState hwnd,1 然后再绑定.
+3.    "dx.public.disable.window.position" 此模式将锁定绑定窗口位置.不可与"dx.public.fake.window.min"共用.
+4.    "dx.public.disable.window.size" 此模式将锁定绑定窗口,禁止改变大小. 不可与"dx.public.fake.window.min"共用.
+5.    "dx.public.disable.window.minmax" 此模式将禁止窗口最大化和最小化,但是付出的代价是窗口同时也会被置顶. 不可与"dx.public.fake.window.min"共用.
+6.    "dx.public.fake.window.min" 此模式将允许目标窗口在最小化状态时，仍然能够像非最小化一样操作.. 另注意，此模式会导致任务栏顺序重排，所以如果是多开模式下，会看起来比较混乱，建议单开使用，多开不建议使用. <收费功能，具体详情点击查看>
+7.    "dx.public.hide.dll" 此模式将会隐藏目标进程的大漠插件，避免被检测..另外使用此模式前，请仔细做过测试，此模式可能会造成目标进程不稳定，出现崩溃。<收费功能，具体详情点击查看>
+8. ★ "dx.public.active.api2" 此模式表示通过封锁系统API来锁定窗口激活状态. 部分窗口遮挡无法后台,需要这个属性. <收费功能，具体详情点击查看>
+9. ★ "dx.public.input.ime" 此模式是配合SendStringIme使用. 具体可以查看SendStringIme接口. <收费功能，具体详情点击查看>
+10 ★ "dx.public.graphic.protect" 此模式可以保护dx图色不被恶意检测.同时对dx.keypad.api和dx.mouse.api也有保护效果. <收费功能，具体详情点击查看>
+11 ★ "dx.public.disable.window.show" 禁止目标窗口显示,这个一般用来配合dx.public.fake.window.min来使用. <收费功能，具体详情点击查看>
+12 ★ "dx.public.anti.api" 此模式可以突破部分窗口对后台的保护. <收费功能，具体详情点击查看>
+13 ★ "dx.public.memory" 此模式可以让内存读写函数突破保护.只要绑定成功即可操作内存函数. <收费功能，具体详情点击查看>
+14 ★ "dx.public.km.protect" 此模式可以保护dx键鼠不被恶意检测.最好配合dx.public.anti.api一起使用. 此属性可能会导致部分后台功能失效. <收费功能，具体详情点击查看>
+15    "dx.public.prevent.block"  绑定模式1 3 5 7 101 103下，可能会导致部分窗口卡死. 这个属性可以避免卡死. <收费功能，具体详情点击查看>
+16    "dx.public.ori.proc"  此属性只能用在模式0 1 2 3和101下. 有些窗口在不同的界面下(比如登录界面和登录进以后的界面)，键鼠的控制效果不相同. 那可以用这个属性来尝试让保持一致. 注意的是，这个属性不可以滥用，确保测试无问题才可以使用. 否则可能会导致后台失效. <收费功能，具体详情点击查看>
+	 */
+	private String pub="";		//绑定，案件方式
 	private int mode=0;		//绑定模式
 	
 	
@@ -363,6 +385,55 @@ public class Com {
 		
 		return bind(hwnd);
 	}
+	
+	public boolean bindEx(int hwnd,String display,String mouse,String key,String pub,int mode){
+		this.display=display;
+		this.mouse=mouse;
+		this.key=key;
+		this.mode=mode;
+		this.pub = pub;
+		return bindEx(hwnd);
+	}
+
+	public boolean bindEx(int hwnd){
+		this.hwnd=hwnd;
+		
+		boolean xnx3_result=false;	
+		
+		for (int i = 0; i < 30; i++) {
+			try {
+				//激活窗口
+				new Window(activeBean).setWindowState(hwnd, 1);
+				
+				//进行dm窗口绑定
+				Variant[] var=new Variant[5];
+				var[0]=new Variant(hwnd);
+				var[1]=new Variant(display);
+				var[2]=new Variant(mouse);
+				var[3]=new Variant(key);
+				var[4]=new Variant(pub);
+				var[5]=new Variant(mode);
+				int bindWindow=activeBean.getDm().invoke("BindWindowEx",var).getInt();
+				var=null;
+				
+				if(bindWindow==0){
+					activeBean.getDm().invoke("ForceUnBindWindow",hwnd);
+					xnx3_result=false;
+				}else{	//绑定成功
+					
+					xnx3_result=true;
+					
+					i=30;
+				}
+			} catch (Exception e) {
+				xnx3_result=false;
+				e.printStackTrace();
+				log.debug(this, "bind", "异常:"+e.getMessage());
+			}
+		}
+		
+		return xnx3_result;
+	} 
 	
 	/**
 	 * 窗口绑定，绑定后可任意操作该窗口

@@ -1,5 +1,10 @@
 package com.xnx3.microsoft;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.Variant;
 import com.xnx3.Log;
@@ -559,6 +564,63 @@ public class Window {
 		}
 		
 		return result;
+	}
+	
+	//EnumWindow(parent,title,class_name,filter)
+	/**
+	 * parent 整形数: 获得的窗口句柄是该窗口的子窗口的窗口句柄,取0时为获得桌面句柄
+
+title 字符串: 窗口标题. 此参数是模糊匹配.
+
+class_name 字符串: 窗口类名. 此参数是模糊匹配.
+
+filter整形数: 取值定义如下
+
+1 : 匹配窗口标题,参数title有效 
+
+2 : 匹配窗口类名,参数class_name有效.
+
+4 : 只匹配指定父窗口的第一层孩子窗口
+
+8 : 匹配所有者窗口为0的窗口,即顶级窗口
+
+16 : 匹配可见的窗口
+
+32 : 匹配出的窗口按照窗口打开顺序依次排列 <收费功能，具体详情点击查看>
+
+这些值可以相加,比如4+8+16就是类似于任务管理器中的窗口列表
+
+返回值:
+
+字符串 :
+返回所有匹配的窗口句柄字符串,格式"hwnd1,hwnd2,hwnd3"
+
+	 * @param hwnd
+	 * @return
+	 */
+	public List<Integer> EnumWindow(int parent,String title,String class_name,int filter){
+		Variant[] var=new Variant[4];
+		String result=null;
+		List<Integer> ret = new ArrayList<>();
+		try {
+			var[0]=new Variant(parent);
+			var[1]=new Variant(title);
+			var[2]=new Variant(class_name);
+			var[3]=new Variant(filter);
+			result=this.active.invoke("EnumWindow",var).getString();
+		} catch (Exception e) {
+			log.debug(this, "EnumWindow", "异常捕获:"+e.getMessage());
+		}finally{
+			var=null;
+		}
+		if(StringUtils.isNotBlank(result)) {
+			String[] hwnds = result.split(",");
+			for(String item : hwnds) {
+				ret.add(Integer.parseInt(item));	
+			}
+			
+		}
+		return ret;
 	}
 	
 }

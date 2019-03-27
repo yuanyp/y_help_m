@@ -66,14 +66,7 @@ public class Base{
 	public static LinkedList<CoordBean> xiaohao = new LinkedList<CoordBean>();//判断小号
 	public static Map<String,String> runRole = new HashMap<>();//当前正在进行的角色
     static{
-        com = new Com();
-        window = new Window(com.getActiveXComponent());    //窗口操作类
-        mouse = new Mouse(com.getActiveXComponent());   //鼠标模拟操作类
-        press = new Press(com.getActiveXComponent());   //键盘模拟操作类
-        color = new Color(com.getActiveXComponent());   //颜色相关的取色、判断类
-        findPic = new FindPic(com.getActiveXComponent());
-        findStr = new FindStr(com.getActiveXComponent());
-        file = new com.xnx3.microsoft.File(com.getActiveXComponent());
+    	initCom();
         robot = new Robot();
         screenWidth = robot.screenWidth;
         screenHeight = robot.screenHeight;
@@ -102,6 +95,17 @@ public class Base{
                 }
             }
         });
+    }
+    
+    public static void initCom() {
+    	com = new Com();
+        window = new Window(com.getActiveXComponent());    //窗口操作类
+        mouse = new Mouse(com.getActiveXComponent());   //鼠标模拟操作类
+        press = new Press(com.getActiveXComponent());   //键盘模拟操作类
+        color = new Color(com.getActiveXComponent());   //颜色相关的取色、判断类
+        findPic = new FindPic(com.getActiveXComponent());
+        findStr = new FindStr(com.getActiveXComponent());
+        file = new com.xnx3.microsoft.File(com.getActiveXComponent());
     }
     
 	public static String getAppName(){
