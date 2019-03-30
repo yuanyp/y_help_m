@@ -276,7 +276,20 @@ public class Layout extends JFrame{
     	robot.delay(3000);
     	list = Base.findPic(Constant.xiaohao_close,2000);
     	if(list.size() > 0){
-    		String[] user = Base.listUsers.getLast();
+    		String[] user = null;
+    		try{
+    			if(Base.listUsers.size() > 0){
+    				user = Base.listUsers.getLast();
+    			}
+    		}catch(Exception e){
+    			if(Base.listUsers.size() > 0){
+    				user = Base.listUsers.get(0);
+    			}
+    			e.printStackTrace();
+    		}
+    		if(null == user){
+    			return new ArrayList<CoordBean>();
+    		}
     		if(user[2].equals("1") && !Base.listUserXiaoHao.contains(user[0])){//有小号，并且小号没有处理过
     			Base.listUserXiaoHao.add(user[0]);
     			CoordBean xiaohao1 = new CoordBean();//266*89
@@ -829,6 +842,12 @@ public class Layout extends JFrame{
      */
     public void lcbt(){
     	Base.addLog("领藏宝图开始..");
+    	//判断当前是在雷鸣还是在神界
+    	List<CoordBean> listsj = Base.findStrE("神界", 
+				"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013", 0.8, 0,3000);
+    	if(listsj.size() > 0){
+    		sj_to_lm();
+    	}
     	robot.delay(3000);
     	List<CoordBean> list = Base.findPic(Constant.wb_0,12000);
     	if(list.size() > 0){
@@ -849,7 +868,6 @@ public class Layout extends JFrame{
         		robot.delay(500);
         		mouse.mouseClick(list.get(0).getX() + 366, list.get(0).getY() - 9, true);
         		robot.delay(500);
-        		//判断当前是在雷鸣还是在神界
         		list = Base.findStrE("确定","c7bd97-383e38", 1, 0,2000);
     			if(list.size() > 0){
     				mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
