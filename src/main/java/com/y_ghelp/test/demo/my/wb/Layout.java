@@ -842,12 +842,6 @@ public class Layout extends JFrame{
      */
     public void lcbt(){
     	Base.addLog("领藏宝图开始..");
-    	//判断当前是在雷鸣还是在神界
-    	List<CoordBean> listsj = Base.findStrE("神界", 
-				"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013", 0.8, 0,3000);
-    	if(listsj.size() > 0){
-    		sj_to_lm();
-    	}
     	robot.delay(3000);
     	List<CoordBean> list = Base.findPic(Constant.wb_0,12000);
     	if(list.size() > 0){
@@ -868,7 +862,8 @@ public class Layout extends JFrame{
         		robot.delay(500);
         		mouse.mouseClick(list.get(0).getX() + 366, list.get(0).getY() - 9, true);
         		robot.delay(500);
-        		list = Base.findStrE("确定","c7bd97-383e38", 1, 0,2000);
+        		//判断当前是在雷鸣还是在神界
+        		list = Base.findStrE("确定","c7bd97-383e38", 0.9, 0,2000);
     			if(list.size() > 0){
     				mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
     				robot.delay(500);
@@ -898,12 +893,14 @@ public class Layout extends JFrame{
 				"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013", 0.8, 0,10000);
 		if(list.size() > 0){
 			Base.addLog("当前人物在神界");
+			robot.delay(2000);
 			press.keyPressTime(press.W, 380);
 			robot.delay(500);
 			press.keyPress(press.SPACE);
 			robot.delay(800);
 			boolean a = Base.go_to_lm();
 			if(a){
+				robot.delay(3000);
 				lcbt();
 			}else{
 				Base.addLog("没有找到传送到雷鸣的对话框，尝试点击坐标（319,150）；");

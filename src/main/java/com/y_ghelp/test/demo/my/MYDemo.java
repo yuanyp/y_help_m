@@ -571,7 +571,7 @@ public class MYDemo extends JFrame{
         });
         
         JButton button_login = new JButton("登录");
-        button_making.addActionListener(new ActionListener() {
+        button_login.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
             	threadPool.execute(login);
             }
