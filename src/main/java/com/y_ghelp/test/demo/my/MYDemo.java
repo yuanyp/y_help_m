@@ -2122,26 +2122,15 @@ public class MYDemo extends JFrame{
      */
     private void exit() throws Exception{
         addLog("开始退出...");
-        forceExit();
+        press.keyPress(press.ESC);
         new Sleep().sleep(800);
         List<CoordBean> list = new ArrayList<CoordBean>();
-        list = findPic(Common.quanbuhuanbao, 1500);
-        if(list.size() > 0 || findImg(Common.huanbaoliangongImg, 2000, list)){
-        	list.clear();
+        list = findPic(Common.zhijietuichu, 1500);
+        if(list.size() > 0){
+        	mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 8, true);
+        	new Sleep().sleep(500);
         	if(findImg(Common.qdImg, 2000, list)){
         		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-        	}else{
-        		exit();
-        	}
-        }else{
-        	if(findImg(Common.quxiao_1Img, 1000, list)){
-        		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-        	}
-        	new Sleep().sleep(1000);
-        	if(findImg(Common.huanbaoliangongImg, 2000, list)){
-        		if(findImg(Common.qdImg, 2000, list)){
-        			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);	
-        		}
         	}else{
         		exit();
         	}
@@ -2154,6 +2143,10 @@ public class MYDemo extends JFrame{
         	addLog("等待退出...");
         	new Sleep().sleep(8000);
         	forceCloseChrome();
+        }else{
+        	forceExit();
+            new Sleep().sleep(800);
+        	exit();
         }
     }
     

@@ -31,11 +31,15 @@ import com.xnx3.microsoft.Com;
 import com.xnx3.microsoft.FindPic;
 import com.xnx3.microsoft.Mouse;
 import com.xnx3.microsoft.Press;
+import com.xnx3.microsoft.Sleep;
 import com.xnx3.microsoft.Window;
 import com.xnx3.robot.Robot;
 import com.xnx3.robot.support.CoordBean;
 import com.y_ghelp.test.demo.config.MYConfig;
 import com.y_ghelp.test.demo.my.Base;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 public class Layout extends JFrame{
     Com com = Base.com;
@@ -230,7 +234,32 @@ public class Layout extends JFrame{
     			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
     		}
     	}
+    	handhuodong();
 		robot.delay(500);
+    }
+    
+    private void handhuodong(){
+    	String huodongImgs = (String) MYConfig.getInstance().getConfig("huodong_imgs");
+    	if(StringUtils.isNotBlank(huodongImgs)){
+    		List<CoordBean> list = Base.findPic(huodongImgs,5000);
+    		if(list.size() > 0){
+    			//[{"x":400,"y":300,"delay":2000},{"x":400,"y":300,"delay":2000}];
+    			String huodong_xy_delay = (String) MYConfig.getInstance().getConfig("huodong_xy_delay");
+    			mouse.mouseClick(list.get(0).getX() + 8, list.get(0).getY() + 8, true);
+    			new Sleep().sleep(800);
+    			if(StringUtils.isNotBlank(huodong_xy_delay)){
+    				JSONArray jsonArr = JSONArray.fromObject(huodong_xy_delay);
+    				for(int i=0,j=jsonArr.size();i<j;i++){
+    					JSONObject jsonObj = (JSONObject)jsonArr.get(i);
+    					int x = jsonObj.getInt("x");
+    					int y = jsonObj.getInt("y");
+    					int delay = jsonObj.getInt("delay");
+    					mouse.mouseClick(x, y, true);
+    					new Sleep().sleep(delay);
+    				}
+    			}
+    		}
+    	}
     }
     
     

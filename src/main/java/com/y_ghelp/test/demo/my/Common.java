@@ -95,6 +95,7 @@ public class Common {
     
     static String huanbaoliangongImg = "huanbaoliangong.png";
     static String quanbuhuanbao = "quanbuhuanbao.bmp";
+    static String zhijietuichu = "zhijietuichu.bmp|zhijietuichu_01.bmp";
     static String quxiao_1Img = "quxiao_1.png";
     static String closeImg = "close.png";
     static String close_1Img = "close_1.png";
