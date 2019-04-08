@@ -2,6 +2,7 @@ package com.y_ghelp.test.demo.my;
 
 import java.awt.TrayIcon;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,6 +24,7 @@ import com.xnx3.microsoft.FindPic;
 import com.xnx3.microsoft.FindStr;
 import com.xnx3.microsoft.Mouse;
 import com.xnx3.microsoft.Press;
+import com.xnx3.microsoft.Sleep;
 import com.xnx3.microsoft.Window;
 import com.xnx3.robot.Robot;
 import com.xnx3.robot.support.CoordBean;
@@ -106,6 +108,15 @@ public class Base{
         findPic = new FindPic(com.getActiveXComponent());
         findStr = new FindStr(com.getActiveXComponent());
         file = new com.xnx3.microsoft.File(com.getActiveXComponent());
+    }
+    
+    public static void closeApp() {
+    	try {
+			Runtime.getRuntime().exec("TASKKILL /IM LdBoxHeadless.exe");
+			new Sleep().sleep(5000);
+		} catch (IOException e) {
+			log.error("", e);
+		}
     }
     
 	public static String getAppName(){

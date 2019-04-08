@@ -1,22 +1,18 @@
 package com.y_ghelp.test.demo.my.wb;
 
 import java.awt.Frame;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
 
 import com.melloware.jintellitype.HotkeyListener;
 import com.melloware.jintellitype.JIntellitype;
-import com.xnx3.robot.Robot;
 import com.xnx3.robot.support.CoordBean;
 import com.y_ghelp.test.demo.my.Base;
-import com.y_ghelp.test.demo.my.Common;
-import com.y_ghelp.test.demo.my.MYDemo;
 
 public class SysHotKey implements HotkeyListener {
     
-	public static final int start_huangjia = 0;//开始皇家
+	public static final int re_start = 0;//重启
 	public static final int start = 1;//开始挖宝
 	public static final int end = 2;//结束
 	public static final int state = 3;//切换窗口,显示\隐藏
@@ -32,10 +28,11 @@ public class SysHotKey implements HotkeyListener {
     
     public void onHotKey(int key) {
         switch (key) {
-	        case start_huangjia:
-	            System.out.println("start_huangjia..");
+	        case re_start:
+	            System.out.println("重启..");
 	            WB.execute = true;
-	            WB.threadPool.execute(WB.start_huangjia);
+	            WB.closeApp();
+	            WB.threadPool.execute(WB.start);
 	            break;
             case start:
                 System.out.println("start..");
@@ -83,7 +80,7 @@ public class SysHotKey implements HotkeyListener {
      * 解除注册
      * */
     public static void destroy() {
-    	JIntellitype.getInstance().unregisterHotKey(start_huangjia);
+    	JIntellitype.getInstance().unregisterHotKey(re_start);
         JIntellitype.getInstance().unregisterHotKey(start);
         JIntellitype.getInstance().unregisterHotKey(end);
         JIntellitype.getInstance().unregisterHotKey(cut);
@@ -99,7 +96,7 @@ public class SysHotKey implements HotkeyListener {
      * 
      */
     void initHotkey() {
-    	JIntellitype.getInstance().registerHotKey(start_huangjia,"ALT+F8");
+    	JIntellitype.getInstance().registerHotKey(re_start,"ALT+F8");
         JIntellitype.getInstance().registerHotKey(start,"ALT+F9");
         JIntellitype.getInstance().registerHotKey(end,"ALT+F10");
         JIntellitype.getInstance().registerHotKey(cut,"ALT+F11");
