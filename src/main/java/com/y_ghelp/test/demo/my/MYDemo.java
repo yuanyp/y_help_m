@@ -717,9 +717,9 @@ public class MYDemo extends JFrame{
         	activeGame();
         	new Sleep().sleep(500);
             addLog("释放技能F2 F3...");
-            robot.press(press.F2);//放技能
+            press.keyPress(press.F2);
             new Sleep().sleep(800);
-            robot.press(press.F3);//放技能
+            press.keyPress(press.F3);
             new Sleep().sleep(6000);
             if(flag == 1){
             	goto_xy();//回到中间	
@@ -823,7 +823,7 @@ public class MYDemo extends JFrame{
     private void f1(int x,int y) {
     	mouse.mouseMoveTo(x, y);
     	new Sleep().sleep(200);
-    	robot.press(press.F1);
+    	press.keyPress(press.F1);
 		log.info("按下F1");
 		new Sleep().sleep(200);
     }
@@ -2281,7 +2281,7 @@ public class MYDemo extends JFrame{
                     .withDescription("this is a ram Sign2") //job的描述
                     .withIdentity("ramJob2", "Sign2") //job 的name和group
                     .build();
-            job.getJobDataMap().put("mydemo", mydemo);  
+            job2.getJobDataMap().put("mydemo", mydemo);  
             
             JobDetail job1 = JobBuilder.newJob(AutoLoginJob.class)
                     .withDescription("this is a AutoLoginJob") //job的描述
