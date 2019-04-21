@@ -45,7 +45,7 @@ public class Constant {
 	public static String wb_2 = "wb_2.bmp";
 	//领取完毕
 	public static String wb_3 = "wb_3.bmp";
-	public static String wb_4 = "wb_4.bmp";
+	public static String wb_4 = "wb_4.bmp|wb_4_1.bmp|wb_4_2.bmp";
 	public static String wb_close = "wb_close.bmp";
 	public static String wb_close_1 = "wb_close_1.bmp";
 	public static String baoxiang_click = "baoxiang_click.bmp";

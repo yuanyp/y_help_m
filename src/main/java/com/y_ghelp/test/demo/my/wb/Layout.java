@@ -762,11 +762,12 @@ public class Layout extends JFrame{
     		robot.delay(200);
     		mouse.mouseClick(list.get(0).getX() + 5,list.get(0).getY() + 5, true);
     	}
-    	list = Base.findPic(Constant.close_liaotian+"|"+Constant.close_liaotian_1);
+    	list = Base.findPic(Constant.close_liaotian+"|"+Constant.close_liaotian_1,254,321,444,447,0.9,true);
     	if(list.size() > 0){
     		robot.delay(200);
     		mouse.mouseClick(list.get(0).getX() +2,list.get(0).getY() + 2, true);
     	}
+    	robot.delay(200);
     	Base.addLog("清空确认按钮结束..");
     }
     
@@ -903,7 +904,8 @@ public class Layout extends JFrame{
         				wb_2();	
     				}else {
     					Base.addLog("程序未能处理,当前人物未能到达雷鸣");
-    					hallowmas_to_lm();
+    					return;
+//    					hallowmas_to_lm();
     				}
     			}
         	}else{
@@ -944,34 +946,34 @@ public class Layout extends JFrame{
 			}
 		}else{
 			Base.addLog("没有找到神界的传送师");
-			hallowmas_to_lm();
+//			hallowmas_to_lm();
 		}
 		Base.addLog("神界去雷鸣结束..");
     }
     
-    private void hallowmas_to_lm() {
-    	Base.addLog("万圣节期间,去雷鸣开始..");
-    	//打开背包，关闭背包
-    	open_beibao();
-    	robot.delay(1000);
-    	close_beibao();
-    	List<CoordBean> list = Base.findStrE("传送", "30eb37-311437", 0.8, 0,5000);
-    	if(list.size() > 0){
-    		Base.addLog("找到传送门...");
-    		mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 50, true);
-    	}else{
-    		Base.addLog("直接点击坐标(180, 213)...");
-    		mouse.mouseClick(180, 213, true);
-    	}
-    	robot.delay(1000);
-    	boolean a = Base.go_to_lm();
-		if(a){
-			lcbt();
-		}else{
-			Base.addLog("没有找到传送到雷鸣的对话框");
-		}
-		Base.addLog("万圣节期间,去雷鸣结束..");
-    }
+//    private void hallowmas_to_lm() {
+//    	Base.addLog("万圣节期间,去雷鸣开始..");
+//    	//打开背包，关闭背包
+//    	open_beibao();
+//    	robot.delay(1000);
+//    	close_beibao();
+//    	List<CoordBean> list = Base.findStrE("传送", "30eb37-311437", 0.8, 0,5000);
+//    	if(list.size() > 0){
+//    		Base.addLog("找到传送门...");
+//    		mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 50, true);
+//    	}else{
+//    		Base.addLog("直接点击坐标(180, 213)...");
+//    		mouse.mouseClick(180, 213, true);
+//    	}
+//    	robot.delay(1000);
+//    	boolean a = Base.go_to_lm();
+//		if(a){
+//			lcbt();
+//		}else{
+//			Base.addLog("没有找到传送到雷鸣的对话框");
+//		}
+//		Base.addLog("万圣节期间,去雷鸣结束..");
+//    }
 
     
 	private void wb_2(){

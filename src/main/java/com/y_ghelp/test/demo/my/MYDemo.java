@@ -2024,6 +2024,7 @@ public class MYDemo extends JFrame{
             	int ye = list.get(0).getY() + 180;
         		int[] result = color.findColor(xs, ys, xe, ye, "ff2c2d-002d2d", 0.9,0);
         		if(result.length > 0 && result[0] != -1){
+        			addLog("找到颜色,点击坐标("+(result[0] - 10)+","+(result[1] +20)+")..");
         			mouse.mouseClick((result[0] - 10), (result[1] +20), true);
         		}
             }
