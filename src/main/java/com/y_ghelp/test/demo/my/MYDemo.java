@@ -111,7 +111,7 @@ public class MYDemo extends JFrame{
     Thread login;//登录线程
     Thread sclTh;//刷幻界大陆材料线程
     Thread m3startTh;//挂机迷3线程
-    Thread markingTh;//自动做神仆材料线程
+    ThreadMaking markingTh;//自动做神仆材料线程
     Thread testTh;//挂机迷3线程(刷上面)
     private JTextField m3_textField_cd;
     private JTextField m3_textField_x;
@@ -276,31 +276,8 @@ public class MYDemo extends JFrame{
             }
         });
         
-        final MYDemo myDemo = this;
-        markingTh = new Thread(new Runnable() {
-            public void run() {
-                try {
-        	    	String user = (String)MYConfig.getInstance().getConfig("user_login_making");
-        	    	if(StringUtils.isNotBlank(user)) {
-        	    		String[] users = user.split(";");
-        	    		if(users.length <= 0) {
-        	    			return;
-        	    		}
-        	    		for(String itemUser : users) {
-        	    			Com com = new Com();
-                        	if(com.isCreateSuccess()) {
-                            	AutoMaking autoMaking = new AutoMaking(myDemo, robot, com);
-                            	autoMaking.setUser(itemUser);
-                            	autoMaking.main();
-                        	}
-        	    		}
-        	    	}
-                } catch (Exception e) {
-                    addLog(e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        });
+        markingTh = new ThreadMaking();
+        markingTh.setMyDemo(this);
         
         login = new Thread(new Runnable() {
             public void run() {
@@ -2111,7 +2088,7 @@ public class MYDemo extends JFrame{
     
     private void forceCloseChrome() throws Exception{
     	addLog("forceCloseChrome start...");
-    	Runtime.getRuntime().exec("TASKKILL /IM chrome.exe");
+    	Runtime.getRuntime().exec("TASKKILL /F /IM chrome.exe");
     	addLog("forceCloseChrome end...");
     }
     
@@ -2132,7 +2109,12 @@ public class MYDemo extends JFrame{
         	new Sleep().sleep(500);
         	if(findImg(Common.qdImg, 2000, list)){
         		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-        	}else{
+        	}else if(findImg(Common.jixuyouxiImg, 1000, list)){
+            	addLog("等待退出...");
+            	new Sleep().sleep(8000);
+            	forceCloseChrome();
+            	return;
+            } else{
         		exit();
         	}
         }
@@ -2248,9 +2230,11 @@ public class MYDemo extends JFrame{
      * @param str
      */
     public void addLog(Object str){
-    	log.info(str);
-        System.out.println(str);
-        this.textArea.setText(str.toString());    
+        try{
+        	log.info(str);
+            System.out.println(str);
+        	this.textArea.setText(str.toString());    
+        }catch(Exception e){}
     }
     
     /**

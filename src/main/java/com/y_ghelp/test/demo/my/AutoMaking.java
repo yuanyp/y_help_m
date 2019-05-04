@@ -129,17 +129,20 @@ public class AutoMaking {
 			window.setWindowActivate(hwnd);
 			sleep.sleep(200);
 			bindRet = com.bind(hwnd, "dx2", "windows3", "windows", 0);
-			sleep.sleep(200);
+			log.info("绑定结果.." + bindRet);
+			sleep.sleep(2000);
 			
 			//测试截图
 			util.screenImage("测试截图");
 			log.info("延迟5秒，测试被遮挡之后，鼠标和键盘是否有效..");
-			sleep.sleep(5000);
-			//测试鼠标
-			mouse.mouseClick(800, 600, true);
-			sleep.sleep(2000);
-			//测试键盘
-			press.keyPress(press.F3);
+			for(int i= 0;i<5;i++){
+				sleep.sleep(5000);
+				//测试鼠标
+				mouse.mouseClick(800, 600, true);
+				log.info("鼠标点击（800,600）");
+				sleep.sleep(2000);
+				//测试键盘
+			}
 		}
 		log.info("结束绑定.." + currentUser + "_绑定结果：" + bindRet);
 	}
