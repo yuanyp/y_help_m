@@ -393,41 +393,52 @@ public class Layout extends JFrame{
         		mouse.mouseClick(list.get(0).getX() - 210, list.get(0).getY() + 247,true);
         	}
         	robot.delay(5000);
-        	return true;
-    	}else{
-    		//无小号
-    		Base.addLog("无小号..");
-    		if(list.size() > 0){
-        		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(),true);
+        	//判断是否还停留在切换小号页面；
+        	list = Base.findPic(Constant.xiaohao_close,1500);
+        	if(list.size() > 0) {
+        		exit(list);
+        		return false;
+        	}else {
+        		return true;	
         	}
-        	list = Base.findPic(Constant.logout +"|" + Constant.logout_1  
-        			+"|" + Constant.logout_2  +"|" + Constant.logout_3,5000);
-    		if(list.size() > 0){
-    			Base.addLog("找到图片logout");
-    			mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 12, true);
-    		}else{
-    			list = Base.getWB_CLOSE(5000);
-    			//272 383//切换角色
-    			//126 383//退出游戏
-    			if(list.size() > 0){
-    				List<CoordBean> list1 = Base.findStrE("退出","84b2a2-47484a", 0.9, 0);
-    				if(list1.size() > 0){
-    					Base.addLog("找到文字退出");
-    					mouse.mouseClick(list1.get(0).getX() + 15, list1.get(0).getY() + 12, true);
-    				}else{
-    					mouse.mouseClick(list.get(0).getX() - 53, list.get(0).getY() + 347, true);
-    				}
-    			}
-    		}
-    		list = Base.findPic(Constant.logout_ok,5000);
-    		if(list.size() > 0){
-    			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);//回到登录页面
-    			robot.delay(2000);
-    			//标记该账号已经完成挖宝
-    			finshRole();
-    		}
+    	}else{
+    		exit(list);
     		return false;
     	}
+    }
+    
+    public void exit(List<CoordBean> list) {
+    	//无小号
+		Base.addLog("无小号..");
+		if(list.size() > 0){
+    		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(),true);
+    	}
+    	list = Base.findPic(Constant.logout +"|" + Constant.logout_1  
+    			+"|" + Constant.logout_2  +"|" + Constant.logout_3,5000);
+		if(list.size() > 0){
+			Base.addLog("找到图片logout");
+			mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 12, true);
+		}else{
+			list = Base.getWB_CLOSE(5000);
+			//272 383//切换角色
+			//126 383//退出游戏
+			if(list.size() > 0){
+				List<CoordBean> list1 = Base.findStrE("退出","84b2a2-47484a", 0.9, 0);
+				if(list1.size() > 0){
+					Base.addLog("找到文字退出");
+					mouse.mouseClick(list1.get(0).getX() + 15, list1.get(0).getY() + 12, true);
+				}else{
+					mouse.mouseClick(list.get(0).getX() - 53, list.get(0).getY() + 347, true);
+				}
+			}
+		}
+		list = Base.findPic(Constant.logout_ok,5000);
+		if(list.size() > 0){
+			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);//回到登录页面
+			robot.delay(2000);
+			//标记该账号已经完成挖宝
+			finshRole();
+		}
     }
     
     public void finshRole() {
@@ -1132,25 +1143,30 @@ public class Layout extends JFrame{
         		Base.addLog("没有找到login_success");
         		Base.screenImage("login_success");
         		list = Base.findStrE("确定","c7bd97-383e38", 1, 0,2000);
+        		boolean flag_qd = false;
         		if(list.size() > 0){
         			Base.addLog("找到确定按钮，点击确定，然后重新登录");
         			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
-        			return login();
-        		}else{
-        			list = Base.findPic(Constant.login_fanmang);
-        			if(list.size() > 0){
-        				Base.addLog("服务器繁忙,继续重试");
-        				mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
-        				robot.delay(200);
-        				return login();
-        			}
-        			list = Base.findPic(Constant.login_u+"|"+Constant.login_1,2000);
-        			if(list.size() > 0){
-        				Base.addLog("还停留在输入账号密码界面，重新登录");
-        				return login();
-        			}
-        			return false;
+        			flag_qd = true;
+        			robot.delay(200);
         		}
+        		list = Base.findPic(Constant.login_fanmang);
+        		boolean flag_qx = false;
+    			if(list.size() > 0){
+    				Base.addLog("服务器繁忙,继续重试");
+    				mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
+    				flag_qx = true;
+    				robot.delay(200);
+    			}
+    			if(flag_qd || flag_qx) {
+    				return login();
+    			}
+    			list = Base.findPic(Constant.login_u+"|"+Constant.login_1,2000);
+    			if(list.size() > 0){
+    				Base.addLog("还停留在输入账号密码界面，重新登录");
+    				return login();
+    			}
+    			return false;
         	}
     	}else{
     		//TODO 判断是否有验证码(有验证码换号登录)
