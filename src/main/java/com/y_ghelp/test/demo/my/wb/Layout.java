@@ -1437,4 +1437,48 @@ public class Layout extends JFrame{
             Base.addLog(e.getMessage());
         }
     }
+    
+    public void bind(int hwnd) {
+    	Sleep sleep = new Sleep();
+    	Base.addLog("绑定模拟器开始,顶级窗口 > " + hwnd);
+    	List<Integer> hwnds = window.EnumWindow(hwnd,"","TheRender",1 + 4 +8 + 16);
+    	if(null != hwnds && hwnds.size() > 0) {
+    		Base.addLog("绑定TheRender窗口 > " + hwnds.get(0));
+    		boolean result = com.bindEx(hwnds.get(0), com.GDI, com.WINDOWS, com.WINDOWS, "", 0);
+    		Base.addLog("绑定结果  > " + result);
+    	}
+    	Base.addLog("绑定模拟器结束 > " + hwnd);
+    	
+    	Base.addLog("测试绑定截图");
+    	Base.screenImage("测试绑定截图");
+    	
+    	Base.addLog("测试找图登录框..");
+    	List<CoordBean> list = Base.findPic(Constant.login_u+"|"+Constant.login_p,2000);//账号输入框
+    	Base.addLog("测试找图登录框.." + list.size());
+    	if(list.size() > 0) {
+    		mouse.mouseClick(list.get(0).getX() + 90, list.get(0).getY() + 13, true);
+    		Base.addLog("鼠标点击.." + list.get(0).getX() + 90 +"," + list.get(0).getY() + 13);
+    		sleep.sleep(500);
+    	}
+    	Base.addLog("测试找图副本中心..");
+       	List<CoordBean> list1 = Base.findPic(Constant.wb_0,20000);
+    	if(list1.size() > 0){
+    		mouse.mouseClick(list1.get(0).getX(), list1.get(0).getY(), true);
+    		sleep.sleep(2000);
+    	}
+    	Base.addLog("测试找图副本中心.." + list1.size());
+    	
+    	Base.addLog("测试按键ESC..");
+    	press.keyPress(press.ESC);
+    	sleep.sleep(1000);
+    	
+    	Base.addLog("延迟70秒..");
+    	sleep.sleep(70000);
+    	
+    	Base.addLog("释放10次技能..");
+    	for(int i=1,j=11;i<j;i++) {
+    		press.keyPress(press.F3);
+    		sleep.sleep(1000);
+    	}
+    }
 }
