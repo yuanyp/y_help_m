@@ -22,7 +22,7 @@ public class ThreadMaking implements Runnable {
 					return;
 				}
 				for (String itemUser : users) {
-					AutoMaking autoMaking = new AutoMaking(myDemo, myDemo.robot, myDemo.com);
+					AutoQiangTanWei autoMaking = new AutoQiangTanWei(myDemo, myDemo.robot, myDemo.com);
 					autoMaking.setUser(itemUser);
 					autoMaking.main();
 				}

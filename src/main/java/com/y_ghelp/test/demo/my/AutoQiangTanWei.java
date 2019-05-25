@@ -19,13 +19,16 @@ import com.xnx3.microsoft.Sleep;
 import com.xnx3.microsoft.Window;
 import com.xnx3.robot.Robot;
 import com.xnx3.robot.support.CoordBean;
+import com.y_ghelp.test.demo.config.MYConfig;
+
+import net.sf.json.JSONArray;
 
 /**
  * 自动制作材料
  * @author yuanyp
  *
  */
-public class AutoMaking {
+public class AutoQiangTanWei {
 
 	public MYDemo myDemo;
 	
@@ -42,7 +45,7 @@ public class AutoMaking {
     Sleep sleep = new Sleep();
     public String user;
     
-    static Logger log = Logger.getLogger(AutoMaking.class);
+    static Logger log = Logger.getLogger(AutoQiangTanWei.class);
 	
 	/**
 	 * 在线的用户
@@ -54,7 +57,7 @@ public class AutoMaking {
 	 */
 	public String currentUser;
 	
-	public AutoMaking(MYDemo myDemo,Robot robot,Com com) {
+	public AutoQiangTanWei(MYDemo myDemo,Robot robot,Com com) {
 		this.myDemo = myDemo;
 		this.robot = robot;
 		this.com = com;
@@ -116,10 +119,10 @@ public class AutoMaking {
 	/**
 	 * 绑定
 	 */
-	public void bind() {
+	public boolean bind() {
 		if(StringUtils.isBlank(currentUser)) {
 			log.info("没有设置活动的账号");
-			return;
+			return false;
 		}
 		log.info("开始绑定.." + currentUser);
 		int hwnd = onLineUser.get(currentUser);
@@ -130,21 +133,11 @@ public class AutoMaking {
 			sleep.sleep(200);
 			bindRet = com.bind(hwnd, "dx2", "windows3", "windows", 0);
 			log.info("绑定结果.." + bindRet);
-			sleep.sleep(2000);
-			
-			//测试截图
-			util.screenImage("测试截图");
-			log.info("延迟5秒，测试被遮挡之后，鼠标和键盘是否有效..");
-			for(int i= 0;i<5;i++){
-				sleep.sleep(5000);
-				//测试鼠标
-				mouse.mouseClick(800, 600, true);
-				log.info("鼠标点击（800,600）");
-				sleep.sleep(2000);
-				//测试键盘
-			}
+			sleep.sleep(200);
+			return bindRet;
 		}
 		log.info("结束绑定.." + currentUser + "_绑定结果：" + bindRet);
+		return false;
 	}
 	
 	/**
@@ -165,9 +158,68 @@ public class AutoMaking {
 		Set<String> users = onLineUser.keySet();
 		for(String user : users) {
 			setCurrentUser(user);
-			bind();
+			if(bind()){
+				if(goToLeiMing()){
+					
+				}
+			}
 			sleep.sleep(2000);
 		}
+	}
+	
+	/**
+	 * 发送邮件提醒
+	 */
+	public void sendEmail(){
+		
+	}
+	
+	/**
+	 * 抢摊位
+	 * 422800-000000 当前地图, 00ff00-000000 摊位旗, ffff00-000000 结束
+	 */
+	public void qiangTanWei(){
+		JSONArray jsonArray = (JSONArray)MYConfig.getInstance().getConfig("tanwei_xy");
+		if(null != jsonArray && jsonArray.size() > 0){
+			for(int i=0,j=jsonArray.size();i<j;i++){
+				String xy = jsonArray.get(i).toString();
+				if(StringUtils.isNotBlank(xy)){
+					String[] xys = xy.split(",");
+					List<CoordBean> emailImg = util.findPic(Common.emailImg, 1000);
+					if(emailImg.size() > 0){
+						int x = emailImg.get(0).getX();
+						int y = emailImg.get(0).getY();
+						mouse.mouseClick(x+2, y+52, true);
+						sleep.sleep(500);
+						List<CoordBean> dqdt = util.findStrE("当前地图", "422800-000000", 0.9, 0);//当前地图
+						if(dqdt.size() > 0){
+							int goX = Integer.parseInt(xys[0]);
+							int goY = Integer.parseInt(xys[1]);
+							mouse.mouseClick(goX,goY,true);
+							sleep.sleep(200);
+							xunlu();
+							findTanWei();
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	private void findTanWei(){
+		//closeXiaoDiTu();
+		List<CoordBean> tanwei = util.findStrE("摊位旗", "00ff00-000000", 0.9, 0);//摊位旗
+		
+	}
+	private void xunlu(){
+		
+	}
+	
+	/**
+	 * 去雷鸣
+	 */
+	public boolean goToLeiMing() {
+		return true;
 	}
 	
 	/**

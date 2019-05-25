@@ -586,6 +586,7 @@ public class Layout extends JFrame{
     			+ "|" + Constant.cangbaotu_8;
     	list = Base.findPic(cangbaotu,412,144,756,551,0.8);
     	boolean flag = true;
+    	int i=0;
     	do{
     		Base.addLog("关闭背包...");
     		mouse.mouseClick(b_x + 8, b_y + 8, true);
@@ -596,6 +597,11 @@ public class Layout extends JFrame{
     		}else{
     			b_x = list1.get(0).getX();
     			b_y = list1.get(0).getY();
+    		}
+    		i++;
+    		if(i>5){
+    			Base.addLog("未能关闭背包...");
+    			flag = false;
     		}
     	}while(flag);//防止背包关不掉
     	return list;
@@ -931,9 +937,9 @@ public class Layout extends JFrame{
     private void sj_to_lm() {
     	Base.addLog("神界去雷鸣开始..");
     	//检查是否已经到了神界
-    	List<CoordBean> list = Base.findStrE("神界", 
-				"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013", 0.8, 0,10000);
-		if(list.size() > 0){
+//    	List<CoordBean> list = Base.findStrE("神界", 
+//				"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013", 0.8, 0,10000);
+//		if(list.size() > 0){
 			Base.addLog("当前人物在神界");
 			robot.delay(2000);
 			press.keyPressTime(press.W, 380);
@@ -955,10 +961,10 @@ public class Layout extends JFrame{
 					Base.addLog("未能到达雷鸣");
 				}
 			}
-		}else{
-			Base.addLog("没有找到神界的传送师");
-//			hallowmas_to_lm();
-		}
+//		}else{
+//			Base.addLog("没有找到神界的传送师");
+////			hallowmas_to_lm();
+//		}
 		Base.addLog("神界去雷鸣结束..");
     }
     
