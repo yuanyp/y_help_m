@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.y_ghelp.test.demo.config.MYConfig;
 
-public class ThreadMaking implements Runnable {
+public class ThreadQiangTanWei implements Runnable {
 
 	private MYDemo myDemo;
 

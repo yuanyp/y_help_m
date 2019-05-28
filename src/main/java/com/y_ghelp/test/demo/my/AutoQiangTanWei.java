@@ -24,7 +24,7 @@ import com.y_ghelp.test.demo.config.MYConfig;
 import net.sf.json.JSONArray;
 
 /**
- * 自动制作材料
+ * 抢摊位
  * @author yuanyp
  *
  */

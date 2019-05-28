@@ -71,25 +71,6 @@ public class Layout extends JFrame{
         Base.addLog("结束..");
     }
     
-    public void execute_huangjia(){
-    	//打开模拟器
-    	openApp();
-    	robot.delay(5000);
-    	active();
-        //进入游戏
-        openGameApp();
-        boolean flag = true;
-        do{
-        	//登录
-        	flag = login();
-        	if(flag){
-        		//开始皇家
-        		huangjia();
-        	}
-        }while(flag);
-        Base.addLog("结束皇家..");
-    }
-    
     /**
      * 出征宝宝
      */
@@ -131,22 +112,14 @@ public class Layout extends JFrame{
     	}
     }
     
-    private void active(){
+    private int active(){
     	int hwnd = window.findWindow(0, null, Base.getAppName());
         if(hwnd > 0){
         	Base.addLog("模拟器句柄：" + hwnd);
             window.moveWindow(hwnd, 0, 0);
             window.setWindowActivate(hwnd); //激活窗口
         }
-    }
-    
-    public void huangjia(){
-    	login_after();
-		new AutoHuangJia().execute();
-		boolean a = new Layout().switchUser();
-    	if(a){
-    		huangjia();
-    	}
+        return hwnd;
     }
     
     /**
@@ -1331,21 +1304,11 @@ public class Layout extends JFrame{
             }
         });
     	
-    	JButton button = new JButton("开始皇家");
+    	JButton button = new JButton("测试");
     	button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	active();
-            	Base.resetUsers();
-                boolean flag = true;
-                do{
-                	//登录
-                	flag = login();
-                	if(flag){
-                		//开始皇家
-                		huangjia();
-                	}
-                }while(flag);
-                Base.addLog("结束..");
+            	int hwnd = active();
+            	bind(hwnd);
             }
         });
     	
@@ -1446,6 +1409,7 @@ public class Layout extends JFrame{
     
     public void bind(int hwnd) {
     	Sleep sleep = new Sleep();
+    	sleep.sleep(200);
     	Base.addLog("绑定模拟器开始,顶级窗口 > " + hwnd);
     	List<Integer> hwnds = window.EnumWindow(hwnd,"","TheRender",1 + 4 +8 + 16);
     	if(null != hwnds && hwnds.size() > 0) {
@@ -1483,6 +1447,7 @@ public class Layout extends JFrame{
     	
     	Base.addLog("释放10次技能..");
     	for(int i=1,j=11;i<j;i++) {
+    		Base.addLog("释放技能F3..");
     		press.keyPress(press.F3);
     		sleep.sleep(1000);
     	}

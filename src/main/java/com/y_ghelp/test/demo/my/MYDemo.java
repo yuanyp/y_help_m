@@ -85,7 +85,7 @@ public class MYDemo extends JFrame{
     
     private Util util;
     
-
+    boolean workingMonitor = false;
     boolean m3startInitThFlag = false;
     boolean testThInitFlag = false;
     boolean checkDieInitFlag = false;
@@ -111,7 +111,7 @@ public class MYDemo extends JFrame{
     Thread login;//登录线程
     Thread sclTh;//刷幻界大陆材料线程
     Thread m3startTh;//挂机迷3线程
-    ThreadMaking markingTh;//自动做神仆材料线程
+    ThreadQiangTanWei markingTh;//自动做神仆材料线程
     Thread testTh;//挂机迷3线程(刷上面)
     private JTextField m3_textField_cd;
     private JTextField m3_textField_x;
@@ -276,7 +276,7 @@ public class MYDemo extends JFrame{
             }
         });
         
-        markingTh = new ThreadMaking();
+        markingTh = new ThreadQiangTanWei();
         markingTh.setMyDemo(this);
         
         login = new Thread(new Runnable() {
