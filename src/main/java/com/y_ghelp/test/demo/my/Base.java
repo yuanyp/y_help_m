@@ -61,7 +61,6 @@ public class Base{
             new ThreadPoolExecutor.DiscardOldestPolicy());
 	
 	public static Thread start;
-	public static Thread start_huangjia;
 	public static boolean execute = false;
 	public static LinkedList<String[]> listUsers = new LinkedList<String[]>();//判断账号是否已经处理过
 	public static LinkedList<String> listUserXiaoHao = new LinkedList<String>();//判断大号的小号是否已经处理过
@@ -82,16 +81,6 @@ public class Base{
                 try {
                    robot.delay(100);
                    frame.execute();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        start_huangjia = new Thread(new Runnable() {
-            public void run() {
-                try {
-                   robot.delay(100);
-                   frame.execute_huangjia();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

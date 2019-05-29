@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.ComThread;
+import com.jacob.com.Dispatch;
 import com.jacob.com.Variant;
 import com.xnx3.Lang;
 import com.xnx3.Log;
@@ -550,6 +551,12 @@ public class Com {
 		
 		return xnx3_result;
 	}
+	
+	public String getDMVersion() {
+		String ver = Dispatch.call(this.activeBean.getDm(), "Ver").getString();
+		return ver;
+	}
+	
 	
 	/**
 	 * 销毁，释放内存

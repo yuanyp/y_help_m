@@ -1,6 +1,7 @@
 package com.y_ghelp.test.demo;
 
 import com.xnx3.microsoft.Com;
+import com.xnx3.microsoft.DmSoft;
 import com.xnx3.microsoft.SystemUtil;
 /**
  * 简单使用DEMO
@@ -13,7 +14,10 @@ public class SimpleTest {
 
 		//所有辅助的，模拟进行某种操作(键盘、鼠标、..)要先创建此类,在new Com()时，会自动检测运行环境是否符合、部署、注册Dll
 		Com com=new Com();
-		
+		DmSoft dmSoft = new DmSoft();
+		System.out.println(dmSoft.GetBasePath());
+		System.out.println(dmSoft.Ver());
+		System.out.println("大漠版本为：" + com.getDMVersion());
 		//返回创建Com()的结果，如果自检过程中发现异常，创建Com失败，则调用此会返回false
 		if(com.isCreateSuccess()){
 			
