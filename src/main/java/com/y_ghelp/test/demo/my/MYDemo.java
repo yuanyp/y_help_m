@@ -212,8 +212,8 @@ public class MYDemo extends JFrame{
             addLog("创建Com对象失败");
             return;
         }
-        util = new Util(com);
-        window = util.window;    //窗口操作类
+        util = new Util(com.getActiveXComponent());
+        window = new Window(com.getActiveXComponent());    //窗口操作类
         mouse = util.mouse;   //鼠标模拟操作类
         press = util.press;   //键盘模拟操作类
         color = util.color;   //颜色相关的取色、判断类

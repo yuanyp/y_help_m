@@ -14,6 +14,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +51,10 @@ public class Layout extends JFrame{
     Robot robot = Base.robot;
     FindPic findPic = Base.findPic;
     com.xnx3.microsoft.File file = Base.file;
+    
+    JButton btnHangUp;
+    JButton btnHangUp_2;
+    AutoHangUp autoHangUp;
     
     public void execute(){
     	Base.resetUsers();
@@ -1330,7 +1335,47 @@ public class Layout extends JFrame{
     	JButton btn_exit = new JButton("\u9000\u51FA");
     	btn_exit.addActionListener(new ActionListener() {
     		public void actionPerformed(ActionEvent e) {
+    			if(null != autoHangUp) {
+    				autoHangUp.destroy();	
+    			}
     			SysHotKey.destroy();
+    		}
+    	});
+    	
+    	btnHangUp = new JButton("挂材料");
+    	btnHangUp.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent arg0) {
+    			int handFlag = 1;
+    			if(btnHangUp.getText().equals("挂材料")){
+    				if(autoHangUp == null) {
+    					autoHangUp = new AutoHangUp();
+    					autoHangUp.m3_start = true;
+    					WB.threadPool.execute(autoHangUp.getAutoHangUpThread(handFlag));
+    				}
+            		btnHangUp.setText("暂停");
+                }else if(btnHangUp.getText().equals("暂停")){
+                	autoHangUp.m3_start = false;
+                	btnHangUp.setText("挂材料");
+                }
+    		}
+    	});
+    	
+    	btnHangUp_2= new JButton("挂材料（上）");
+    	btnHangUp_2.addActionListener(new ActionListener() {
+    		public void actionPerformed(ActionEvent e) {
+    			int handFlag = 2;
+    			if(btnHangUp_2.getText().equals("挂材料（上）")){
+    				if(autoHangUp == null) {
+    					autoHangUp = new AutoHangUp();
+    					autoHangUp.m3_start = true;
+    					WB.threadPool.execute(autoHangUp.getAutoHangUpThread(handFlag));
+    				}
+    				autoHangUp.m3_start = true;
+            		btnHangUp.setText("暂停");
+                }else if(btnHangUp_2.getText().equals("暂停")){
+                	autoHangUp.m3_start = false;
+                	btnHangUp.setText("挂材料（上）");
+                }
     		}
     	});
     	GroupLayout groupLayout = new GroupLayout(getContentPane());
@@ -1339,16 +1384,17 @@ public class Layout extends JFrame{
     			.addGroup(groupLayout.createSequentialGroup()
     				.addGap(123)
     				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-    					.addComponent(button_1, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
-    					.addGroup(groupLayout.createSequentialGroup()
-    						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-    							.addComponent(btnNewButton)
-    							.addComponent(button))
-    						.addGap(18)
-    						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-    							.addComponent(btn_exit, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
-    							.addComponent(btn_reset, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE))))
-    				.addContainerGap(107, Short.MAX_VALUE))
+    					.addComponent(btnNewButton)
+    					.addComponent(button)
+    					.addComponent(button_1, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE))
+    				.addGap(18)
+    				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+    					.addComponent(btnHangUp_2)
+    					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+    						.addComponent(btn_exit, GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
+    						.addComponent(btn_reset, GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
+    						.addComponent(btnHangUp, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+    				.addContainerGap(95, Short.MAX_VALUE))
     	);
     	groupLayout.setVerticalGroup(
     		groupLayout.createParallelGroup(Alignment.LEADING)
@@ -1362,8 +1408,12 @@ public class Layout extends JFrame{
     					.addComponent(button)
     					.addComponent(btn_exit))
     				.addGap(18)
-    				.addComponent(button_1)
-    				.addContainerGap(101, Short.MAX_VALUE))
+    				.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+    					.addComponent(button_1)
+    					.addComponent(btnHangUp))
+    				.addPreferredGap(ComponentPlacement.RELATED)
+    				.addComponent(btnHangUp_2)
+    				.addContainerGap(71, Short.MAX_VALUE))
     	);
     	getContentPane().setLayout(groupLayout);
     }

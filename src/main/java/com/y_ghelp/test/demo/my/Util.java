@@ -7,14 +7,13 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.xnx3.bean.ActiveBean;
 import com.xnx3.microsoft.Color;
-import com.xnx3.microsoft.Com;
 import com.xnx3.microsoft.File;
 import com.xnx3.microsoft.FindPic;
 import com.xnx3.microsoft.FindStr;
 import com.xnx3.microsoft.Mouse;
 import com.xnx3.microsoft.Press;
-import com.xnx3.microsoft.Window;
 import com.xnx3.robot.Robot;
 import com.xnx3.robot.support.CoordBean;
 
@@ -22,8 +21,6 @@ public class Util {
 	
 	Logger logger = Logger.getLogger(Util.class);
 	
-	public Com com;
-	public Window window;
 	public Mouse mouse;
 	public Press press;
 	public Color color;
@@ -33,15 +30,13 @@ public class Util {
 	public File file;
 	
 	
-	public Util(Com com) {
-		this.com = com;
-		this.window = new Window(com.getActiveXComponent());    //窗口操作类
-		this.mouse = new Mouse(com.getActiveXComponent());   //鼠标模拟操作类
-		this.press = new Press(com.getActiveXComponent());   //键盘模拟操作类
-		this.color = new Color(com.getActiveXComponent());   //颜色相关的取色、判断类
-		this.findPic = new FindPic(com.getActiveXComponent());
-		this.findStr = new FindStr(com.getActiveXComponent());
-		this.file = new com.xnx3.microsoft.File(com.getActiveXComponent());
+	public Util(ActiveBean activeBean) {
+		this.mouse = new Mouse(activeBean);   //鼠标模拟操作类
+		this.press = new Press(activeBean);   //键盘模拟操作类
+		this.color = new Color(activeBean);   //颜色相关的取色、判断类
+		this.findPic = new FindPic(activeBean);
+		this.findStr = new FindStr(activeBean);
+		this.file = new com.xnx3.microsoft.File(activeBean);
 	}
 	
 	

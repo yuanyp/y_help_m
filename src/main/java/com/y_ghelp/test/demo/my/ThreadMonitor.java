@@ -21,7 +21,7 @@ public class ThreadMonitor implements Runnable {
 	}
 	
 	public void monitor() {
-		Util util = new Util(myDemo.com);
+		Util util = new Util(myDemo.com.getActiveXComponent());
 		Sleep sleep = new Sleep();
 		int millis = Integer.parseInt(MYConfig.getInstance().getConfig("monitor_millis") + "");
 		while(true) {

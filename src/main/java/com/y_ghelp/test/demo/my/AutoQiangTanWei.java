@@ -61,8 +61,8 @@ public class AutoQiangTanWei {
 		this.myDemo = myDemo;
 		this.robot = robot;
 		this.com = com;
-		this.util = new Util(com);
-		this.window = util.window;    //窗口操作类
+		this.util = new Util(com.getActiveXComponent());
+		this.window = new Window(com.getActiveXComponent());    //窗口操作类
 		this.mouse = util.mouse;   //鼠标模拟操作类
 		this.press = util.press;   //键盘模拟操作类
 		this.color = util.color;   //颜色相关的取色、判断类

@@ -1,7 +1,5 @@
 package com.xnx3.microsoft;
 
-import java.io.File;
-
 import com.jacob.activeX.ActiveXComponent;
 import com.jacob.com.ComThread;
 import com.jacob.com.Dispatch;
@@ -112,6 +110,10 @@ public class Com {
 	 * @see Com
 	 */
 	public Com() {
+		this(null);
+	}
+	
+	public Com(ActiveXComponent activeDm) {
 		versionCheck();
 		initCheckJreVersion();
 		initCopyDll();
@@ -126,7 +128,7 @@ public class Com {
 		log=new Log();
 		
 		//注册，创建dm.dmsoft对象
-		initRegisterDll();
+		initRegisterDll(activeDm);
 	}
 	
 	/**
@@ -252,7 +254,7 @@ public class Com {
 	 * <li>检测dm.dll是否已注册,若是没有注册，则自动注册
 	 * <li>若是已注册，则创建dm.dmsoft对象
 	 */
-	private void initRegisterDll(){
+	private void initRegisterDll(ActiveXComponent activeDm){
 		if(Com.initDll){
 			return;
 		}
@@ -262,7 +264,9 @@ public class Com {
 		String currentDir=Lang.getCurrentJrePath();	//当前项目Jre路径
 		
 		try {
-			ActiveXComponent activeDm=new ActiveXComponent("dm.dmsoft");
+			if(activeDm == null) {
+				activeDm = new ActiveXComponent("dm.dmsoft");	
+			}
 			activeBean.setDm(activeDm);		//创建大漠对象
 			activeBean.setPlugin365(new ActiveXComponent("Plugin365ID"));	//创建365对象
 			this.createSuccess=true;
