@@ -142,6 +142,7 @@ public class Util {
     	}else{
     		imgs = getRealPath(img);
     	}
+    	logger.info("sx:"+sx+",sy:"+sy+",ex:"+ex+",ey:"+ey+",imgs:"+imgs);
     	int[] a = findPic.findPic(sx,sy,ex,ey, imgs, "",sim, 0);
     	if(a[0] == -1){
     		if(log){

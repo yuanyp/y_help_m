@@ -53,6 +53,7 @@ public class Dnplayer2Util {
 	 */
 	public static List<String> list2() {
 		String console = exeCmd("dnconsole.exe list2");
+		System.out.println("dnconsole.exe list2" + console);
 		if (StringUtils.isNotBlank(console)) {
 			return Arrays.asList(console.split(","));
 		} else {

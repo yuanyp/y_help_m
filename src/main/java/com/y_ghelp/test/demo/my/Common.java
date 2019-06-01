@@ -77,6 +77,7 @@ public class Common {
     public static String no_guaiwu = "no_guaiwu.bmp";
     
     public static String m3_jingying = "m3_jingying.bmp";
+    public static String m3_jingying1 = "m3_jingying1.bmp";
     public static String m3_ret = "m3_ret.bmp";
     public static String m3_yongsheng = "m3_yongsheng.bmp";
     public static String m3_yuangushouling = "m3_yuangushouling.bmp";

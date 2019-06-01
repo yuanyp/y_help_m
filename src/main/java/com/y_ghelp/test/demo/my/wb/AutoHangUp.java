@@ -2,6 +2,8 @@ package com.y_ghelp.test.demo.my.wb;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.xnx3.bean.ActiveBean;
 import com.xnx3.microsoft.Com;
 import com.xnx3.microsoft.DmSoft;
@@ -19,12 +21,13 @@ import com.y_ghelp.test.demo.my.Util;
  *
  */
 public class AutoHangUp {
+	
+	Logger log = Logger.getLogger(getClass());
 
 	public boolean die = false;
 	public boolean m3_start = false;
 
 	private ActiveBean activeBean;
-	private Com com;
 	private Sleep sleep;
 	private Press press;
 	private Mouse mouse;
@@ -34,7 +37,6 @@ public class AutoHangUp {
 
 	public AutoHangUp() {
 		dm = new DmSoft();
-		com = new Com(dm.getDM());
 		activeBean = new ActiveBean();
 		activeBean.setDm(dm.getDM());
 		press = new Press(activeBean);
@@ -43,8 +45,8 @@ public class AutoHangUp {
 		sleep = new Sleep();
 		List<String> list = Dnplayer2Util.list2();
 		hwnd = Integer.parseInt(list.get(3));
-		boolean result = com.bindEx(hwnd, Com.GDI, Com.WINDOWS, Com.WINDOWS, "", 0);
-		System.out.println("bind  > " + result);
+		int result = dm.BindWindowEx(hwnd, Com.GDI, Com.WINDOWS, Com.WINDOWS, "", 0);
+		log.info("bind  > " + result);
 	}
 
 	/**
@@ -52,18 +54,18 @@ public class AutoHangUp {
 	 * @param flag
 	 */
 	private void m3_start(int flag) {
-		System.out.println("start..");
+		log.info("start..");
 		do {
 			if (die) {
-				System.out.println("die.. wait 5 seconds..");
+				log.info("die.. wait 5 seconds..");
 				new Sleep().sleep(5000);
 				m3_start(flag);
 			}
 			sleep.sleep(500);
-			System.out.println("F2..");
+			log.info("F2..");
 			press.keyPress(press.F2);
-			new Sleep().sleep(800);
-			System.out.println("F3..,wait 6 seconds..");
+			new Sleep().sleep(1500);
+			log.info("F3..,wait 6 seconds..");
 			press.keyPress(press.F3);
 			new Sleep().sleep(6000);
 			if (flag == 1) {
@@ -88,7 +90,7 @@ public class AutoHangUp {
 			int cd = getCD();
 			new Sleep().sleep(cd);// 等CD
 		}while(m3_start);
-		System.out.println("stop..");
+		log.info("stop..");
 	}
 
 	private int getCD() {
@@ -96,18 +98,15 @@ public class AutoHangUp {
 		return 0;
 	}
 
-	private List<Integer> getOffsetXY() {
-		return null;
-	}
 
 	private void shua_m3jy() {
-		List<CoordBean> guaiwu = util.findPic(Common.m3_jingying);
+		List<CoordBean> guaiwu = util.findPic(Common.m3_jingying+"|"+Common.m3_jingying1);
 		new Sleep().sleep(200);
 		if (null != guaiwu && guaiwu.size() > 0) {
-			System.out.println("找到怪物坐标为：" + guaiwu.get(0).getX() + "," + guaiwu.get(0).getY());
+			log.info("找到怪物坐标为：" + guaiwu.get(0).getX() + "," + guaiwu.get(0).getY());
 			mouse.mouseMoveTo(guaiwu.get(0).getX(), guaiwu.get(0).getY() + 50);
 			new Sleep().sleep(200);
-			System.out.println("按下F1");
+			log.info("按下F1");
 			press.keyPress(press.F1);
 			new Sleep().sleep(2500);
 		}
@@ -120,23 +119,22 @@ public class AutoHangUp {
 		if (die) {
 			return;
 		}
-		System.out.println("goto_xy start ..");
+		log.info("goto_xy start ..");
 		List<CoordBean> list1 = util.findPic(Common.m3_jiao1_1);
 		int x = 0;
 		int y = 0;
 		if (list1.size() > 0) {
-			x = getOffsetXY().get(0);
-			y = getOffsetXY().get(1);
 			x = list1.get(0).getX() + x;
-			y = list1.get(0).getY() + y;
+			y = list1.get(0).getY() + 140;
 		} else {
 			List<CoordBean> list2 = util.findPic(Common.m3_jiao1_2);
 			if (list2.size() > 0) {
-				x = list2.get(0).getX() + 450;
+				x = list2.get(0).getX() + 232;
 				y = list2.get(0).getY();
 			}
 		}
 		if (x > 0 && y > 0) {
+			log.info("x,y("+x+","+y+")");
 			f1(x, y);
 			mouse.mouseClick(x, y, true);
 		}
@@ -147,7 +145,7 @@ public class AutoHangUp {
 		mouse.mouseMoveTo(x, y);
 		new Sleep().sleep(200);
 		press.keyPress(press.F1);
-		System.out.println("按下F1");
+		log.info("按下F1");
 		new Sleep().sleep(200);
 	}
 
@@ -158,19 +156,19 @@ public class AutoHangUp {
 		if (die) {
 			return;
 		}
-		System.out.println("goto_xy_top start ..");
+		log.info("goto_xy_top start ..");
 
 		List<CoordBean> list1 = util.findPic(Common.m3_jiao1_2);
 		int x = 0;
 		int y = 0;
 		if (list1.size() > 0) {
-			x = getOffsetXY().get(0) + 360;
-			y = getOffsetXY().get(1) - 55;
+			x = list1.get(0).getX() + 205;
+			y = list1.get(0).getY() - 10;
 		} else {
 			List<CoordBean> list2 = util.findPic(Common.m3_jiao1_2_top);
 			if (list2.size() > 0) {
-				x = list2.get(0).getX() - 144;
-				y = list2.get(0).getY() - 203;
+				x = list2.get(0).getX() - 69;
+				y = list2.get(0).getY() - 166;
 			}
 		}
 		if (x > 0 && y > 0) {
@@ -181,7 +179,9 @@ public class AutoHangUp {
 	}
 	
 	public void destroy() {
-		com.unbind();
+		dm.SetWindowState(hwnd, 1);
+		int r = dm.UnBindWindow();
+		log.info("解绑结果>" + r);
 	}
 	
 	public AutoHangUpThread getAutoHangUpThread(int flag) {

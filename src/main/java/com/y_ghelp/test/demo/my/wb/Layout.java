@@ -1349,10 +1349,10 @@ public class Layout extends JFrame{
     			if(btnHangUp.getText().equals("挂材料")){
     				if(autoHangUp == null) {
     					autoHangUp = new AutoHangUp();
-    					autoHangUp.m3_start = true;
-    					WB.threadPool.execute(autoHangUp.getAutoHangUpThread(handFlag));
     				}
-            		btnHangUp.setText("暂停");
+    				autoHangUp.m3_start = true;
+    				btnHangUp.setText("暂停");
+    				WB.threadPool.execute(autoHangUp.getAutoHangUpThread(handFlag));
                 }else if(btnHangUp.getText().equals("暂停")){
                 	autoHangUp.m3_start = false;
                 	btnHangUp.setText("挂材料");

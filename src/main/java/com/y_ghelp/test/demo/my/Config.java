@@ -10,6 +10,14 @@ public class Config {
 	
 	private static String path;
 	
+	public static void setScreenWidth(int screenWidth) {
+		Config.screenWidth = screenWidth;
+	}
+
+	public static void setScreenHeight(int screenHeight) {
+		Config.screenHeight = screenHeight;
+	}
+
 	private static int screenWidth;
 	private static int screenHeight;
 	
@@ -55,4 +63,5 @@ public class Config {
 	public static int getScreenHeight() {
 		return screenHeight;
 	}
+	
 }

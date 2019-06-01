@@ -12,6 +12,7 @@ import com.xnx3.microsoft.SystemUtil;
 import com.xnx3.robot.support.CoordBean;
 import com.y_ghelp.test.demo.config.MYConfig;
 import com.y_ghelp.test.demo.my.Base;
+import com.y_ghelp.test.demo.my.Config;
 
 /**
  * 夜神模拟器挖宝
@@ -96,9 +97,11 @@ public class WB extends Base{
 	
 	
 	public static void main(String[] args) {
-		setImgHomeFolder(Constant.img_home);
 		setDic(0, Constant.dm_dic);
+		setImgHomeFolder(Constant.img_home);
 		setScreenWidthAndHeight(800, 600);
+		Config.initConfig(800, 600);
+		Config.setImg_folder_name(Constant.img_home);
 		frame = new Layout();
 		frame.setBounds(100, 100, 700, 250);
 		frame.setVisible(true);
