@@ -331,6 +331,8 @@ public class Base{
 		robot.delay(2000);
     }
     
+    public static Sleep sleep = new Sleep();
+    
     public static void resetUsers(){
     	Base.listUsers.clear();
 		Base.xiaohao.clear();

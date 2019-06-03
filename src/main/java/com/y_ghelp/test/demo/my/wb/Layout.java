@@ -51,16 +51,18 @@ public class Layout extends JFrame{
     Robot robot = Base.robot;
     FindPic findPic = Base.findPic;
     com.xnx3.microsoft.File file = Base.file;
+    Sleep sleep = Base.sleep;
     
     JButton btnHangUp;
     JButton btnHangUp_2;
     AutoHangUp autoHangUp;
+    AutoResurgenceThread autoResurgenceThread;
     
     public void execute(){
     	Base.resetUsers();
     	//打开模拟器
     	openApp();
-    	robot.delay(5000);
+    	sleep.sleep(5000);
     	active();
         //进入游戏
         openGameApp();
@@ -81,39 +83,45 @@ public class Layout extends JFrame{
      */
     private void chuzhengbaobao(int x,int y){
     	//66 * 58
-    	robot.delay(200);
+    	sleep.sleep(200);
     	mouse.mouseClick(x + 66, y - 58, true);
-    	robot.delay(200);
+    	sleep.sleep(200);
     	chuzhen_1();
-    	robot.delay(200);
+    	sleep.sleep(200);
     	mouse.mouseClick(x + 66, y - 58, true);
     	//134 * 58
-//    	robot.delay(200);
+//    	sleep.sleep(200);
 //    	mouse.mouseClick(x + 134, y - 58, true);
-//    	robot.delay(200);
+//    	sleep.sleep(200);
 //    	chuzhen_1();
     }
     
+	public AutoResurgenceThread setAutoResurgenceThread(int zIndex2) {
+		this.autoResurgenceThread = new AutoResurgenceThread();
+		this.autoResurgenceThread.zIndex2 = zIndex2;
+		return this.autoResurgenceThread;
+	}
+    
     private void chuzhen_1(){
-    	robot.delay(200);
+    	sleep.sleep(200);
     	List<CoordBean> list = Base.findStrE("解体",  "d9d8d7-262728", 1, 0);//解体
     	if(list.size() > 0){
     		Base.addLog("解体..");
     		return;
     	}
-    	robot.delay(200);
+    	sleep.sleep(200);
     	list = Base.findStrE("合体",  "d9d8d7-262728", 1, 0);//合体
     	if(list.size() > 0){
     		Base.addLog("合体..");
     		mouse.mouseClick(list.get(0).getX() + 8, list.get(0).getY() + 8, true);
-    		robot.delay(200);
+    		sleep.sleep(200);
     		return;
     	}
     	list = Base.findStrE("出征",  "d9d8d7-262728", 1, 0);//出征
     	if(list.size() > 0){
     		Base.addLog("出征..");
     		mouse.mouseClick(list.get(0).getX() + 8, list.get(0).getY() + 8, true);
-    		robot.delay(200);
+    		sleep.sleep(200);
     	}
     }
     
@@ -158,7 +166,7 @@ public class Layout extends JFrame{
     	List<CoordBean> list = Base.findPic(getHDClose(),getHDCloseTime());
         if(list.size() > 0){
 			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
-			robot.delay(500);
+			sleep.sleep(500);
 		}
     	
     	//465 233
@@ -170,7 +178,7 @@ public class Layout extends JFrame{
         list = Base.findPic(Constant.do_ok,3000);
 		if(list.size() > 0){
 			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
-			robot.delay(500);
+			sleep.sleep(500);
 		}
     	//收起任务栏
     	list = Base.findPic(Constant.go_index_1 + "|" + Constant.go_index_1_1,10000);
@@ -180,7 +188,7 @@ public class Layout extends JFrame{
     		x = list.get(0).getX();
     		y = list.get(0).getY();
     		mouse.mouseClick(x, y, true);
-    		robot.delay(1000);
+    		sleep.sleep(1000);
     	}else{
     		Base.addLog("没有找到收起人物栏的图标");
     		return;
@@ -196,14 +204,14 @@ public class Layout extends JFrame{
     		list = Base.findStrE("德兰", "0bb10b-0b4e0c", 0.9, 0,1000);
     		if(list.size() > 0){//13 51
     			mouse.mouseClick(list.get(0).getX() + 13, list.get(0).getY() + 51, true);
-    			robot.delay(1500);
+    			sleep.sleep(1500);
     		}else{
     			list = Base.findPic(Constant.huanbaoliangongshagn01,1000);
     			if(list.size() > 0){
     				int sx = 322;
     	    		int sy = 165;
     				mouse.mouseClick(sx, sy, true);
-        			robot.delay(1500);
+        			sleep.sleep(1500);
     			}
     		}
     		//判断是否在环保练功场（未成神）
@@ -213,7 +221,7 @@ public class Layout extends JFrame{
     		}
     	}
     	handhuodong();
-		robot.delay(500);
+		sleep.sleep(500);
     }
     
     private void handhuodong(){
@@ -263,7 +271,7 @@ public class Layout extends JFrame{
     private List<CoordBean> has_xiaohao(){
     	List<CoordBean> list = Base.getWB_CLOSE(5000);//272 383
     	if(list.size() > 0){
-    		robot.delay(500);
+    		sleep.sleep(500);
     		//点击切换小号
     		List<CoordBean> list1 = Base.findPic(Constant.xiaohao_qiehuan_1 + "|" + Constant.xiaohao_qiehuan_2,3000);
     		if(list1.size() > 0){
@@ -280,7 +288,7 @@ public class Layout extends JFrame{
     		Base.addLog("小号还未处理完.." + Base.xiaohao);
     		return Base.xiaohao;
     	}
-    	robot.delay(3000);
+    	sleep.sleep(3000);
     	list = Base.findPic(Constant.xiaohao_close,2000);
     	if(list.size() > 0){
     		String[] user = null;
@@ -297,65 +305,58 @@ public class Layout extends JFrame{
     		if(null == user){
     			return new ArrayList<CoordBean>();
     		}
-    		if(user[2].equals("1") && !Base.listUserXiaoHao.contains(user[0])){//有小号，并且小号没有处理过
+    		int xiaohaoNum = Integer.parseInt(user[2]);
+    		if(xiaohaoNum > 0 && !Base.listUserXiaoHao.contains(user[0])){//有小号，并且小号没有处理过
     			Base.listUserXiaoHao.add(user[0]);
-    			CoordBean xiaohao1 = new CoordBean();//266*89
-    			xiaohao1.setId(1);
-        		xiaohao1.setX(list.get(0).getX() - 266);
-        		xiaohao1.setY(list.get(0).getY() + 89);
-        		
-        		CoordBean xiaohao2 = new CoordBean();//153*89
-        		xiaohao2.setId(2);
-        		xiaohao2.setX(list.get(0).getX() - 153);
-        		xiaohao2.setY(list.get(0).getY() + 89);
-        		
-        		CoordBean xiaohao3 = new CoordBean();//41*89
-        		xiaohao3.setId(3);
-        		xiaohao3.setX(list.get(0).getX() - 41);
-        		xiaohao3.setY(list.get(0).getY() + 89);
-        		
-        		CoordBean xiaohao4 = new CoordBean();//376*178
-        		xiaohao4.setId(4);
-        		xiaohao4.setX(list.get(0).getX() - 376);
-        		xiaohao4.setY(list.get(0).getY() + 178);
-        		
-        		CoordBean xiaohao5 = new CoordBean();//266*178
-        		xiaohao5.setId(5);
-        		xiaohao5.setX(list.get(0).getX() - 266);
-        		xiaohao5.setY(list.get(0).getY() + 178);
-        		Base.xiaohao.add(xiaohao1);
-        		Base.xiaohao.add(xiaohao2);
-        		Base.xiaohao.add(xiaohao3);
-        		Base.xiaohao.add(xiaohao4);
-        		Base.xiaohao.add(xiaohao5);
+    			for(int i=1;i<=xiaohaoNum;i++) {
+    				CoordBean xiaohao = new CoordBean();//266*89
+    				if(i == 1) {
+            			xiaohao.setId(1);
+                		xiaohao.setX(list.get(0).getX() - 266);
+                		xiaohao.setY(list.get(0).getY() + 89);
+    				}else if(i == 2) {
+    					xiaohao.setId(2);
+                		xiaohao.setX(list.get(0).getX() - 153);
+                		xiaohao.setY(list.get(0).getY() + 89);
+    				}else if(i == 3) {
+    					xiaohao.setId(3);
+                		xiaohao.setX(list.get(0).getX() - 41);
+                		xiaohao.setY(list.get(0).getY() + 89);
+    				}else if(i == 4) {
+    					xiaohao.setId(4);
+                		xiaohao.setX(list.get(0).getX() - 376);
+                		xiaohao.setY(list.get(0).getY() + 178);
+    				}else if(i == 5) {
+    					xiaohao.setId(5);
+                		xiaohao.setX(list.get(0).getX() - 266);
+                		xiaohao.setY(list.get(0).getY() + 178);
+    				}
+    				Base.xiaohao.add(xiaohao);
+    			}
     		}
     	}
     	return Base.xiaohao;
     }
     
-    public void clearData(){
-    	WB.die_count = 0;
-    }
-    
     public boolean switchUser(){
     	Base.addLog("开始切换账号..");
-    	clearData();//清空死亡次数
-    	robot.delay(2000);
+    	autoResurgenceThread.clearData();//清空死亡次数
+    	sleep.sleep(2000);
     	//先退出当前账号
     	//按K然后找到设置按钮
     	press.keyPress(press.K);
-    	robot.delay(1000);
+    	sleep.sleep(1000);
     	//系统设置坐标 776*438
     	mouse.mouseClick(776, 438, true);
-    	robot.delay(500);
+    	sleep.sleep(500);
     	List<CoordBean> xiaohao = has_xiaohao();
     	//判断是否有小号
-    	robot.delay(1500);
+    	sleep.sleep(1500);
     	//210 247
 		List<CoordBean> list = Base.findPic(Constant.xiaohao_close,1500);
     	if(xiaohao.size() > 0){
     		Base.addLog("有小号.." + xiaohao);
-    		robot.delay(500);
+    		sleep.sleep(500);
     		if(list.size() <= 0){
     			Base.addLog("找不到" + Constant.xiaohao_close);
     			return false;
@@ -364,13 +365,13 @@ public class Layout extends JFrame{
     		Base.addLog("移除.." + xiaohao + "中的：" + xiaohao.get(0));
     		Base.runRole.put("main_role_sub", xiaohao.get(0).getId() + "");
     		Base.xiaohao.removeFirst();
-    		robot.delay(500);
+    		sleep.sleep(500);
         	if(list.size() > 0){
         		Base.addLog("点击切换按钮");
-        		robot.delay(500);
+        		sleep.sleep(500);
         		mouse.mouseClick(list.get(0).getX() - 210, list.get(0).getY() + 247,true);
         	}
-        	robot.delay(5000);
+        	sleep.sleep(5000);
         	//判断是否还停留在切换小号页面；
         	list = Base.findPic(Constant.xiaohao_close,1500);
         	if(list.size() > 0) {
@@ -413,7 +414,7 @@ public class Layout extends JFrame{
 		list = Base.findPic(Constant.logout_ok,5000);
 		if(list.size() > 0){
 			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);//回到登录页面
-			robot.delay(2000);
+			sleep.sleep(2000);
 			//标记该账号已经完成挖宝
 			finshRole();
 		}
@@ -482,24 +483,24 @@ public class Layout extends JFrame{
      */
     public boolean open_cbt(List<CoordBean> list){
     	press.keyPress(press.Z);
-    	robot.delay(200);
+    	sleep.sleep(200);
     	open_beibao();
     	if(null != list && list.size() > 0){
 			Base.addLog("点击藏宝图...");
-			robot.delay(200);
+			sleep.sleep(200);
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-    		robot.delay(500);
+    		sleep.sleep(500);
 			Base.addLog("使用藏宝图...");
 			list = Base.findPic(Constant.cangbaotu_shiyong+"|"+Constant.cangbaotu_shiyong_1,1000);
 			if(list.size() > 0){
 				//75 * 43
 				mouse.mouseClick(list.get(0).getX() + 8, list.get(0).getY() + 8, true);
 			}
-			robot.delay(500);
+			sleep.sleep(500);
 			list = Base.findPic(Constant.beibao_close,1500);
 			if(list.size() > 0){
 				mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-				robot.delay(800);
+				sleep.sleep(800);
 			}
 			list = Base.findPic(Constant.xunlu,1000);
 			if(list.size() > 0){
@@ -518,19 +519,19 @@ public class Layout extends JFrame{
 		if(list_wb_close.size() > 0){
 			Base.addLog("关闭活动界面");
 			mouse.mouseClick(list_wb_close.get(0).getX(), list_wb_close.get(0).getY(), true);
-			robot.delay(200);
+			sleep.sleep(200);
 		}
     	//打开背包
     	Base.addLog("打开背包...");
     	press.keyPress(press.I);
-    	robot.delay(800);
+    	sleep.sleep(800);
     	//打开任务栏 228*42 x-228 y+42
     	List<CoordBean> list = Base.findPic(Constant.beibao_close,2000);
     	if(list.size() > 0){
     		Base.addLog("打开任务栏...");
     		mouse.mouseClick(list.get(0).getX() - 228, list.get(0).getY() + 42, true);
     	}
-    	robot.delay(500);
+    	sleep.sleep(500);
     	return list;
     }
     
@@ -541,7 +542,7 @@ public class Layout extends JFrame{
     	List<CoordBean> list = Base.findPic(Constant.beibao_close,2000);
     	if(list.size() > 0){
     		mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
-    		robot.delay(500);
+    		sleep.sleep(500);
     	}
     }
     /**
@@ -568,7 +569,7 @@ public class Layout extends JFrame{
     	do{
     		Base.addLog("关闭背包...");
     		mouse.mouseClick(b_x + 8, b_y + 8, true);
-    		robot.delay(500);
+    		sleep.sleep(500);
     		List<CoordBean> list1 = Base.findPic(Constant.beibao_close);
     		if(list1.size() <= 0){
     			flag = false;
@@ -597,7 +598,7 @@ public class Layout extends JFrame{
     		do_0();
     		if(i % 3 == 0){
     			press.keyPress(press.F2);
-    			robot.delay(500);
+    			sleep.sleep(500);
     		}
     		Base.addLog("处理山贼... i " + i);
     		flag = Base.findPic(getBaoXiangImg()).size() <= 0;
@@ -611,13 +612,13 @@ public class Layout extends JFrame{
     }
     
     private void do_0(){
-    	robot.delay(200);
+    	sleep.sleep(200);
 		press.keyPress(press.F3);
-		robot.delay(1000);
+		sleep.sleep(1000);
 		press.keyPress(press.F1);
-		robot.delay(1000);
+		sleep.sleep(1000);
 		press.keyPress(press.F3);
-		robot.delay(1000);
+		sleep.sleep(1000);
     }
     
     //do_2 处理盗墓贼
@@ -631,13 +632,13 @@ public class Layout extends JFrame{
     	int i = 0;//140次
     	boolean flag = true;
     	press.keyPress(press.F3);
-		robot.delay(200);
+		sleep.sleep(200);
     	do{
     		press.keyPress(press.SPACE);
-    		robot.delay(200);
+    		sleep.sleep(200);
     		if(i == 2){
     			press.keyPress(press.F2);
-    			robot.delay(500);
+    			sleep.sleep(500);
     		}
     		list = Base.findPic(Constant.do_2_1);
         	if(list.size() > 0){
@@ -680,7 +681,7 @@ public class Layout extends JFrame{
     		do_0();
     		if(i % 3 == 0){
     			press.keyPress(press.F2);
-    			robot.delay(500);
+    			sleep.sleep(500);
     		}
     		press.keyPress(press.SPACE);
     		Base.addLog("处理宝树... i " + i);
@@ -711,19 +712,17 @@ public class Layout extends JFrame{
     	}
     	//检测复活
     	List<CoordBean> die_list = new ArrayList<>();
-    	boolean die = WB.die(die_list);
-    	if(die) {
-    		robot.delay(500);
+    	if(autoResurgenceThread.die(die_list)) {
+    		sleep.sleep(500);
 			//如果人物死亡，执行复活
-    		WB.threadPool.execute(WB.checkDie);
-    		robot.delay(1000);
+    		WB.threadPool.execute(autoResurgenceThread);
+    		sleep.sleep(1000);
     		do{
-    			robot.delay(1000);
+    			sleep.sleep(1000);
     			Base.addLog("等待复活...");
-    		}while(WB.die);
+    		}while(autoResurgenceThread.die(die_list));
     		//判断是否已经复活过5次
-    		if(WB.die_count >=5){
-    			Base.addLog("复活次数大于等于5次直接返回...");
+    		if(autoResurgenceThread.maxDieNum()){
     			return;
     		}
     	}
@@ -737,7 +736,7 @@ public class Layout extends JFrame{
     		wbz();
     		list =  null;
     	}
-    	robot.delay(500);
+    	sleep.sleep(500);
     	do_all(list);//继续挖宝
     }
     
@@ -748,31 +747,31 @@ public class Layout extends JFrame{
     	Base.addLog("清空确认按钮开始..");
     	List<CoordBean> list = Base.findPic(Constant.do_ok);
     	if(list.size() > 0){
-    		robot.delay(200);
+    		sleep.sleep(200);
     		mouse.mouseClick(list.get(0).getX() + 5,list.get(0).getY() + 5, true);
     	}
-    	robot.delay(200);
+    	sleep.sleep(200);
     	list = Base.findStrE("确定","c7bd97-383e38", 1, 0,200);
     	if(list.size() > 0){
-    		robot.delay(200);
+    		sleep.sleep(200);
     		mouse.mouseClick(list.get(0).getX() + 5,list.get(0).getY() + 5, true);
     	}
     	list = Base.findPic(Constant.close_liaotian+"|"+Constant.close_liaotian_1,254,321,444,447,0.9,true);
     	if(list.size() > 0){
-    		robot.delay(200);
+    		sleep.sleep(200);
     		mouse.mouseClick(list.get(0).getX() +2,list.get(0).getY() + 2, true);
     	}
-    	robot.delay(200);
+    	sleep.sleep(200);
     	Base.addLog("清空确认按钮结束..");
     }
     
     public void clear_gw(){
     	//清理小怪,避免打断挖宝
-        robot.delay(200);
+        sleep.sleep(200);
     	for(int i = 0,j=6;i<j;i++){
     		Base.addLog("释放技能F3...");
         	press.keyPress(press.F3);
-        	robot.delay(800);
+        	sleep.sleep(800);
     	}
     }
     
@@ -791,7 +790,7 @@ public class Layout extends JFrame{
         	}else if(list3.size() > 0){
         		do_3(list.get(0).getX(),list.get(0).getY());
         	}
-    		robot.delay(200);
+    		sleep.sleep(200);
     		boolean flag = true;
     		int i = 0;
     		boolean m = true;
@@ -814,16 +813,16 @@ public class Layout extends JFrame{
             			}
             			Base.addLog("移动到宝箱周围("+x+","+y+")..");
             			mouse.mouseClick(x,y, true);
-            			robot.delay(2000);
+            			sleep.sleep(2000);
             		}else {
             			if(i == 20 || i == 30 || i == 40){
                 			do_0();//防止怪物与宝箱重叠,释放技能杀怪
                 		}
                 		Base.addLog("点击宝箱...");
                 		mouse.mouseMoveTo(list.get(0).getX() + 30,list.get(0).getY() + 55);
-                		robot.delay(200);
+                		sleep.sleep(200);
                 		Base.doubleClick();
-                		robot.delay(500);
+                		sleep.sleep(500);
             		}
             	}else{
             		Base.screenImage("宝箱");
@@ -842,16 +841,16 @@ public class Layout extends JFrame{
     	List<CoordBean> list = Base.findPic(Constant.wb_0,10000);
     	if(list.size() > 0){
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-        	robot.delay(2000);
+        	sleep.sleep(2000);
         	list = Base.findPic(Constant.wb_4,3000);//是否已经挖过宝了
         	if(list.size() > 0){
         		//115
         		mouse.mouseClick(list.get(0).getX() + 115, list.get(0).getY(), true);
-        		robot.delay(500);
+        		sleep.sleep(500);
         		list = Base.findPic(Constant.baoxiang_click,3000);
         		if(list.size() > 0){
         			mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 10, true);
-            		robot.delay(500);
+            		sleep.sleep(500);
             		Base.close_wb_page();
         		}else{
         			Base.close_wb_page();
@@ -867,12 +866,12 @@ public class Layout extends JFrame{
      */
     public void lcbt(){
     	Base.addLog("领藏宝图开始..");
-    	robot.delay(3000);
+    	sleep.sleep(3000);
     	List<CoordBean> list = Base.findPic(Constant.wb_0,12000);
     	if(list.size() > 0){
-    		robot.delay(2000);
+    		sleep.sleep(2000);
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-        	robot.delay(2000);
+        	sleep.sleep(2000);
         	list = Base.findPic(Constant.wb_4,3000);//是否已经挖过宝了
         	if(list.size() > 0){
         		Base.addLog("该账号已经挖过宝..");
@@ -882,16 +881,16 @@ public class Layout extends JFrame{
         	list = Base.findPic(Constant.wb_1+"|"+Constant.wb_1_1,5000);
         	if(list.size() > 0){
         		//x+371,y-8
-        		robot.delay(200);
+        		sleep.sleep(200);
         		mouse.mouseMoveTo(list.get(0).getX() + 366, list.get(0).getY() - 9);
-        		robot.delay(500);
+        		sleep.sleep(500);
         		mouse.mouseClick(list.get(0).getX() + 366, list.get(0).getY() - 9, true);
-        		robot.delay(500);
+        		sleep.sleep(500);
         		//判断当前是在雷鸣还是在神界
         		list = Base.findStrE("确定","c7bd97-383e38", 0.9, 0,2000);
     			if(list.size() > 0){
     				mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
-    				robot.delay(500);
+    				sleep.sleep(500);
     				sj_to_lm();
     			}else{
     				if(Base.is_xunlu()) {
@@ -919,19 +918,19 @@ public class Layout extends JFrame{
 //				"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013", 0.8, 0,10000);
 //		if(list.size() > 0){
 			Base.addLog("当前人物在神界");
-			robot.delay(2000);
+			sleep.sleep(2000);
 			press.keyPressTime(press.W, 380);
-			robot.delay(500);
+			sleep.sleep(500);
 			press.keyPress(press.SPACE);
-			robot.delay(800);
+			sleep.sleep(800);
 			boolean a = Base.go_to_lm();
 			if(a){
-				robot.delay(3000);
+				sleep.sleep(3000);
 				lcbt();
 			}else{
 				Base.addLog("没有找到传送到雷鸣的对话框，尝试点击坐标（319,150）；");
 				mouse.mouseClick(319, 150, true);
-				robot.delay(800);
+				sleep.sleep(800);
 				a = Base.go_to_lm();
 				if(a){
 					lcbt();
@@ -950,7 +949,7 @@ public class Layout extends JFrame{
 //    	Base.addLog("万圣节期间,去雷鸣开始..");
 //    	//打开背包，关闭背包
 //    	open_beibao();
-//    	robot.delay(1000);
+//    	sleep.sleep(1000);
 //    	close_beibao();
 //    	List<CoordBean> list = Base.findStrE("传送", "30eb37-311437", 0.8, 0,5000);
 //    	if(list.size() > 0){
@@ -960,7 +959,7 @@ public class Layout extends JFrame{
 //    		Base.addLog("直接点击坐标(180, 213)...");
 //    		mouse.mouseClick(180, 213, true);
 //    	}
-//    	robot.delay(1000);
+//    	sleep.sleep(1000);
 //    	boolean a = Base.go_to_lm();
 //		if(a){
 //			lcbt();
@@ -980,7 +979,7 @@ public class Layout extends JFrame{
 			boolean flag = true;
 			do{
 				mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-				robot.delay(500);
+				sleep.sleep(500);
 				i++;
 				if(i > 10 || Base.findPic(Constant.wb_3,145,318,269,365).size() > 0){
 					flag = false;
@@ -995,18 +994,18 @@ public class Layout extends JFrame{
 				if(list.size() > 0){
 					flag = true;
 					mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
-					robot.delay(500);
+					sleep.sleep(500);
 				}
 				if(i > 10 || list.size() <= 0){
 					flag = false;
 				}
 			}while(flag);
-			robot.delay(500);
+			sleep.sleep(500);
 			list = open_beibao();
 			int b_x = list.get(0).getX();
 	    	int b_y = list.get(0).getY();
 	    	mouse.mouseClick(b_x + 5, b_y + 5, true);
-			robot.delay(500);
+			sleep.sleep(500);
 		}else {
 			Base.addLog("未能到达领取藏宝图的NPC处");
 		}
@@ -1065,15 +1064,15 @@ public class Layout extends JFrame{
     	if(null == list || list.size() == 0){
     		list = Base.findPic(Constant.login_1,3000);
         	if(list.size() > 0){
-        		robot.delay(3000);
+        		sleep.sleep(3000);
         		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
         	}else{
         		list = Base.findPic(Constant.update_4,2000);
         		if(list.size() > 0){
         			Base.addLog("找到更新内容界面，关闭界面然后重新登录");
-        			robot.delay(200);
+        			sleep.sleep(200);
         			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-        			robot.delay(200);
+        			sleep.sleep(200);
         			return login();
         		}
         		//判断是会否闪退到了桌面
@@ -1095,12 +1094,12 @@ public class Layout extends JFrame{
     	}
     	Base.addLog("开始登录：" + user[0]);
     	List<CoordBean> listPassword = input_user(user);
-    	robot.delay(200);
+    	sleep.sleep(200);
     	list = Base.findPic(Constant.login_2,2000);
     	if(list.size() > 0){
     		//点击登录
     		mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
-    		robot.delay(5000);
+    		sleep.sleep(5000);
 			list = Base.findPic(Constant.login_e+"|"+Constant.login_2 +"|"+Constant.login_u+"|"+Constant.login_p,3000);
 			if(list.size() > 0){//如果账号密码不正确
 				clearInput();
@@ -1114,7 +1113,7 @@ public class Layout extends JFrame{
 			list = Base.findPic(getHDClose(),getHDCloseTime());
 	        if(list.size() > 0){
 				mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
-				robot.delay(500);
+				sleep.sleep(500);
 			}
 	        
     		list = Base.findPic(Constant.login_success,30000);
@@ -1132,7 +1131,7 @@ public class Layout extends JFrame{
         			Base.addLog("找到确定按钮，点击确定，然后重新登录");
         			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
         			flag_qd = true;
-        			robot.delay(200);
+        			sleep.sleep(200);
         		}
         		list = Base.findPic(Constant.login_fanmang);
         		boolean flag_qx = false;
@@ -1140,7 +1139,7 @@ public class Layout extends JFrame{
     				Base.addLog("服务器繁忙,继续重试");
     				mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
     				flag_qx = true;
-    				robot.delay(200);
+    				sleep.sleep(200);
     			}
     			if(flag_qd || flag_qx) {
     				return login();
@@ -1158,16 +1157,16 @@ public class Layout extends JFrame{
 			if(list.size() > 0){
 				Base.addLog("服务器繁忙,继续重试");
 				mouse.mouseClick(list.get(0).getX() + 5, list.get(0).getY() + 5, true);
-				robot.delay(200);
+				sleep.sleep(200);
 				return login();
 			}
 			//登录页面变白,处理
 			Base.addLog("没有找到登录按钮login_2,尝试点击密码框(可能页面变白)");
 			mouse.mouseClick(listPassword.get(0).getX() + 90, listPassword.get(0).getY() + 13, true);
-			robot.delay(2000);
+			sleep.sleep(2000);
 			Base.addLog("没有找到登录按钮login_2,尝试点击账号框(可能页面变白)");
 			mouse.mouseClick(listPassword.get(0).getX() + 90, listPassword.get(0).getY() - 70, true);
-			robot.delay(2000);
+			sleep.sleep(2000);
 			list = Base.findPic(Constant.login_u);
 	    	if(list.size() > 0){
 	    		Base.addLog("重新找到账号密码输入框，重新登录");
@@ -1187,17 +1186,17 @@ public class Layout extends JFrame{
      */
     public List<CoordBean> input_user(String[] user){
     	clearInput();
-    	robot.delay(500);
+    	sleep.sleep(500);
     	List<CoordBean> list = Base.findPic(Constant.login_u,2000);
     	if(list.size() > 0){
     		mouse.mouseClick(list.get(0).getX() + 90, list.get(0).getY() + 13, true);
-    		robot.delay(500);
+    		sleep.sleep(500);
     		robot.sendString(user[0]);
     	}
     	list = Base.findPic(Constant.login_p,2000);
     	if(list.size() > 0){
     		mouse.mouseClick(list.get(0).getX() + 90, list.get(0).getY() + 13, true);
-    		robot.delay(500);
+    		sleep.sleep(500);
     		robot.sendString(user[1]);
     	}
     	return list;
@@ -1207,22 +1206,22 @@ public class Layout extends JFrame{
      * 清空输入框
      */
     public void clearInput(){
-    	robot.delay(200);
+    	sleep.sleep(200);
     	List<CoordBean> list = Base.findPic(Constant.login_u,2000);
     	if(list.size() > 0){
     		mouse.mouseMoveTo(list.get(0).getX() + 90, list.get(0).getY() + 13);
-    		robot.delay(200);
+    		sleep.sleep(200);
     		Base.doubleClick();
-    		robot.delay(200);
+    		sleep.sleep(200);
     		press.keyPress(press.DELETE);
-    		robot.delay(200);
+    		sleep.sleep(200);
     		mouse.mouseClick(list.get(0).getX() + 90, list.get(0).getY() + 13,true);
     		for(int i=0,j=10;i<j;i++){
-    			robot.delay(100);
+    			sleep.sleep(100);
         		press.keyPress(press.DELETE);	
     		}
     		for(int i=0,j=10;i<j;i++){
-    			robot.delay(100);
+    			sleep.sleep(100);
         		press.keyPress(press.BACKSPACE);	
     		}
     	}
@@ -1236,10 +1235,10 @@ public class Layout extends JFrame{
     	//1分钟内循环查找游戏app。如果进入了桌面 肯定能找到
     	List<CoordBean> list = Base.findPic(img,60000);
     	if(list.size() > 0){
-    		robot.delay(10000);
+    		sleep.sleep(10000);
     		Base.addLog("找到"+ img +"点击..");
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
-    		robot.delay(500);
+    		sleep.sleep(500);
     		list = Base.findPic(img,1000);
     		if(list.size() > 0){
     			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
@@ -1249,7 +1248,7 @@ public class Layout extends JFrame{
     			mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);
     		}
     	}
-    	robot.delay(500);
+    	sleep.sleep(500);
     	//检查是否需要更新
         update();
     }
@@ -1291,6 +1290,7 @@ public class Layout extends JFrame{
     }
     
     public Layout() {
+    	autoResurgenceThread = setAutoResurgenceThread(2);
     	JButton btnNewButton = new JButton("开始登录挖宝");
     	btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

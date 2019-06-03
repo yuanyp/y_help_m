@@ -4,12 +4,9 @@ import java.awt.PopupMenu;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.xnx3.Lang;
 import com.xnx3.microsoft.SystemUtil;
-import com.xnx3.robot.support.CoordBean;
 import com.y_ghelp.test.demo.config.MYConfig;
 import com.y_ghelp.test.demo.my.Base;
 import com.y_ghelp.test.demo.my.Config;
@@ -21,66 +18,6 @@ import com.y_ghelp.test.demo.my.Config;
  *
  */
 public class WB extends Base{
-	
-	static int sx = 0;
-	static int sy = 0;
-	static int ex = 800;
-	static int ey = 600;
-	
-	static int die_count = 0;
-	static boolean die = false;//判断人物是否死亡
-	
-	public static boolean die(List<CoordBean> _list) {
-		if(null != _list){
-			_list.clear();
-		}
-		robot.delay(500);
-		List<CoordBean> list = findPic(Constant.die,sx,sy,ex,ey,0.9,false);
-		if(list.size() > 0){
-			Base.screenDieImage();
-			addErrorLog("检测到人物死亡【"+Base.runRole.toString()+"】");
-			_list.addAll(list);//返回坐标
-			WB.die = true;
-			return true;
-		}
-		WB.die = false;
-		return false;
-	}
-	
-	public static Thread checkDie = new Thread(new Runnable() {
-        public void run() {
-            try {
-            	//处理如果人物死亡自动复活
-            	//检测人物死亡开始
-            	Base.addLog("自动复活开启..");
-            	boolean flag = true;
-            	do{
-            		List<CoordBean> list = new ArrayList<>();
-            		boolean die = die(list);
-            		if(die){
-            			robot.delay(200);
-            			int x = list.get(0).getX() + 5;
-            			int y = list.get(0).getY() + 95;
-            			Base.addLog("鼠标点击复活坐标1【"+x+","+y+"】..");
-        				mouse.mouseClick(x, y, true);
-        				robot.delay(500);
-        				//68 86
-        				int x1 = list.get(0).getX() - 68;
-        				int y1 = list.get(0).getY() + 86;
-        				Base.addLog("鼠标点击复活坐标2【"+x1+","+y1+"】..");
-        				mouse.mouseClick(x1, y1, true);
-            		}else {
-            			WB.die = false;
-            			flag = false;
-            		}
-            	}while(flag);
-            	WB.die_count = WB.die_count + 1;//复活次数+1
-            	Base.addLog("复活次数+1...【"+WB.die_count+"】");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    });
 	
 	public static Thread openGame = new Thread(new Runnable() {
         public void run() {
@@ -94,7 +31,6 @@ public class WB extends Base{
             }
         }
     });
-	
 	
 	public static void main(String[] args) {
 		setDic(0, Constant.dm_dic);

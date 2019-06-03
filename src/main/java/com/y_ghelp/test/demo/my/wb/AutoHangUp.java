@@ -1,5 +1,6 @@
 package com.y_ghelp.test.demo.my.wb;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -24,7 +25,6 @@ public class AutoHangUp {
 	
 	Logger log = Logger.getLogger(getClass());
 
-	public boolean die = false;
 	public boolean m3_start = false;
 
 	private ActiveBean activeBean;
@@ -33,6 +33,7 @@ public class AutoHangUp {
 	private Mouse mouse;
 	private DmSoft dm;
 	private Util util;
+	private AutoResurgenceThread autoResurgenceThread;
 	private int hwnd = 0;
 
 	public AutoHangUp() {
@@ -42,6 +43,8 @@ public class AutoHangUp {
 		press = new Press(activeBean);
 		mouse = new Mouse(activeBean);
 		util = new Util(activeBean);
+		autoResurgenceThread = new AutoResurgenceThread();
+		autoResurgenceThread.zIndex2 = 1;
 		sleep = new Sleep();
 		List<String> list = Dnplayer2Util.list2();
 		hwnd = Integer.parseInt(list.get(3));
@@ -56,25 +59,29 @@ public class AutoHangUp {
 	private void m3_start(int flag) {
 		log.info("start..");
 		do {
-			if (die) {
-				log.info("die.. wait 5 seconds..");
-				new Sleep().sleep(5000);
-				m3_start(flag);
-			}
+			List<CoordBean> dieList = new ArrayList<>();
+	    	if(autoResurgenceThread.die(dieList)) {
+	    		sleep.sleep(500);
+	    		WB.threadPool.execute(autoResurgenceThread);
+	    		do{
+	    			sleep.sleep(1000);
+	    			log.info("die.. wait 1 seconds..");
+	    		}while(autoResurgenceThread.die(dieList));
+	    	}
 			sleep.sleep(500);
-			log.info("F2..");
+			log.info("F2..,wait 3 seconds..");
 			press.keyPress(press.F2);
-			new Sleep().sleep(1500);
+			sleep.sleep(3000);
 			log.info("F3..,wait 6 seconds..");
 			press.keyPress(press.F3);
-			new Sleep().sleep(6000);
+			sleep.sleep(6000);
 			if (flag == 1) {
 				goto_xy();// 回到中间
 			} else if (flag == 2) {
 				goto_xy_top();
 			}
 			for (int i = 0, j = 5; i < j; i++) {
-				if (die) {
+				if (autoResurgenceThread.die(dieList)) {
 					break;
 				}
 				if (!m3_start) {
@@ -88,7 +95,7 @@ public class AutoHangUp {
 				}
 			}
 			int cd = getCD();
-			new Sleep().sleep(cd);// 等CD
+			sleep.sleep(cd);// 等CD
 		}while(m3_start);
 		log.info("stop..");
 	}
@@ -101,14 +108,14 @@ public class AutoHangUp {
 
 	private void shua_m3jy() {
 		List<CoordBean> guaiwu = util.findPic(Common.m3_jingying+"|"+Common.m3_jingying1);
-		new Sleep().sleep(200);
+		sleep.sleep(200);
 		if (null != guaiwu && guaiwu.size() > 0) {
 			log.info("找到怪物坐标为：" + guaiwu.get(0).getX() + "," + guaiwu.get(0).getY());
 			mouse.mouseMoveTo(guaiwu.get(0).getX(), guaiwu.get(0).getY() + 50);
-			new Sleep().sleep(200);
+			sleep.sleep(200);
 			log.info("按下F1");
 			press.keyPress(press.F1);
-			new Sleep().sleep(2500);
+			sleep.sleep(2500);
 		}
 	}
 
@@ -116,7 +123,8 @@ public class AutoHangUp {
 		if (!m3_start) {
 			return;
 		}
-		if (die) {
+		List<CoordBean> dieList = new ArrayList<>();
+		if (autoResurgenceThread.die(dieList)) {
 			return;
 		}
 		log.info("goto_xy start ..");
@@ -138,22 +146,23 @@ public class AutoHangUp {
 			f1(x, y);
 			mouse.mouseClick(x, y, true);
 		}
-		new Sleep().sleep(500);
+		sleep.sleep(500);
 	}
 
 	private void f1(int x, int y) {
 		mouse.mouseMoveTo(x, y);
-		new Sleep().sleep(200);
+		sleep.sleep(200);
 		press.keyPress(press.F1);
 		log.info("按下F1");
-		new Sleep().sleep(200);
+		sleep.sleep(200);
 	}
 
 	private void goto_xy_top() {
 		if (!m3_start) {
 			return;
 		}
-		if (die) {
+		List<CoordBean> dieList = new ArrayList<>();
+		if (autoResurgenceThread.die(dieList)) {
 			return;
 		}
 		log.info("goto_xy_top start ..");
@@ -175,7 +184,7 @@ public class AutoHangUp {
 			f1(x, y);
 			mouse.mouseClick(x, y, true);
 		}
-		new Sleep().sleep(500);
+		sleep.sleep(500);
 	}
 	
 	public void destroy() {
