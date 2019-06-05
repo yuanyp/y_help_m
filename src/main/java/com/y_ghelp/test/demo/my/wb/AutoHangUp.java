@@ -35,6 +35,7 @@ public class AutoHangUp {
 	private Util util;
 	private AutoResurgenceThread autoResurgenceThread;
 	private int hwnd = 0;
+	private int hwndTop = 0;
 
 	public AutoHangUp() {
 		dm = new DmSoft();
@@ -46,10 +47,14 @@ public class AutoHangUp {
 		autoResurgenceThread = new AutoResurgenceThread();
 		autoResurgenceThread.zIndex2 = 1;
 		sleep = new Sleep();
-		List<String> list = Dnplayer2Util.list2();
-		hwnd = Integer.parseInt(list.get(3));
-		int result = dm.BindWindowEx(hwnd, Com.GDI, Com.WINDOWS, Com.WINDOWS, "", 0);
-		log.info("bind  > " + result);
+		List<String> list = Dnplayer2Util.list2NoBind(dm);
+		hwndTop = Integer.parseInt(list.get(Dnplayer2Util._TOP_HWND));
+		hwnd = Integer.parseInt(list.get(Dnplayer2Util._BIND_HWND));
+		if(hwnd > 0 && hwndTop > 0) {
+			dm.SetWindowText(hwndTop, Util._TITLE + "_" + list.get(Dnplayer2Util._INDEX));
+			int result = dm.BindWindowEx(hwnd, Com.GDI, Com.WINDOWS, Com.WINDOWS, "", 0);
+			log.info("bind  > " + result);	
+		}
 	}
 
 	/**

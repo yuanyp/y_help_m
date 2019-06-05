@@ -360,7 +360,7 @@ public class SystemUtil extends Lang {
 		try {
 			process = Runtime.getRuntime().exec( "cmd.exe /c "+command);
 			InputStream inputStream = process.getInputStream(); 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream)); 
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream,"gbk")); 
 
 			// 取得输出流
 			StringBuffer str=new StringBuffer();

@@ -25,7 +25,7 @@ public class Dnplayer2Demo {
 		Press press = new Press(activeBean);
 		Mouse mouse = new Mouse(activeBean);
 		Sleep sleep = new Sleep();
-		List<String> list = Dnplayer2Util.list2();
+		List<String> list = Dnplayer2Util.list2NoBind(dm);
 		int hwnd = Integer.parseInt(list.get(3));
 		int result = dm.BindWindowEx(hwnd, Com.GDI, Com.WINDOWS, Com.WINDOWS, "", 0);
 		System.out.println("绑定结果  > " + result);

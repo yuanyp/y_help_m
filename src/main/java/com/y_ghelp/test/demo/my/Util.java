@@ -29,6 +29,8 @@ public class Util {
 	public FindStr findStr;
 	public File file;
 	
+	public static String _TITLE = "yyp";
+	
 	
 	public Util(ActiveBean activeBean) {
 		this.mouse = new Mouse(activeBean);   //鼠标模拟操作类
