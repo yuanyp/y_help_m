@@ -36,6 +36,7 @@ public class AutoHangUp {
 	private AutoResurgenceThread autoResurgenceThread;
 	private int hwnd = 0;
 	private int hwndTop = 0;
+	private String orgTitle;
 
 	public AutoHangUp() {
 		dm = new DmSoft();
@@ -51,6 +52,7 @@ public class AutoHangUp {
 		hwndTop = Integer.parseInt(list.get(Dnplayer2Util._TOP_HWND));
 		hwnd = Integer.parseInt(list.get(Dnplayer2Util._BIND_HWND));
 		if(hwnd > 0 && hwndTop > 0) {
+			orgTitle = dm.GetWindowTitle(hwndTop);
 			dm.SetWindowText(hwndTop, Util._TITLE + "_" + list.get(Dnplayer2Util._INDEX));
 			int result = dm.BindWindowEx(hwnd, Com.GDI, Com.WINDOWS, Com.WINDOWS, "", 0);
 			log.info("bind  > " + result);	
@@ -193,6 +195,7 @@ public class AutoHangUp {
 	}
 	
 	public void destroy() {
+		dm.SetWindowText(hwndTop, orgTitle);
 		dm.SetWindowState(hwnd, 1);
 		int r = dm.UnBindWindow();
 		log.info("解绑结果>" + r);

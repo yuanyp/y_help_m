@@ -1792,7 +1792,8 @@ public class MYDemo extends JFrame{
             
             //签到
             singIn(hwnd);
-            if("1".equals(user[2])) {//判断是否签到小号
+            int xiaohaoNum = Integer.parseInt(user[2]);
+            if(xiaohaoNum > 0) {//判断是否签到小号
             	//小号签到
                 login_xiaohao_sing(hwnd);
                 //切换到主号然后退出
@@ -2044,15 +2045,21 @@ public class MYDemo extends JFrame{
      */
     private void login_xiaohao_sing(int hwnd) throws InterruptedException{
     	addLog("开始小号签到..");
-    	new Sleep().sleep(500);
-    	press.keyPress(press.X);
-    	new Sleep().sleep(500);
-    	robot.setSourcePath(MYDemo.class);
-    	List<CoordBean> list = findPic(Common.quanbudengluImg+"|"+Common.quanbudenglu1Img, 1500);
-        if(null == list || list.size() == 0){
-            addLog("未能找到图片【"+Common.quanbudengluImg+"】..");
-            return;
-        }
+    	int i = 0;
+    	List<CoordBean> list = null;
+    	do{
+    		i++;
+    		closeAll();
+        	new Sleep().sleep(500);
+        	press.keyPress(press.X);
+        	new Sleep().sleep(500);
+        	robot.setSourcePath(MYDemo.class);
+        	list = findPic(Common.quanbudengluImg+"|"+Common.quanbudenglu1Img, 1500);
+            if(null == list || list.size() == 0){
+                addLog("未能找到图片【"+Common.quanbudengluImg+"】..");
+                return;
+            }
+    	}while(i <=5 && list == null);
         mouse.mouseClick(list.get(0).getX() + 8, list.get(0).getY() + 8, true);//移动之后，左键点击
         list.clear();
         

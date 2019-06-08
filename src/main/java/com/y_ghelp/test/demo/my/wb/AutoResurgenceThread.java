@@ -44,18 +44,18 @@ public class AutoResurgenceThread extends Base implements Runnable{
         		boolean die = die(list);
         		if(die){
         			sleep.sleep(200);
-        			if(zIndex2 == 2) {
-            			int x = list.get(0).getX() + 5;
-            			int y = list.get(0).getY() + 95;
-            			Base.addLog("鼠标点击复活坐标1【"+x+","+y+"】..");
-        				mouse.mouseClick(x, y, true);
-        			}
-        			sleep.sleep(500);
-					//68 86
-    				int x1 = list.get(0).getX() - 68;
-    				int y1 = list.get(0).getY() + 86;
-    				Base.addLog("鼠标点击复活坐标2【"+x1+","+y1+"】..");
-    				mouse.mouseClick(x1, y1, true);
+        			int x = list.get(0).getX() + 5;
+        			int y = list.get(0).getY() + 95;
+        			Base.addLog("鼠标点击复活坐标1【"+x+","+y+"】..");
+    				mouse.mouseClick(x, y, true);
+	        		if(zIndex2 == 2) {
+	        			sleep.sleep(500);
+						//68 86
+	    				int x1 = list.get(0).getX() - 68;
+	    				int y1 = list.get(0).getY() + 86;
+	    				Base.addLog("鼠标点击复活坐标2【"+x1+","+y1+"】..");
+	    				mouse.mouseClick(x1, y1, true);
+	        		}
         		}else {
         			die = false;
         			flag = false;
