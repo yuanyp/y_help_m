@@ -97,8 +97,7 @@ public class Layout extends JFrame{
     }
     
 	public AutoResurgenceThread setAutoResurgenceThread(int zIndex2) {
-		this.autoResurgenceThread = new AutoResurgenceThread();
-		this.autoResurgenceThread.zIndex2 = zIndex2;
+		this.autoResurgenceThread = new AutoResurgenceThread(mouse,sleep,zIndex2);
 		return this.autoResurgenceThread;
 	}
     
@@ -181,7 +180,7 @@ public class Layout extends JFrame{
 			sleep.sleep(500);
 		}
     	//收起任务栏
-    	list = Base.findPic(Constant.go_index_1 + "|" + Constant.go_index_1_1,10000);
+    	list = Base.findPic(Constant.go_index_1,10000);
     	int x = -1;
     	int y = -1;
     	if(list.size() > 0){
@@ -899,7 +898,6 @@ public class Layout extends JFrame{
     				}else {
     					Base.addLog("程序未能处理,当前人物未能到达雷鸣");
     					return;
-//    					hallowmas_to_lm();
     				}
     			}
         	}else{
@@ -912,62 +910,29 @@ public class Layout extends JFrame{
     }
     
     private void sj_to_lm() {
-    	Base.addLog("神界去雷鸣开始..");
-    	//检查是否已经到了神界
-//    	List<CoordBean> list = Base.findStrE("神界", 
-//				"bbbb06-3c3c07|bbbb13-3c3c13|bfbf13-404013", 0.8, 0,10000);
-//		if(list.size() > 0){
-			Base.addLog("当前人物在神界");
-			sleep.sleep(2000);
-			press.keyPressTime(press.W, 380);
-			sleep.sleep(500);
-			press.keyPress(press.SPACE);
+		Base.addLog("神界去雷鸣开始..当前人物在神界");
+		sleep.sleep(2000);
+		press.keyPressTime(press.W, 380);
+		sleep.sleep(500);
+		press.keyPress(press.C);//对话键
+		sleep.sleep(800);
+		boolean a = Base.go_to_lm();
+		if(a){
+			sleep.sleep(3000);
+			lcbt();
+		}else{
+			Base.addLog("没有找到传送到雷鸣的对话框，尝试点击坐标（319,150）；");
+			mouse.mouseClick(319, 150, true);
 			sleep.sleep(800);
-			boolean a = Base.go_to_lm();
+			a = Base.go_to_lm();
 			if(a){
-				sleep.sleep(3000);
 				lcbt();
 			}else{
-				Base.addLog("没有找到传送到雷鸣的对话框，尝试点击坐标（319,150）；");
-				mouse.mouseClick(319, 150, true);
-				sleep.sleep(800);
-				a = Base.go_to_lm();
-				if(a){
-					lcbt();
-				}else{
-					Base.addLog("未能到达雷鸣");
-				}
+				Base.addLog("未能到达雷鸣");
 			}
-//		}else{
-//			Base.addLog("没有找到神界的传送师");
-////			hallowmas_to_lm();
-//		}
+		}
 		Base.addLog("神界去雷鸣结束..");
     }
-    
-//    private void hallowmas_to_lm() {
-//    	Base.addLog("万圣节期间,去雷鸣开始..");
-//    	//打开背包，关闭背包
-//    	open_beibao();
-//    	sleep.sleep(1000);
-//    	close_beibao();
-//    	List<CoordBean> list = Base.findStrE("传送", "30eb37-311437", 0.8, 0,5000);
-//    	if(list.size() > 0){
-//    		Base.addLog("找到传送门...");
-//    		mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 50, true);
-//    	}else{
-//    		Base.addLog("直接点击坐标(180, 213)...");
-//    		mouse.mouseClick(180, 213, true);
-//    	}
-//    	sleep.sleep(1000);
-//    	boolean a = Base.go_to_lm();
-//		if(a){
-//			lcbt();
-//		}else{
-//			Base.addLog("没有找到传送到雷鸣的对话框");
-//		}
-//		Base.addLog("万圣节期间,去雷鸣结束..");
-//    }
 
     
 	private void wb_2(){

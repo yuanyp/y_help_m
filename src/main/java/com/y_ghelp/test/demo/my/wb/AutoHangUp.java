@@ -45,8 +45,7 @@ public class AutoHangUp {
 		press = new Press(activeBean);
 		mouse = new Mouse(activeBean);
 		util = new Util(activeBean);
-		autoResurgenceThread = new AutoResurgenceThread();
-		autoResurgenceThread.zIndex2 = 1;
+		autoResurgenceThread = new AutoResurgenceThread(mouse,sleep,1);
 		sleep = new Sleep();
 		List<String> list = Dnplayer2Util.list2NoBind(dm);
 		hwndTop = Integer.parseInt(list.get(Dnplayer2Util._TOP_HWND));

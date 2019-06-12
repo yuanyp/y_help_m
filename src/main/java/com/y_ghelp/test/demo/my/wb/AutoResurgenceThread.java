@@ -3,10 +3,12 @@ package com.y_ghelp.test.demo.my.wb;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.xnx3.microsoft.Mouse;
+import com.xnx3.microsoft.Sleep;
 import com.xnx3.robot.support.CoordBean;
 import com.y_ghelp.test.demo.my.Base;
 
-public class AutoResurgenceThread extends Base implements Runnable{
+public class AutoResurgenceThread implements Runnable{
 	private int die_count = 0;
 	private boolean die = false;//判断人物是否死亡
 	private int sx = 0;
@@ -14,7 +16,31 @@ public class AutoResurgenceThread extends Base implements Runnable{
 	private int ex = 800;
 	private int ey = 600;
 	public int zIndex2;
+	private Sleep sleep;
+	private Mouse mouse;
 	
+	public AutoResurgenceThread(Mouse mouse,Sleep sleep,int zIndex2) {
+		this.mouse = mouse;
+		this.sleep = sleep;
+		this.zIndex2 = zIndex2;
+	}
+	
+	public Mouse getMouse() {
+		return mouse;
+	}
+
+	public void setMouse(Mouse mouse) {
+		this.mouse = mouse;
+	}
+
+	public Sleep getSleep() {
+		return sleep;
+	}
+
+	public void setSleep(Sleep sleep) {
+		this.sleep = sleep;
+	}
+
 	public boolean die(List<CoordBean> _list) {
 		if(null != _list){
 			_list.clear();

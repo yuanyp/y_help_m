@@ -27,17 +27,16 @@ public class Constant {
 	public static String update_1 = "update_1.bmp";
 	public static String update_2 = "update_2.bmp";
 	public static String update_3 = "update_3.bmp";
-	public static String update_4 = "update_4.bmp";
+	public static String update_4 = "update_4.bmp|update_4_1.bmp";
 	
 	public static String go_index = "go_index.bmp";
 	
 	public static String huanbaoliangongshagn01 = "huanbaoliangongshagn01.bmp";
 	
-	public static String go_index_1 = "go_index_1.bmp";
-	public static String go_index_1_1 = "go_index_1_1.bmp";
+	public static String go_index_1 = "go_index_1.bmp|go_index_1_1.bmp|go_index_1_2.bmp";
 	
 	//活动中心坐标
-	public static String wb_0 = "wb_0.bmp";
+	public static String wb_0 = "login_success.bmp";
 	//挖宝自动寻路
 	public static String wb_1 = "wb_1.bmp";//x+371,y-8
 	public static String wb_1_1 = "wb_1_1.bmp";//x+371,y-8
