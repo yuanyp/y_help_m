@@ -12,6 +12,7 @@ public class Constant {
 	
 	public static String close_liaotian = "close_liaotian.bmp";
 	public static String close_liaotian_1 = "close_liaotian_1.bmp";
+	public static String leidian_update = "leidian_update.bmp|leidian_update1.bmp";
 	
 	public static String app_game = "app.bmp";
 	public static String app_game1 = "app_1.bmp";

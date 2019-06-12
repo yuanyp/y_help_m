@@ -84,16 +84,11 @@ public class Layout extends JFrame{
     private void chuzhengbaobao(int x,int y){
     	//66 * 58
     	sleep.sleep(200);
-    	mouse.mouseClick(x + 66, y - 58, true);
+    	mouse.mouseClick(x + 40, y - 175, true);
     	sleep.sleep(200);
     	chuzhen_1();
     	sleep.sleep(200);
-    	mouse.mouseClick(x + 66, y - 58, true);
-    	//134 * 58
-//    	sleep.sleep(200);
-//    	mouse.mouseClick(x + 134, y - 58, true);
-//    	sleep.sleep(200);
-//    	chuzhen_1();
+    	mouse.mouseClick(x + 40, y - 175, true);
     }
     
 	public AutoResurgenceThread setAutoResurgenceThread(int zIndex2) {
@@ -528,7 +523,7 @@ public class Layout extends JFrame{
     	List<CoordBean> list = Base.findPic(Constant.beibao_close,2000);
     	if(list.size() > 0){
     		Base.addLog("打开任务栏...");
-    		mouse.mouseClick(list.get(0).getX() - 228, list.get(0).getY() + 42, true);
+    		mouse.mouseClick(list.get(0).getX() + 20, list.get(0).getY() + 103, true);
     	}
     	sleep.sleep(500);
     	return list;
@@ -756,6 +751,13 @@ public class Layout extends JFrame{
     		mouse.mouseClick(list.get(0).getX() + 5,list.get(0).getY() + 5, true);
     	}
     	list = Base.findPic(Constant.close_liaotian+"|"+Constant.close_liaotian_1,254,321,444,447,0.9,true);
+    	if(list.size() > 0){
+    		sleep.sleep(200);
+    		mouse.mouseClick(list.get(0).getX() +2,list.get(0).getY() + 2, true);
+    	}
+    	sleep.sleep(200);
+    	//清空模拟器更新信息
+    	list = Base.findPic(Constant.leidian_update);
     	if(list.size() > 0){
     		sleep.sleep(200);
     		mouse.mouseClick(list.get(0).getX() +2,list.get(0).getY() + 2, true);
