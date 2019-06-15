@@ -22,7 +22,7 @@ public class Constant {
 	public static String login_3 = "login_3.bmp";
 	public static String login_p = "login_p.bmp";
 	public static String login_e = "login_e.bmp";
-	public static String login_success = "login_success.bmp";
+	public static String login_success = "login_success.bmp|login_success1.bmp|login_success2.bmp|login_success3.bmp";
 	public static String login_fanmang = "login_fanmang.bmp";
 	public static String login_u = "login_u.bmp";
 	public static String update_1 = "update_1.bmp";
@@ -37,7 +37,7 @@ public class Constant {
 	public static String go_index_1 = "go_index_1.bmp|go_index_1_1.bmp|go_index_1_2.bmp";
 	
 	//活动中心坐标
-	public static String wb_0 = "login_success.bmp";
+	public static String wb_0 = login_success;
 	//挖宝自动寻路
 	public static String wb_1 = "wb_1.bmp";//x+371,y-8
 	public static String wb_1_1 = "wb_1_1.bmp";//x+371,y-8

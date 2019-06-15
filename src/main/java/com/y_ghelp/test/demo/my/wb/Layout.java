@@ -487,8 +487,10 @@ public class Layout extends JFrame{
 			Base.addLog("使用藏宝图...");
 			list = Base.findPic(Constant.cangbaotu_shiyong+"|"+Constant.cangbaotu_shiyong_1,1000);
 			if(list.size() > 0){
-				//75 * 43
 				mouse.mouseClick(list.get(0).getX() + 8, list.get(0).getY() + 8, true);
+			}else{
+				Base.addLog("未找到使用按钮，直接点击坐标135, 172");
+				mouse.mouseClick(135, 172, true);
 			}
 			sleep.sleep(500);
 			list = Base.findPic(Constant.beibao_close,1500);
@@ -606,13 +608,13 @@ public class Layout extends JFrame{
     }
     
     private void do_0(){
-    	sleep.sleep(200);
+    	sleep.sleep(500);
 		press.keyPress(press.F3);
-		sleep.sleep(1000);
+		sleep.sleep(2000);
 		press.keyPress(press.F1);
-		sleep.sleep(1000);
+		sleep.sleep(1500);
 		press.keyPress(press.F3);
-		sleep.sleep(1000);
+		sleep.sleep(1500);
     }
     
     //do_2 处理盗墓贼
@@ -629,10 +631,10 @@ public class Layout extends JFrame{
 		sleep.sleep(200);
     	do{
     		press.keyPress(press.SPACE);
-    		sleep.sleep(200);
-    		if(i == 2){
+    		sleep.sleep(500);
+    		if(i == 2 || i == 4){
     			press.keyPress(press.F2);
-    			sleep.sleep(500);
+    			sleep.sleep(200);
     		}
     		list = Base.findPic(Constant.do_2_1);
         	if(list.size() > 0){
@@ -743,26 +745,33 @@ public class Layout extends JFrame{
     	if(list.size() > 0){
     		sleep.sleep(200);
     		mouse.mouseClick(list.get(0).getX() + 5,list.get(0).getY() + 5, true);
+    		sleep.sleep(200);
     	}
-    	sleep.sleep(200);
     	list = Base.findStrE("确定","c7bd97-383e38", 1, 0,200);
     	if(list.size() > 0){
     		sleep.sleep(200);
     		mouse.mouseClick(list.get(0).getX() + 5,list.get(0).getY() + 5, true);
+    		sleep.sleep(200);
     	}
     	list = Base.findPic(Constant.close_liaotian+"|"+Constant.close_liaotian_1,254,321,444,447,0.9,true);
     	if(list.size() > 0){
     		sleep.sleep(200);
     		mouse.mouseClick(list.get(0).getX() +2,list.get(0).getY() + 2, true);
+    		sleep.sleep(200);
     	}
-    	sleep.sleep(200);
     	//清空模拟器更新信息
     	list = Base.findPic(Constant.leidian_update);
     	if(list.size() > 0){
     		sleep.sleep(200);
     		mouse.mouseClick(list.get(0).getX() +2,list.get(0).getY() + 2, true);
+    		sleep.sleep(200);
     	}
-    	sleep.sleep(200);
+    	list = Base.findPic(Constant.go_index);
+    	if(list.size() > 0){
+    		sleep.sleep(200);
+    		mouse.mouseClick(list.get(0).getX() +2,list.get(0).getY() + 2, true);
+    		sleep.sleep(200);
+    	}
     	Base.addLog("清空确认按钮结束..");
     }
     
@@ -869,6 +878,13 @@ public class Layout extends JFrame{
     	Base.addLog("领藏宝图开始..");
     	sleep.sleep(3000);
     	List<CoordBean> list = Base.findPic(Constant.wb_0,12000);
+    	if(list.size() == 0){
+    		list = new ArrayList<>();
+    		CoordBean coordBean = new CoordBean();
+    		coordBean.setX(470);
+    		coordBean.setY(70);
+    		list.add(coordBean);
+    	}
     	if(list.size() > 0){
     		sleep.sleep(2000);
     		mouse.mouseClick(list.get(0).getX(), list.get(0).getY(), true);

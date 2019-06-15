@@ -45,6 +45,9 @@ public class AutoResurgenceThread implements Runnable{
 		if(null != _list){
 			_list.clear();
 		}
+		if(sleep == null){
+			sleep = new Sleep();
+		}
 		sleep.sleep(500);
 		List<CoordBean> list = Base.findPic(Constant.die,sx,sy,ex,ey,0.9,false);
 		if(list.size() > 0){
