@@ -489,8 +489,7 @@ public class Layout extends JFrame{
 			if(list.size() > 0){
 				mouse.mouseClick(list.get(0).getX() + 8, list.get(0).getY() + 8, true);
 			}else{
-				Base.addLog("未找到使用按钮，直接点击坐标135, 172");
-				mouse.mouseClick(135, 172, true);
+				Base.addLog("未找到使用按钮！！");
 			}
 			sleep.sleep(500);
 			list = Base.findPic(Constant.beibao_close,1500);
@@ -525,7 +524,7 @@ public class Layout extends JFrame{
     	List<CoordBean> list = Base.findPic(Constant.beibao_close,2000);
     	if(list.size() > 0){
     		Base.addLog("打开任务栏...");
-    		mouse.mouseClick(list.get(0).getX() + 20, list.get(0).getY() + 103, true);
+    		mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 103, true);
     	}
     	sleep.sleep(500);
     	return list;
@@ -985,10 +984,12 @@ public class Layout extends JFrame{
 			}while(flag);
 			sleep.sleep(500);
 			list = open_beibao();
-			int b_x = list.get(0).getX();
-	    	int b_y = list.get(0).getY();
-	    	mouse.mouseClick(b_x + 5, b_y + 5, true);
-			sleep.sleep(500);
+			if(null != list){
+				int b_x = list.get(0).getX();
+		    	int b_y = list.get(0).getY();
+		    	mouse.mouseClick(b_x + 5, b_y + 5, true);
+				sleep.sleep(500);
+			}
 		}else {
 			Base.addLog("未能到达领取藏宝图的NPC处");
 		}
