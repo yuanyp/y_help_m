@@ -184,6 +184,12 @@ public class Layout extends JFrame{
     		mouse.mouseClick(x, y, true);
     		sleep.sleep(1000);
     	}else{
+    		list = Base.findPic(getHDClose(),getHDCloseTime());
+            if(list.size() > 0){
+    			mouse.mouseClick(list.get(0).getX() + 10, list.get(0).getY() + 5, true);
+    			sleep.sleep(500);
+    			login_after();
+    		}
     		Base.addLog("没有找到收起人物栏的图标");
     		return;
     	}
@@ -263,7 +269,7 @@ public class Layout extends JFrame{
      * @return
      */
     private List<CoordBean> has_xiaohao(){
-    	List<CoordBean> list = Base.getWB_CLOSE(5000);//272 383
+    	List<CoordBean> list = Base.getSystem_Close(5000);//272 383
     	if(list.size() > 0){
     		sleep.sleep(500);
     		//点击切换小号
@@ -392,7 +398,7 @@ public class Layout extends JFrame{
 			Base.addLog("找到图片logout");
 			mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 12, true);
 		}else{
-			list = Base.getWB_CLOSE(5000);
+			list = Base.getSystem_Close(5000);
 			//272 383//切换角色
 			//126 383//退出游戏
 			if(list.size() > 0){
