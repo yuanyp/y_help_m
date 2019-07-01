@@ -2107,9 +2107,13 @@ public class MYDemo extends JFrame{
      */
     private void exit() throws Exception{
         addLog("开始退出...");
-        press.keyPress(press.ESC);
-        new Sleep().sleep(800);
         List<CoordBean> list = new ArrayList<CoordBean>();
+        list = findPic(Common.zhijietuichu, 1500);
+        if(list.size() > 0){
+        }else {
+        	press.keyPress(press.ESC);
+            new Sleep().sleep(800);	
+        }
         list = findPic(Common.zhijietuichu, 1500);
         if(list.size() > 0){
         	mouse.mouseClick(list.get(0).getX() + 15, list.get(0).getY() + 8, true);
