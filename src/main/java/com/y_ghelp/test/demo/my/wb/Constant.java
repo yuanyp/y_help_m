@@ -48,6 +48,7 @@ public class Constant {
 	public static String wb_4 = "wb_4.bmp|wb_4_1.bmp|wb_4_2.bmp";
 	public static String wb_close = "wb_close.bmp";
 	public static String wb_close_1 = "wb_close_1.bmp";
+	public static String system_close = "system_close.bmp|system_close1.bmp";
 	public static String baoxiang_click = "baoxiang_click.bmp";
 	
 	//背包关闭按钮 ;任务栏:228*42 x-228 y+42

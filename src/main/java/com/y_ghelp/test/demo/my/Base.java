@@ -319,6 +319,17 @@ public class Base{
     	return new ArrayList<CoordBean>();
     }
     
+    public static List<CoordBean> getSystem_Close(int time){
+    	List<CoordBean> list = Base.findPic(Constant.system_close,time);
+    	if(null != list && list.size() > 0){
+    		CoordBean item = list.get(0);
+        	item.setX(item.getX() + 5);
+        	item.setY(item.getY() + 5);
+        	return list;
+    	}
+    	return new ArrayList<CoordBean>();
+    }
+    
     public static void close_wb_page(){
     	List<CoordBean> list = getWB_CLOSE(2000);
 		if(list.size() > 0){
