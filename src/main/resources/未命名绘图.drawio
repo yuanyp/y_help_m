@@ -1,0 +1,91 @@
+<mxfile host="app.diagrams.net" modified="2024-05-23T03:06:13.696Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" etag="797lwTMZ0TgADefpp4Uw" version="24.4.6" type="github">
+  <diagram name="第 1 页" id="_TC1i7395d7Ko6areE1A">
+    <mxGraphModel dx="1434" dy="780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-38" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="585" width="757" height="325" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-2" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.patternFillRect;fillStyle=solid;step=5;fillStrokeWidth=0.2;fillStrokeColor=#dddddd;gradientColor=none;fillColor=#78A9FF;" vertex="1" parent="1">
+          <mxGeometry x="220" y="460" width="446" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-3" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeWidth=2;shape=mxgraph.arrows2.arrow;dy=0.6;dx=40;notch=0;" vertex="1" parent="1">
+          <mxGeometry x="110" y="467.5" width="90" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-11" value="左边添加推送数据" style="shape=note;size=20;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="340" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-12" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeWidth=2;shape=mxgraph.arrows2.arrow;dy=0.6;dx=40;notch=0;" vertex="1" parent="1">
+          <mxGeometry x="690" y="467.5" width="90" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-13" value="右边移除推送数据" style="shape=note;size=20;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="666" y="340" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-14" value="起草" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="560" y="460" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-15" value="审批" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="470" y="460" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-18" value="归档" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="384" y="460" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-19" value="办结" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="280" y="460" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-20" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.patternFillRect;fillStyle=solid;step=5;fillStrokeWidth=0.2;fillStrokeColor=#dddddd;gradientColor=none;fillColor=#78A9FF;" vertex="1" parent="1">
+          <mxGeometry x="220" y="670" width="446" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-21" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeWidth=2;shape=mxgraph.arrows2.arrow;dy=0.6;dx=40;notch=0;" vertex="1" parent="1">
+          <mxGeometry x="110" y="677.5" width="90" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-22" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeWidth=2;shape=mxgraph.arrows2.arrow;dy=0.6;dx=40;notch=0;" vertex="1" parent="1">
+          <mxGeometry x="680" y="670" width="90" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-23" value="起草" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="560" y="670" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-24" value="审批" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="470" y="670" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-25" value="归档" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="384" y="670" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-26" value="办结" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="280" y="670" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-27" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.patternFillRect;fillStyle=solid;step=5;fillStrokeWidth=0.2;fillStrokeColor=#dddddd;gradientColor=none;fillColor=#78A9FF;" vertex="1" parent="1">
+          <mxGeometry x="218" y="800" width="446" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-28" value="" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;strokeWidth=2;shape=mxgraph.arrows2.arrow;dy=0.6;dx=40;notch=0;" vertex="1" parent="1">
+          <mxGeometry x="108" y="807.5" width="90" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-31" value="审批" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="560" y="800" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-33" value="办结" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="278" y="800" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-34" value="..." style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.flowchart.on-page_reference;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="382" y="800" width="60" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-35" value="流程实例2" style="shape=note;size=20;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="770" width="176" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-36" value="流程实例1" style="shape=note;size=20;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="310" y="640" width="176" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-39" value="机器人遍历所有需要推送的流程实例数据" style="shape=note;size=20;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="53" y="585" width="176" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-40" value="推送失败,阻塞,等待下次机器人触发" style="shape=note;size=20;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="664" y="807.5" width="146" height="72.5" as="geometry" />
+        </mxCell>
+        <mxCell id="Gp8K34Z30wctiOWK-yPE-41" value="推送成功,移除" style="shape=note;size=20;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="670" y="702.5" width="146" height="55" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
